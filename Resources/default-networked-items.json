@@ -1,0 +1,32 @@
+{
+    "MothwingCloak": {
+        "items": [
+            "MothwingCloak"
+        ],
+        "message": "Speedrunner has obtained Mothwing Cloak. All players have now access to Mothwing Cloak."
+    },
+    "CrystalHeart": {
+        "items": [
+            "CrystalHeart"
+        ],
+        "message": "Speedrunner has obtained Crystal Heart. All players have now access to Crystal Heart."
+    },
+    "IsmasTear": {
+        "items": [
+            "IsmasTear"
+        ],
+        "message": "Speedrunner has obtained Isma's Tear. All players have now access to Isma's Tear."
+    },
+    "MonarchWings": {
+        "items": [
+            "MonarchWings"
+        ],
+        "message": "Speedrunner has obtained Monarch Wings. All players have now access to Monarch Wings."
+    },
+    "ShadeCloak": {
+        "items": [
+            "ShadeCloak"
+        ],
+        "message": "Speedrunner has obtained Shade Cloak. All players have now access to Shade Cloak."
+    }
+}
