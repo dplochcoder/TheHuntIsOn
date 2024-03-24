@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Hkmp.Api.Server;
-using JetBrains.Annotations;
 using Newtonsoft.Json;
 
 namespace TheHuntIsOn.HkmpAddon;
@@ -83,7 +82,6 @@ public class HuntServerAddon : ServerAddon
         return Path.Combine(directory.FullName, NetworkedItemsFileName);
     }
 
-    [UsedImplicitly]
     private class ItemGrant
     {
         [JsonProperty("items")]
