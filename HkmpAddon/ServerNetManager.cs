@@ -27,7 +27,7 @@ public class ServerNetManager
 
     public void SendGrantItems(List<NetItem> netItems)
     {
-        _netSender.BroadcastSingleData(ClientPacketId.GrantItems, new GrantItemsPacket
+        _netSender.BroadcastCollectionData(ClientPacketId.GrantItems, new GrantItemsPacket
         {
             NetItems = netItems.ToArray()
         });

@@ -2,6 +2,7 @@ using System;
 using Hkmp.Api.Client;
 using Hkmp.Api.Client.Networking;
 using Hkmp.Networking.Packet;
+using Hkmp.Networking.Packet.Data;
 
 namespace TheHuntIsOn.HkmpAddon;
 
@@ -35,7 +36,7 @@ public class ClientNetManager
         switch (packetId)
         {
             case ClientPacketId.GrantItems:
-                return new GrantItemsPacket();
+                return new PacketDataCollection<GrantItemsPacket>();
         }
 
         return null;
