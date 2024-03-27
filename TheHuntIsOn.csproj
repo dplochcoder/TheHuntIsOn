@@ -5,7 +5,7 @@
 		<TargetFramework>net472</TargetFramework>
 		<RootNamespace>TheHuntIsOn</RootNamespace>
 		<AssemblyTitle>TheHuntIsOn</AssemblyTitle>
-		<AssemblyVersion>0.3.0.0</AssemblyVersion>
+		<AssemblyVersion>0.4.0.0</AssemblyVersion>
 		<Deterministic>true</Deterministic>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<LangVersion>latest</LangVersion>
@@ -16,7 +16,7 @@
 		<ExportDir>bin\Publish</ExportDir>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<DocumentationFile></DocumentationFile>
-		<FileVersion>0.3.0.0</FileVersion>
+		<FileVersion>0.4.0.0</FileVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -33,7 +33,7 @@
 			<HintPath>$(HollowKnightRefs)\Assembly-CSharp.dll</HintPath>
 		</Reference>
 		<Reference Include="KorzUtils">
-		  <HintPath>..\..\..\Program Files\Steam\steamapps\common\Hollow Knight\hollow_knight_Data\Managed\Mods\KorzUtils\KorzUtils.dll</HintPath>
+		  <HintPath>$(HollowKnightRefs)\Mods\KorzUtils\KorzUtils.dll</HintPath>
 		</Reference>
 		<Reference Include="MMHOOK_Assembly-CSharp">
 			<HintPath>$(HollowKnightRefs)\MMHOOK_Assembly-CSharp.dll</HintPath>
@@ -60,7 +60,7 @@
 			<HintPath>$(HollowKnightRefs)\PlayMaker.dll</HintPath>
 		</Reference>
 		<Reference Include="Satchel">
-		  <HintPath>..\..\..\Program Files\Steam\steamapps\common\Hollow Knight\hollow_knight_Data\Managed\Mods\Satchel\Satchel.dll</HintPath>
+		  <HintPath>$(HollowKnightRefs)\Mods\Satchel\Satchel.dll</HintPath>
 		</Reference>
 		<Reference Include="UnityEngine">
 			<HintPath>$(HollowKnightRefs)\UnityEngine.dll</HintPath>

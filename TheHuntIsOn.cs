@@ -58,7 +58,8 @@ public class TheHuntIsOn : Mod, IGlobalSettings<HuntGlobalSaveData>, ICustomMenu
         new StagModule(),
         new TramModule(),
         new AutoTriggerBossModule(),
-        new ItemNetworkModule()
+        new ItemNetworkModule(),
+        new HelperPlatformModule()
     };
 
     #endregion
