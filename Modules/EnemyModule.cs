@@ -50,11 +50,11 @@ internal class EnemyModule : Module
         {
             // We use the hp as an indicator if the enemy is a boss.
             // As early game bosses do not have 200+ hp, we call them here seperately.
-            // Also we exclude the "adds" from Collector and Traitor Lord.
+            // Also we exclude the "adds" from Collector, Gruz Mother and Traitor Lord.
             if (enemy.name == "Mega Moss Charger" || enemy.name == "Giant Fly"
                 || enemy.name == "False Knight New" || enemy.name == "Mage Knight"
                 || enemy.scene.name == "Fungus3_23_boss" || enemy.name == "Head"
-                || enemy.scene.name == "Ruins2_11_boss")
+                || enemy.scene.name == "Ruins2_11_boss" || (enemy.name.Contains("Fly") && enemy.scene.name == "Crossroads_04"))
                 return false;
             HealthManager healthManager = enemy.GetComponent<HealthManager>();
             return healthManager.hp < 200 || isAlreadyDead;
