@@ -4,6 +4,9 @@ using Satchel.BetterMenus;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Hkmp.Api.Client;
+using Hkmp.Api.Server;
+using TheHuntIsOn.HkmpAddon;
 using TheHuntIsOn.Modules;
 using TheHuntIsOn.Modules.HealthModules;
 using UnityEngine;
@@ -32,6 +35,9 @@ public class TheHuntIsOn : Mod, IGlobalSettings<HuntGlobalSaveData>, ICustomMenu
     public bool ToggleButtonInsideMenu { get; }
 
     public Menu MenuRef { get; set; }
+    
+    public HuntClientAddon HuntClientAddon { get; private set; }
+    public HuntServerAddon HuntServerAddon { get; private set; }
 
     internal List<Module> Modules { get; set; } = new()
     {
@@ -52,6 +58,7 @@ public class TheHuntIsOn : Mod, IGlobalSettings<HuntGlobalSaveData>, ICustomMenu
         new StagModule(),
         new TramModule(),
         new AutoTriggerBossModule(),
+        new ItemNetworkModule(),
         new HelperPlatformModule()
     };
 
@@ -70,6 +77,11 @@ public class TheHuntIsOn : Mod, IGlobalSettings<HuntGlobalSaveData>, ICustomMenu
 
     public override void Initialize(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
     {
+        HuntClientAddon = new HuntClientAddon();
+        HuntServerAddon = new HuntServerAddon();
+        ClientAddon.RegisterAddon(HuntClientAddon);
+        ServerAddon.RegisterAddon(HuntServerAddon);
+        
         On.UIManager.StartNewGame += UIManager_StartNewGame;
         On.UIManager.ContinueGame += UIManager_ContinueGame;
         On.UIManager.ReturnToMainMenu += UIManager_ReturnToMainMenu;

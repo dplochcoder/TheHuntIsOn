@@ -1,0 +1,44 @@
+{
+    "MothwingCloak": {
+        "items": [
+            "MothwingCloak"
+        ],
+        "message": "Speedrunner has obtained Mothwing Cloak. All players have now access to Mothwing Cloak."
+    },
+    "MantisClaw": {
+        "items": [
+            "MantisClaw"
+        ],
+        "message": "Speedrunner has obtained Mantis Claw. All players have now access to Mantis Claw."
+    },
+    "CrystalHeart": {
+        "items": [
+            "CrystalHeart"
+        ],
+        "message": "Speedrunner has obtained Crystal Heart. All players have now access to Crystal Heart."
+    },
+    "IsmasTear": {
+        "items": [
+            "IsmasTear"
+        ],
+        "message": "Speedrunner has obtained Isma's Tear. All players have now access to Isma's Tear."
+    },
+    "MonarchWings": {
+        "items": [
+            "MonarchWings"
+        ],
+        "message": "Speedrunner has obtained Monarch Wings. All players have now access to Monarch Wings."
+    },
+    "ShadeCloak": {
+        "items": [
+            "ShadeCloak"
+        ],
+        "message": "Speedrunner has obtained Shade Cloak. All players have now access to Shade Cloak."
+    },
+    "Movement2": {
+        "items": [
+            "Mask", "NailUpgrade", "NailUpgrade"
+        ],
+        "message": "Speedrunner has obtained 2 movement items. Hunters get 1 mask and 2 Nail upgrades."
+    }
+}
