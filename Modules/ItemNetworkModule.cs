@@ -198,6 +198,7 @@ internal class ItemNetworkModule : Module
                     break;
                 case NetItem.IsmasTear:
                     pd.hasAcidArmour = true;
+                    PlayMakerFSM.BroadcastEvent("GET ACID ARMOUR");
                     break;
                 case NetItem.ShadeCloak:
                     pd.hasDash = true;
