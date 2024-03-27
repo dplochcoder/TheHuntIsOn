@@ -32,6 +32,9 @@
 		<Reference Include="Assembly-CSharp">
 			<HintPath>$(HollowKnightRefs)\Assembly-CSharp.dll</HintPath>
 		</Reference>
+		<Reference Include="HKMP">
+		  <HintPath>$(HollowKnightRefs)\Mods\HKMP\HKMP.dll</HintPath>
+		</Reference>
 		<Reference Include="KorzUtils">
 		  <HintPath>$(HollowKnightRefs)\Mods\KorzUtils\KorzUtils.dll</HintPath>
 		</Reference>

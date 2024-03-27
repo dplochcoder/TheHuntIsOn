@@ -1,4 +1,5 @@
 using System;
+using KorzUtils.Helper;
 using Modding;
 using TheHuntIsOn.HkmpAddon;
 
@@ -17,7 +18,7 @@ internal class ItemNetworkModule : Module
     private int ModHooks_OnSetPlayerIntHook(string name, int orig)
     {
         // Make sure that the player obtaining items is the speedrunner
-        if (TheHuntIsOn.SaveData.IsHunter)
+        if (!IsModuleUsed || TheHuntIsOn.SaveData.IsHunter)
         {
             return orig;
         }
@@ -68,7 +69,7 @@ internal class ItemNetworkModule : Module
     private bool ModHooks_OnSetPlayerBoolHook(string name, bool orig)
     {
         // Make sure that the player obtaining items is the speedrunner
-        if (TheHuntIsOn.SaveData.IsHunter)
+        if (!IsModuleUsed || TheHuntIsOn.SaveData.IsHunter)
         {
             return orig;
         }
@@ -151,12 +152,12 @@ internal class ItemNetworkModule : Module
     private void NetManager_OnGrantItemsEvent(NetItem[] netItems)
     {
         // Check if the player is not the speedrunner
-        if (!TheHuntIsOn.SaveData.IsHunter)
+        if (!IsModuleUsed || !TheHuntIsOn.SaveData.IsHunter)
         {
             return;
         }
 
-        Logger.Log("OnGrantItems:");
+        LogHelper.Write<TheHuntIsOn>("OnGrantItems:");
 
         var pd = PlayerData.instance;
 
@@ -259,7 +260,7 @@ internal class ItemNetworkModule : Module
 
     private void SendItemObtained(NetItem item)
     {
-        Logger.Log($"Sending obtained item: {item}");
+        LogHelper.Write<TheHuntIsOn>($"Sending obtained item: {item}");
         TheHuntIsOn.Instance.HuntClientAddon.NetManager.SendItemObtained(item);
     }
 
