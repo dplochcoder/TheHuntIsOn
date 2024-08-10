@@ -50,6 +50,24 @@ internal class HelperPlatformModule : Module
                 currentGameObject = GameObject.Instantiate(ShadeModule.PlatformPrefab, new(5.0873f, 23.1602f, 0), Quaternion.identity);
                 currentGameObject.SetActive(true);
                 break;
+            case "Fungus2_01":
+                currentGameObject = GameObject.Instantiate(ShadeModule.PlatformPrefab, new(36.44f, 35.21f, 0), Quaternion.identity);
+                currentGameObject.SetActive(true);
+                break;
+            case "Ruins2_01_b":
+                currentGameObject = GameObject.Instantiate(ShadeModule.PlatformPrefab, new(30.56f, 31.59f, 0), Quaternion.identity);
+                currentGameObject.SetActive(true);
+                break;
+            case "Deepnest_East_11":
+                currentGameObject = GameObject.Instantiate(ShadeModule.PlatformPrefab, new(104.34f, 97.36f, 0), Quaternion.identity);
+                currentGameObject.SetActive(true);
+
+                currentGameObject = GameObject.Instantiate(ShadeModule.PlatformPrefab, new(102.04f, 106.51f, 0), Quaternion.identity);
+                currentGameObject.SetActive(true);
+
+                currentGameObject = GameObject.Instantiate(ShadeModule.PlatformPrefab, new(97.36f, 113.58f, 0), Quaternion.identity);
+                currentGameObject.SetActive(true);
+                break;
             default:
                 break;
         }
