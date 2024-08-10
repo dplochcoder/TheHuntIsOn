@@ -36,9 +36,6 @@ public class TheHuntIsOn : Mod, IGlobalSettings<HuntGlobalSaveData>, ICustomMenu
 
     public Menu MenuRef { get; set; }
     
-    public HuntClientAddon HuntClientAddon { get; private set; }
-    public HuntServerAddon HuntServerAddon { get; private set; }
-
     internal List<Module> Modules { get; set; } = new()
     {
         new ArenaModule(),
@@ -58,8 +55,8 @@ public class TheHuntIsOn : Mod, IGlobalSettings<HuntGlobalSaveData>, ICustomMenu
         new StagModule(),
         new TramModule(),
         new AutoTriggerBossModule(),
-        new ItemNetworkModule(),
-        new HelperPlatformModule()
+        new HelperPlatformModule(),
+        new IntangibleGatesModule()
     };
 
     #endregion
@@ -77,11 +74,8 @@ public class TheHuntIsOn : Mod, IGlobalSettings<HuntGlobalSaveData>, ICustomMenu
 
     public override void Initialize(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
     {
-        HuntClientAddon = new HuntClientAddon();
-        HuntServerAddon = new HuntServerAddon();
-        ClientAddon.RegisterAddon(HuntClientAddon);
-        ServerAddon.RegisterAddon(HuntServerAddon);
-        
+        if (ModHooks.GetMod("HKMP", true) is Mod)
+            SetupHKMP();
         On.UIManager.StartNewGame += UIManager_StartNewGame;
         On.UIManager.ContinueGame += UIManager_ContinueGame;
         On.UIManager.ReturnToMainMenu += UIManager_ReturnToMainMenu;
@@ -90,6 +84,8 @@ public class TheHuntIsOn : Mod, IGlobalSettings<HuntGlobalSaveData>, ICustomMenu
         ElevatorModule.Door = preloadedObjects["Crossroads_01"]["_Transition Gates/door1"];
     }
 
+    private void SetupHKMP() => Modules.Add(new ItemNetworkModule());
+    
     #endregion
 
     #region Eventhandler

@@ -1,4 +1,6 @@
 using System;
+using Hkmp.Api.Client;
+using Hkmp.Api.Server;
 using KorzUtils.Helper;
 using Modding;
 using TheHuntIsOn.HkmpAddon;
@@ -10,6 +12,22 @@ internal class ItemNetworkModule : Module
     #region Properties
 
     public override string MenuDescription => "Networks speedrunner obtained items and grants items to hunters.";
+
+    public HuntClientAddon HuntClientAddon { get; private set; }
+
+    public HuntServerAddon HuntServerAddon { get; private set; }
+
+    #endregion
+
+    #region Constructors
+
+    public ItemNetworkModule()
+    {
+        HuntClientAddon = new HuntClientAddon();
+        HuntServerAddon = new HuntServerAddon();
+        ClientAddon.RegisterAddon(HuntClientAddon);
+        ServerAddon.RegisterAddon(HuntServerAddon);
+    }
 
     #endregion
 
@@ -153,10 +171,8 @@ internal class ItemNetworkModule : Module
     {
         // Check if the player is not the speedrunner
         if (!IsModuleUsed || !TheHuntIsOn.SaveData.IsHunter)
-        {
             return;
-        }
-
+        
         LogHelper.Write<TheHuntIsOn>("OnGrantItems:");
 
         var pd = PlayerData.instance;
@@ -167,59 +183,59 @@ internal class ItemNetworkModule : Module
             switch (netItem)
             {
                 case NetItem.VengefulSpirit:
-                    pd.fireballLevel = 1;
+                    PDHelper.FireballLevel = 1;
                     break;
                 case NetItem.DesolateDive:
-                    pd.quakeLevel = 1;
+                    PDHelper.QuakeLevel = 1;
                     break;
                 case NetItem.HowlingWraiths:
-                    pd.screamLevel = 1;
+                    PDHelper.ScreamLevel = 1;
                     break;
                 case NetItem.ShadeSoul:
-                    pd.fireballLevel = 2;
+                    PDHelper.FireballLevel = 2;
                     break;
                 case NetItem.DescendingDark:
-                    pd.quakeLevel = 2;
+                    PDHelper.QuakeLevel = 2;
                     break;
                 case NetItem.AbyssShriek:
-                    pd.screamLevel = 2;
+                    PDHelper.ScreamLevel = 2;
                     break;
                 case NetItem.MothwingCloak:
-                    pd.hasDash = true;
-                    pd.canDash = true;
+                    PDHelper.HasDash = true;
+                    PDHelper.CanDash = true;
                     break;
                 case NetItem.MantisClaw:
-                    pd.hasWalljump = true;
+                    PDHelper.HasWalljump = true;
                     break;
                 case NetItem.CrystalHeart:
-                    pd.hasSuperDash = true;
+                    PDHelper.HasSuperDash = true;
                     break;
                 case NetItem.MonarchWings:
-                    pd.hasDoubleJump = true;
+                    PDHelper.HasDoubleJump = true;
                     break;
                 case NetItem.IsmasTear:
-                    pd.hasAcidArmour = true;
+                    PDHelper.HasAcidArmour = true;
                     PlayMakerFSM.BroadcastEvent("GET ACID ARMOUR");
                     break;
                 case NetItem.ShadeCloak:
-                    pd.hasDash = true;
-                    pd.canDash = true;
-                    pd.hasShadowDash = true;
+                    PDHelper.HasDash = true;
+                    PDHelper.CanDash = true;
+                    PDHelper.HasShadowDash = true;
                     break;
                 case NetItem.DreamNail:
-                    pd.hasDreamNail = true;
+                    PDHelper.HasDreamNail = true;
                     break;
                 case NetItem.CycloneSlash:
-                    pd.hasNailArt = true;
-                    pd.hasCyclone = true;
+                    PDHelper.HasNailArt = true;
+                    PDHelper.HasCyclone = true;
                     break;
                 case NetItem.DashSlash:
-                    pd.hasNailArt = true;
-                    pd.hasUpwardSlash = true;
+                    PDHelper.HasNailArt = true;
+                    PDHelper.HasUpwardSlash = true;
                     break;
                 case NetItem.GreatSlash:
-                    pd.hasNailArt = true;
-                    pd.hasDashSlash = true;
+                    PDHelper.HasNailArt = true;
+                    PDHelper.HasDashSlash = true;
                     break;
                 case NetItem.Mask:
                     if (PlayerData.instance.maxHealthBase < 9)
@@ -261,7 +277,7 @@ internal class ItemNetworkModule : Module
     private void SendItemObtained(NetItem item)
     {
         LogHelper.Write<TheHuntIsOn>($"Sending obtained item: {item}");
-        TheHuntIsOn.Instance.HuntClientAddon.NetManager.SendItemObtained(item);
+        HuntClientAddon.NetManager.SendItemObtained(item);
     }
 
     internal override void Enable()
@@ -269,7 +285,7 @@ internal class ItemNetworkModule : Module
         ModHooks.SetPlayerIntHook += ModHooks_OnSetPlayerIntHook;
         ModHooks.SetPlayerBoolHook += ModHooks_OnSetPlayerBoolHook;
 
-        TheHuntIsOn.Instance.HuntClientAddon.NetManager.GrantItemsEvent += NetManager_OnGrantItemsEvent;
+        HuntClientAddon.NetManager.GrantItemsEvent += NetManager_OnGrantItemsEvent;
     }
 
     internal override void Disable()
@@ -277,7 +293,7 @@ internal class ItemNetworkModule : Module
         ModHooks.SetPlayerIntHook -= ModHooks_OnSetPlayerIntHook;
         ModHooks.SetPlayerBoolHook -= ModHooks_OnSetPlayerBoolHook;
 
-        TheHuntIsOn.Instance.HuntClientAddon.NetManager.GrantItemsEvent -= NetManager_OnGrantItemsEvent;
+        HuntClientAddon.NetManager.GrantItemsEvent -= NetManager_OnGrantItemsEvent;
     }
 
     #endregion
