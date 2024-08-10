@@ -93,7 +93,10 @@ internal class CompletionModule : Module
        "visitedAbyssLower",
        "visitedGodhome",
        "visitedMines10",
-       "openedBlackEggDoor"
+       "openedBlackEggDoor",
+       "whitePalaceOrb_1",
+       "whitePalaceOrb_2",
+       "whitePalaceOrb_3"
     };
     private List<string> _affectedBossPlayerData = new()
     {
