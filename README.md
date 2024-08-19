@@ -69,6 +69,9 @@ Disables trams.
 ### Auto Trigger Boss Module
 Start certain bosses (like dream warrior) encounter automatically once you enter their range.
 
+### Intangible Gates Module
+Makes all arena gates intangible for the player character.
+
 ### ItemNetworkModule
 The ItemNetworkModule networks obtained items by the speedrunner and then grants the hunters items based on this.
 The module uses a configuration file next to the `.dll` file named `networked-items.json`.
