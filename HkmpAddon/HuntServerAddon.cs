@@ -9,8 +9,8 @@ namespace TheHuntIsOn.HkmpAddon;
 
 public class HuntServerAddon : ServerAddon
 {
-    private const string NetworkedItemsFileName = "networked-items.json";
-    private const string DefaultNetworkedItemsFilePath = "TheHuntIsOn.Resources.default-networked-items.json";
+    private const string NetworkedEventsFileName = "networked-events.json";
+    private const string DefaultNetworkedEventsFilePath = "TheHuntIsOn.Resources.default-networked-events.json";
     
     protected override string Name => AddonIdentifier.Name;
     protected override string Version => AddonIdentifier.Version;
@@ -18,26 +18,26 @@ public class HuntServerAddon : ServerAddon
     
     private ServerNetManager NetManager { get; set; }
     
-    private Dictionary<NetItem, ItemGrant> NetworkedItems { get; set; }
+    private Dictionary<NetEvent, ItemGrant> NetworkedEvents { get; set; }
     
     public override void Initialize(IServerApi serverApi)
     {
         NetManager = new ServerNetManager(this, serverApi.NetServer);
 
-        if (!File.Exists(GetNetworkedItemsFilePath()))
+        if (!File.Exists(GetNetworkedEventsFilePath()))
         {
-            Logger.Info($"Could not find networked items file: {NetworkedItemsFileName}, copying default");
-            ExportDefaultNetworkedItems();
+            Logger.Info($"Could not find networked items file: {NetworkedEventsFileName}, copying default");
+            ExportDefaultNetworkedEvents();
         }
         
-        LoadNetworkedItems();
+        LoadNetworkedEvents();
 
-        NetManager.ItemObtainedEvent += OnItemObtained;
+        NetManager.EventTriggeredEvent += OnEventTriggered;
     }
 
-    private void OnItemObtained(ushort id, NetItem item)
+    private void OnEventTriggered(ushort id, NetEvent netEvent)
     {
-        if (!NetworkedItems.TryGetValue(item, out var itemGrant))
+        if (!NetworkedEvents.TryGetValue(netEvent, out var itemGrant))
         {
             return;
         }
@@ -49,37 +49,37 @@ public class HuntServerAddon : ServerAddon
             ServerApi.ServerManager.BroadcastMessage(itemGrant.Message);
     }
 
-    private void ExportDefaultNetworkedItems()
+    private void ExportDefaultNetworkedEvents()
     {
-        using var resourceStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(DefaultNetworkedItemsFilePath);
-        using var fileStream = new FileStream(GetNetworkedItemsFilePath(), FileMode.Create, FileAccess.Write);
+        using var resourceStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(DefaultNetworkedEventsFilePath);
+        using var fileStream = new FileStream(GetNetworkedEventsFilePath(), FileMode.Create, FileAccess.Write);
 
         resourceStream?.CopyTo(fileStream);
         fileStream.Flush();
     }
 
-    private void LoadNetworkedItems()
+    private void LoadNetworkedEvents()
     {
         try
         {
-            var fileContents = File.ReadAllText(GetNetworkedItemsFilePath());
+            var fileContents = File.ReadAllText(GetNetworkedEventsFilePath());
 
-            NetworkedItems = JsonConvert.DeserializeObject<Dictionary<NetItem, ItemGrant>>(fileContents);
+            NetworkedEvents = JsonConvert.DeserializeObject<Dictionary<NetEvent, ItemGrant>>(fileContents);
             
-            Logger.Info("Loaded networked items");
+            Logger.Info("Loaded networked events");
         }
         catch (Exception e)
         {
-            Logger.Error($"Could not read networked items:\n{e}");
+            Logger.Error($"Could not read networked events:\n{e}");
         }
     }
 
-    private string GetNetworkedItemsFilePath()
+    private string GetNetworkedEventsFilePath()
     {
         var location = Assembly.GetExecutingAssembly().Location;
         var directory = Directory.GetParent(location)!;
         
-        return Path.Combine(directory.FullName, NetworkedItemsFileName);
+        return Path.Combine(directory.FullName, NetworkedEventsFileName);
     }
 
     private class ItemGrant

@@ -25,7 +25,7 @@
 
 	<ItemGroup>
 	    <EmbeddedResource Include="Resources\SceneData.json" />
-		<EmbeddedResource Include="Resources\default-networked-items.json" />
+		<EmbeddedResource Include="Resources\default-networked-events.json" />
 	</ItemGroup>
 
 	<ItemGroup>

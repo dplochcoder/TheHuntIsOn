@@ -9,7 +9,7 @@ namespace TheHuntIsOn.HkmpAddon;
 
 public class ServerNetManager
 {
-    public event Action<ushort, NetItem> ItemObtainedEvent; 
+    public event Action<ushort, NetEvent> EventTriggeredEvent; 
     
     private readonly IServerAddonNetworkSender<ClientPacketId> _netSender;
     
@@ -19,9 +19,9 @@ public class ServerNetManager
 
         var netReceiver = netServer.GetNetworkReceiver<ServerPacketId>(addon, InstantiatePacket);
         
-        netReceiver.RegisterPacketHandler<ItemObtainedPacket>(
-            ServerPacketId.ItemObtained, 
-            (id, packet) => ItemObtainedEvent?.Invoke(id, packet.NetItem)
+        netReceiver.RegisterPacketHandler<EventTriggeredPacket>(
+            ServerPacketId.EventTriggered, 
+            (id, packet) => EventTriggeredEvent?.Invoke(id, packet.NetEvent)
         );
     }
 
@@ -37,8 +37,8 @@ public class ServerNetManager
     {
         switch (packetId)
         {
-            case ServerPacketId.ItemObtained:
-                return new PacketDataCollection<ItemObtainedPacket>();
+            case ServerPacketId.EventTriggered:
+                return new PacketDataCollection<EventTriggeredPacket>();
         }
 
         return null;

@@ -2,7 +2,7 @@ namespace TheHuntIsOn.HkmpAddon;
 
 public enum ServerPacketId
 {
-    ItemObtained
+    EventTriggered
 }
 
 public enum ClientPacketId

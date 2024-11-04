@@ -72,11 +72,12 @@ Start certain bosses (like dream warrior) encounter automatically once you enter
 ### Intangible Gates Module
 Makes all arena gates intangible for the player character.
 
-### ItemNetworkModule
-The ItemNetworkModule networks obtained items by the speedrunner and then grants the hunters items based on this.
-The module uses a configuration file next to the `.dll` file named `networked-items.json`.
-This file determines which items that the speedrunner picks up will trigger another set of items to be granted to the
-hunters. If there is no such file found next to the `.dll` file, it will generate a default file.
+### EventNetworkModule
+The EventNetworkModule networks certain events, such as obtained items by the speedrunner and then grants the hunters
+items based on this and sends a message.
+The module uses a configuration file next to the `.dll` file named `networked-event.json`.
+This file determines which events that the speedrunner causes will trigger a set of items to be granted to the hunters.
+If there is no such file found next to the `.dll` file, it will generate a default file.
 
 An example of the format of the file is the following:
 ```json
@@ -102,7 +103,8 @@ the server. And if the speedrunner obtains Mantis Claw, the hunters will get Mon
 The first string in each entry represents the trigger and can be one of the following:  
 `VengefulSpirit`, `DesolateDive`, `HowlingWraiths`, `ShadeSoul`, `DescendingDark`, `AbyssShriek`, `MothwingCloak`,
 `MantisClaw`, `CrystalHeart`, `MonarchWings`, `IsmasTear`, `ShadeCloak`, `DreamNail`, `CycloneSlash`, `DashSlash`,
-`GreatSlash`, `Movement1`, `Movement2`, `Movement3`, `Movement4`, `Movement5`, `Movement6`
+`GreatSlash`, `Mask`, `SoulVessel`, `Movement1`, `Movement2`, `Movement3`, `Movement4`, `Movement5`, `Movement6`,
+`Dreamer`, `Tram`, `Stag`, `Toll`, `Grub`, `DreamWarrior`, `ShopPurchase`, `LeverHit`
 
 The triggers `MovementX` trigger when the speedrunner obtains the X-th movement item. The following are counted as
 movement items:
@@ -111,7 +113,7 @@ Mothwing Cloak, Mantis Claw, Crystal Heart, Monarch Wings, Isma's Tear, Shade Cl
 The items granted under `"items": [ ... ]` can be one of the following:  
 `VengefulSpirit`, `DesolateDive`, `HowlingWraiths`, `ShadeSoul`, `DescendingDark`, `AbyssShriek`, `MothwingCloak`,
 `MantisClaw`, `CrystalHeart`, `MonarchWings`, `IsmasTear`, `ShadeCloak`, `DreamNail`, `CycloneSlash`, `DashSlash`,
-`GreatSlash`, `Mask`, `NailUpgrade`
+`GreatSlash`, `Mask`, `SoulVessel`, `NailUpgrade`
 
 ### Helper Platform Module
 Places some platforms around the world to help reaching some ledges with fewer items than actually required.

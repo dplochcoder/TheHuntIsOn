@@ -2,25 +2,25 @@ using Hkmp.Networking.Packet;
 
 namespace TheHuntIsOn.HkmpAddon;
 
-public class ItemObtainedPacket : IPacketData
+internal class EventTriggeredPacket : IPacketData
 {
-    public NetItem NetItem { get; set; }
+    public NetEvent NetEvent { get; set; }
     
     public void WriteData(IPacket packet)
     {
-        packet.Write((byte) NetItem);
+        packet.Write((byte) NetEvent);
     }
 
     public void ReadData(IPacket packet)
     {
-        NetItem = (NetItem) packet.ReadByte();
+        NetEvent = (NetEvent) packet.ReadByte();
     }
 
     public bool IsReliable => true;
     public bool DropReliableDataIfNewerExists => false;
 }
 
-public class GrantItemsPacket : IPacketData
+internal class GrantItemsPacket : IPacketData
 {
     public NetItem[] NetItems { get; set; }
     
