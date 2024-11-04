@@ -84,7 +84,9 @@ public class TheHuntIsOn : Mod, IGlobalSettings<HuntGlobalSaveData>, ICustomMenu
         ElevatorModule.Door = preloadedObjects["Crossroads_01"]["_Transition Gates/door1"];
     }
 
-    private void SetupHKMP() => Modules.Add(new ItemNetworkModule());
+    private void SetupHKMP() => Modules.Add(new ItemNetworkModule(
+        SaveData.AffectionTable[nameof(ItemNetworkModule)] != ModuleAffection.None
+    ));
     
     #endregion
 

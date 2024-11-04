@@ -17,12 +17,20 @@ internal class ItemNetworkModule : Module
 
     public HuntServerAddon HuntServerAddon { get; private set; }
 
+    /// <summary>
+    /// Whether the HKMP client and server addons are loaded. This determines whether hooks are registered.
+    /// </summary>
+    private bool AddonsLoaded { get; }
+
     #endregion
 
     #region Constructors
 
-    public ItemNetworkModule()
+    public ItemNetworkModule(bool loadAddons)
     {
+        AddonsLoaded = loadAddons;
+        if (!loadAddons) return;
+
         HuntClientAddon = new HuntClientAddon();
         HuntServerAddon = new HuntServerAddon();
         ClientAddon.RegisterAddon(HuntClientAddon);
@@ -179,7 +187,7 @@ internal class ItemNetworkModule : Module
 
         foreach (var netItem in netItems)
         {
-            Logger.Log($"  {netItem}");
+            LogHelper.Write<TheHuntIsOn>($"  {netItem}");
             switch (netItem)
             {
                 case NetItem.VengefulSpirit:
@@ -282,6 +290,8 @@ internal class ItemNetworkModule : Module
 
     internal override void Enable()
     {
+        if (!AddonsLoaded) return;
+
         ModHooks.SetPlayerIntHook += ModHooks_OnSetPlayerIntHook;
         ModHooks.SetPlayerBoolHook += ModHooks_OnSetPlayerBoolHook;
 
@@ -290,6 +300,8 @@ internal class ItemNetworkModule : Module
 
     internal override void Disable()
     {
+        if (!AddonsLoaded) return;
+
         ModHooks.SetPlayerIntHook -= ModHooks_OnSetPlayerIntHook;
         ModHooks.SetPlayerBoolHook -= ModHooks_OnSetPlayerBoolHook;
 
