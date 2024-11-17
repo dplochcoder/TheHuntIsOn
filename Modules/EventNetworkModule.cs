@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.Eventing.Reader;
 using Hkmp.Api.Client;
 using Hkmp.Api.Server;
 using KorzUtils.Helper;
@@ -100,14 +101,14 @@ internal class EventNetworkModule : Module
         else if (name == nameof(PlayerData.maxHealth))
         {
             if (orig == PlayerData.instance.GetInt(nameof(PlayerData.maxHealth))) return orig;
-            
+
             // Speedrunner obtained a full Mask
             SendEvent(NetEvent.Mask);
         }
         else if (name == nameof(PlayerData.MPReserveMax))
         {
             if (orig == PlayerData.instance.GetInt(nameof(PlayerData.MPReserveMax))) return orig;
-            
+
             // Speedrunner obtained a full Soul Vessel
             SendEvent(NetEvent.SoulVessel);
         }
@@ -115,6 +116,49 @@ internal class EventNetworkModule : Module
         {
             // Speedrunner freed a grub
             SendEvent(NetEvent.Grub);
+        }
+        else if (name == nameof(PlayerData.charmSlots))
+        {
+            if (orig == 4)
+            {
+                // Speedrunner has collected a fourth Charm Notch
+                SendEvent(NetEvent.Notch4);
+            }
+            else if (orig == 5)
+            {
+                // Speedrunner has collected a fifth Charm Notch
+                SendEvent(NetEvent.Notch5);
+            }
+            else if (orig == 6)
+            {
+                // Speedrunner has collected a sixth Charm Notch
+                SendEvent(NetEvent.Notch6);
+            }
+            else if (orig == 7)
+            {
+                // Speedrunner has collected a seventh Charm Notch
+                SendEvent(NetEvent.Notch7);
+            }
+            else if (orig == 8)
+            {
+                // Speedrunner has collected an eighth Charm Notch
+                SendEvent(NetEvent.Notch8);
+            }
+            else if (orig == 9)
+            {
+                // Speedrunner has collected a ninth Charm Notch
+                SendEvent(NetEvent.Notch9);
+            }
+            else if (orig == 10)
+            {
+                // Speedrunner has collected a tenth Charm Notch
+                SendEvent(NetEvent.Notch10);
+            }
+            else if (orig == 11)
+            {
+                // Speedrunner has collected an eleventh Charm Notch
+                SendEvent(NetEvent.Notch11);
+            }
         }
 
         return orig;
@@ -240,7 +284,7 @@ internal class EventNetworkModule : Module
             return;
         }
 
-        if (self.name.Equals("Inspect Region") && self.Fsm.Name.Equals("Control") && 
+        if (self.name.Equals("Inspect Region") && self.Fsm.Name.Equals("Control") &&
             self.gameObject.scene.name is "Room_Tram" or "Room_Tram_RG")
         {
             self.InsertCustomAction("Send Event", () =>
@@ -265,6 +309,13 @@ internal class EventNetworkModule : Module
                 }, 2);
             }
         }
+        else if (self.name.Equals("Dreamnail Hit") && self.Fsm.Name.Equals("ghost_npc_dreamnail"))
+        {
+            // self.InsertCustomAction("Send", () =>
+            // {
+            //     SendEvent(NetEvent.DreamWarrior);
+            // }, 1);
+        }
         else if (self.name.Equals("Ghost Warrior NPC") && self.Fsm.Name.Equals("Conversation Control"))
         {
             self.InsertCustomAction("Start Fight", () =>
@@ -272,19 +323,35 @@ internal class EventNetworkModule : Module
                 SendEvent(NetEvent.DreamWarrior);
             }, 7);
         }
-        else if (self.name.Equals("UI List") && self.Fsm.Name.Equals("Confirm Control") && 
-                 self.gameObject.scene.name != "Ruins1_05b")
+        else if (self.name.Equals("UI List") && self.Fsm.Name.Equals("Confirm Control"))
         {
             var yesState = self.Fsm.GetState("Yes");
             if (yesState == null) return;
-            
+
             var numActions = yesState.Actions.Length;
             if (numActions > 3) return;
-            
-            self.InsertCustomAction("Yes", () =>
+
+            if (self.gameObject.scene.name == "Ruins1_05b")
             {
-                SendEvent(NetEvent.ShopPurchase);
-            }, 0);
+                self.InsertCustomAction("Yes", () =>
+                {
+                    SendEvent(NetEvent.RelicSale);
+                }, 0);
+            }
+            else
+            {
+                self.InsertCustomAction("Yes", () =>
+                {
+                    SendEvent(NetEvent.ShopPurchase);
+                }, 0);
+            }
+        }
+        else if (self.name.Equals("Nailsmith") && self.Fsm.Name.Equals("Conversation Control"))
+        {
+            self.InsertCustomAction("Upgrade", () =>
+            {
+                SendEvent(NetEvent.NailUpgrade);
+            }, 5);
         }
         else if (self.name.StartsWith("Gate Switch") ||
                  self.name.StartsWith("Toll Gate Switch") ||
@@ -295,7 +362,8 @@ internal class EventNetworkModule : Module
                  self.name.StartsWith("WP Lever") ||
                  self.name.StartsWith("White Palace Orb Lever"))
         {
-            if (self.Fsm.Name.Equals("Switch Control"))
+            if (self.Fsm.Name.Equals("Switch Control") || 
+                self.Fsm.Name.Equals("toll switch"))
             {
                 self.InsertCustomAction("Hit", () =>
                 {
