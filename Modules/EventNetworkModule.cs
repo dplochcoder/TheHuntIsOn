@@ -265,13 +265,6 @@ internal class EventNetworkModule : Module
                 }, 2);
             }
         }
-        else if (self.name.Equals("Dreamnail Hit") && self.Fsm.Name.Equals("ghost_npc_dreamnail"))
-        {
-            // self.InsertCustomAction("Send", () =>
-            // {
-            //     SendEvent(NetEvent.DreamWarrior);
-            // }, 1);
-        }
         else if (self.name.Equals("Ghost Warrior NPC") && self.Fsm.Name.Equals("Conversation Control"))
         {
             self.InsertCustomAction("Start Fight", () =>
