@@ -4,7 +4,7 @@ using Newtonsoft.Json.Converters;
 namespace TheHuntIsOn.HkmpAddon;
 
 [JsonConverter(typeof(StringEnumConverter))]
-public enum NetEvent
+public enum NetItem
 {
     VengefulSpirit = 0,
     DesolateDive,
@@ -24,18 +24,12 @@ public enum NetEvent
     GreatSlash,
     Mask,
     SoulVessel,
+    NailUpgrade,
     Movement1,
     Movement2,
     Movement3,
     Movement4,
     Movement5,
     Movement6,
-    Dreamer,
-    Tram,
-    Stag,
-    Toll,
-    Grub,
-    DreamWarrior,
-    ShopPurchase,
-    LeverHit
+    Dreamer
 }
