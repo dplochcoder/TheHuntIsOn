@@ -56,7 +56,8 @@ public class TheHuntIsOn : Mod, IGlobalSettings<HuntGlobalSaveData>, ICustomMenu
         new TramModule(),
         new AutoTriggerBossModule(),
         new HelperPlatformModule(),
-        new IntangibleGatesModule()
+        new IntangibleGatesModule(),
+        new EventNetworkModule()
     };
 
     #endregion
@@ -74,8 +75,7 @@ public class TheHuntIsOn : Mod, IGlobalSettings<HuntGlobalSaveData>, ICustomMenu
 
     public override void Initialize(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
     {
-        if (ModHooks.GetMod("HKMP", true) is Mod)
-            SetupHKMP();
+        SetupHKMP();
         On.UIManager.StartNewGame += UIManager_StartNewGame;
         On.UIManager.ContinueGame += UIManager_ContinueGame;
         On.UIManager.ReturnToMainMenu += UIManager_ReturnToMainMenu;
@@ -84,7 +84,12 @@ public class TheHuntIsOn : Mod, IGlobalSettings<HuntGlobalSaveData>, ICustomMenu
         ElevatorModule.Door = preloadedObjects["Crossroads_01"]["_Transition Gates/door1"];
     }
 
-    private void SetupHKMP() => Modules.Add(new ItemNetworkModule());
+    private void SetupHKMP()
+    {
+        // Some funky code to get the EventNetworkModule from the list of modules
+        // Alternatively, the EventNetworkModule could be stored in the class
+        ((EventNetworkModule)Modules.Find(module => module.GetType() == typeof(EventNetworkModule))).Initialize();
+    }
     
     #endregion
 

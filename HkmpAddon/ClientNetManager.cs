@@ -9,11 +9,14 @@ namespace TheHuntIsOn.HkmpAddon;
 public class ClientNetManager
 {
     public event Action<NetItem[]> GrantItemsEvent;
+
+    private readonly INetClient _netClient;
     
     private readonly IClientAddonNetworkSender<ServerPacketId> _netSender;
     
     public ClientNetManager(ClientAddon addon, INetClient netClient)
     {
+        _netClient = netClient;
         _netSender = netClient.GetNetworkSender<ServerPacketId>(addon);
 
         var netReceiver = netClient.GetNetworkReceiver<ClientPacketId>(addon, InstantiatePacket);
@@ -23,11 +26,13 @@ public class ClientNetManager
             packetData => GrantItemsEvent?.Invoke(packetData.NetItems));
     }
 
-    public void SendItemObtained(NetItem item)
+    public void SendEvent(NetEvent netEvent)
     {
-        _netSender.SendCollectionData(ServerPacketId.ItemObtained, new ItemObtainedPacket
+        if (!_netClient.IsConnected) return;
+
+        _netSender.SendCollectionData(ServerPacketId.EventTriggered, new EventTriggeredPacket
         {
-            NetItem = item
+            NetEvent = netEvent
         });
     }
 
