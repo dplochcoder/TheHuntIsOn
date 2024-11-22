@@ -41,6 +41,15 @@ internal class HelperPlatformModule : Module
 
                 currentGameObject = GameObject.Instantiate(ShadeModule.PlatformPrefab, new(10.96f, 29.37f, 0), Quaternion.identity);
                 currentGameObject.SetActive(true);
+
+                currentGameObject = GameObject.Instantiate(ShadeModule.PlatformPrefab, new(47.92f, 3.15f, 0), Quaternion.identity);
+                currentGameObject.SetActive(true);
+
+                currentGameObject = GameObject.Instantiate(ShadeModule.PlatformPrefab, new(55.6f, 3.15f, 0), Quaternion.identity);
+                currentGameObject.SetActive(true);
+
+                currentGameObject = GameObject.Instantiate(ShadeModule.PlatformPrefab, new(111.96f, 9.28f, 0), Quaternion.identity);
+                currentGameObject.SetActive(true);
                 break;
             // False Knight
             case "Crossroads_10":
@@ -66,6 +75,30 @@ internal class HelperPlatformModule : Module
                 currentGameObject.SetActive(true);
 
                 currentGameObject = GameObject.Instantiate(ShadeModule.PlatformPrefab, new(97.36f, 113.58f, 0), Quaternion.identity);
+                currentGameObject.SetActive(true);
+                break;
+            case "Crossroads_ShamanTemple":
+                currentGameObject = GameObject.Instantiate(ShadeModule.PlatformPrefab, new(14.43f, 55.61f, 0), Quaternion.identity);
+                currentGameObject.SetActive(true);
+                break;
+            // Mask Shard Crossroads besides hot spring
+            case "Crossroads_13":
+                currentGameObject = GameObject.Instantiate(ShadeModule.PlatformPrefab, new(21.92f, 15.26f, 0), Quaternion.identity);
+                currentGameObject.SetActive(true);
+                break;
+            // Greenpath to Fog Canyon room.
+            case "Fungus1_11":
+                currentGameObject = GameObject.Instantiate(ShadeModule.PlatformPrefab, new(20.53f, 15.9f, 0), Quaternion.identity);
+                currentGameObject.SetActive(true);
+                break;
+            case "Cliffs_02":
+                currentGameObject = GameObject.Instantiate(ShadeModule.PlatformPrefab, new(39.03f, 36.8f, 0), Quaternion.identity);
+                currentGameObject.SetActive(true);
+
+                currentGameObject = GameObject.Instantiate(ShadeModule.PlatformPrefab, new(33.04f, 40.9f, 0), Quaternion.identity);
+                currentGameObject.SetActive(true);
+
+                currentGameObject = GameObject.Instantiate(ShadeModule.PlatformPrefab, new(29.08f, 44.62f, 0), Quaternion.identity);
                 currentGameObject.SetActive(true);
                 break;
             default:

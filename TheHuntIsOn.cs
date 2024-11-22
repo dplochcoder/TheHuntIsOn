@@ -175,7 +175,8 @@ public class TheHuntIsOn : Mod, IGlobalSettings<HuntGlobalSaveData>, ICustomMenu
     public void OnLoadGlobal(HuntGlobalSaveData saveData)
     {
         SaveData = saveData ?? new();
-        SaveData.AffectionTable ??= new();
+        SaveData.AffectionTable ??= [];
+        
         foreach (Module module in Modules)
             if (SaveData.AffectionTable.ContainsKey(module.GetType().Name))
                 module.Affection = SaveData.AffectionTable[module.GetType().Name];

@@ -36,15 +36,17 @@ internal class ShadeModule : Module
         switch (newScene.name)
         {
             case "Crossroads_04":
-
                 // Salubra
                 currentGameObject = GameObject.Instantiate(PlatformPrefab, new(139.7048f, 6.13f, 0), Quaternion.identity);
                 currentGameObject.SetActive(true);
                 // For blue lake
-                currentGameObject = GameObject.Instantiate(PlatformPrefab, new(151.9073f, 15.0591f, 0), Quaternion.identity);
-                currentGameObject.SetActive(true);
-                currentGameObject = GameObject.Instantiate(PlatformPrefab, new(148.2994f, 19.5866f, 0), Quaternion.identity);
-                currentGameObject.SetActive(true);
+                if (TheHuntIsOn.SaveData.ShadePlatformSpawn == ShadePlatformMode.On || (PDHelper.HasDash && PDHelper.HasWalljump))
+                {
+                    currentGameObject = GameObject.Instantiate(PlatformPrefab, new(151.9073f, 15.0591f, 0), Quaternion.identity);
+                    currentGameObject.SetActive(true);
+                    currentGameObject = GameObject.Instantiate(PlatformPrefab, new(148.2994f, 19.5866f, 0), Quaternion.identity);
+                    currentGameObject.SetActive(true);
+                }
                 break;
             case "Deepnest_East_06":
                 currentGameObject = GameObject.Instantiate(PlatformPrefab, new(157.6747f, 17.4731f, 0), Quaternion.identity);
