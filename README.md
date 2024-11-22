@@ -104,16 +104,20 @@ The first string in each entry represents the trigger and can be one of the foll
 `VengefulSpirit`, `DesolateDive`, `HowlingWraiths`, `ShadeSoul`, `DescendingDark`, `AbyssShriek`, `MothwingCloak`,
 `MantisClaw`, `CrystalHeart`, `MonarchWings`, `IsmasTear`, `ShadeCloak`, `DreamNail`, `CycloneSlash`, `DashSlash`,
 `GreatSlash`, `Mask`, `SoulVessel`, `Movement1`, `Movement2`, `Movement3`, `Movement4`, `Movement5`, `Movement6`,
-`Dreamer`, `Tram`, `Stag`, `Toll`, `Grub`, `DreamWarrior`, `ShopPurchase`, `LeverHit`
+`Dreamer`, `Tram`, `Stag`, `Toll`, `Grub`, `DreamWarrior`, `ShopPurchase`, `NailUpgrade`, `RelicSale`, `LeverHit`, `Notch4`, `Notch5`, `Notch6`, `Notch7`, `Notch8`, `Notch9`, `Notch10`, `Notch11`
 
 The triggers `MovementX` trigger when the speedrunner obtains the X-th movement item. The following are counted as
 movement items:
 Mothwing Cloak, Mantis Claw, Crystal Heart, Monarch Wings, Isma's Tear, Shade Cloak
 
+The triggers `NotchX` trigger when the speedrunner obtains the X-th Charm Notch.
+
 The items granted under `"items": [ ... ]` can be one of the following:  
 `VengefulSpirit`, `DesolateDive`, `HowlingWraiths`, `ShadeSoul`, `DescendingDark`, `AbyssShriek`, `MothwingCloak`,
 `MantisClaw`, `CrystalHeart`, `MonarchWings`, `IsmasTear`, `ShadeCloak`, `DreamNail`, `CycloneSlash`, `DashSlash`,
 `GreatSlash`, `Mask`, `SoulVessel`, `NailUpgrade`
+
+Note that sales and purchases made using QoL's NPCSellAll module do not currently trigger events.
 
 ### Helper Platform Module
 Places some platforms around the world to help reaching some ledges with fewer items than actually required.

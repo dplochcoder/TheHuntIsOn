@@ -37,5 +37,45 @@ public enum NetEvent
     Grub,
     DreamWarrior,
     ShopPurchase,
-    LeverHit
+    NailUpgrade,
+    RelicSale,
+    LeverHit,
+    Notch4,
+    Notch5,
+    Notch6,
+    Notch7,
+    Notch8,
+    Notch9,
+    Notch10,
+    Notch11
+}
+
+public enum NetItem
+{
+    VengefulSpirit = 0,
+    DesolateDive,
+    HowlingWraiths,
+    ShadeSoul,
+    DescendingDark,
+    AbyssShriek,
+    MothwingCloak,
+    MantisClaw,
+    CrystalHeart,
+    MonarchWings,
+    IsmasTear,
+    ShadeCloak,
+    DreamNail,
+    CycloneSlash,
+    DashSlash,
+    GreatSlash,
+    Mask,
+    SoulVessel,
+    NailUpgrade,
+    Movement1,
+    Movement2,
+    Movement3,
+    Movement4,
+    Movement5,
+    Movement6,
+    Dreamer
 }
