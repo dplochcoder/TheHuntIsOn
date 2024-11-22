@@ -6,7 +6,7 @@ namespace TheHuntIsOn.HkmpAddon;
 [JsonConverter(typeof(StringEnumConverter))]
 public enum NetItem
 {
-    VengefulSpirit = 0,
+    VengefulSpirit,
     DesolateDive,
     HowlingWraiths,
     ShadeSoul,
