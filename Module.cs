@@ -19,8 +19,6 @@ internal abstract class Module
 
     public abstract string MenuDescription { get; }
 
-    public static bool RetainBosses { get; set; }
-
     #endregion
 
     #region Methods
