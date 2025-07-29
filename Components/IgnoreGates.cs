@@ -13,7 +13,7 @@ public class IgnoreGates : MonoBehaviour
         {
             Physics2D.IgnoreCollision(GetComponent<BoxCollider2D>(), collison.gameObject.GetComponent<BoxCollider2D>());
         }
-        else if(collison.transform.parent?.name == "Hornet Saver" || collison.gameObject.name == "Wall Saver" || collison.gameObject.name == "Enemy Saver")
+        else if(collison.transform.parent?.name == "Hornet Saver" || collison.gameObject.name == "Wall Saver" || collison.gameObject.name == "Enemy Saver" || collison.gameObject.name == "Floor Saver")
         {
             var colliders = collison.gameObject.GetComponents<BoxCollider2D>();
             foreach (BoxCollider2D collider2D in colliders)

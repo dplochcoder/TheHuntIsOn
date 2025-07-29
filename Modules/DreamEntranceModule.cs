@@ -94,7 +94,7 @@ internal class DreamEntranceModule : Module
         // To prevent a softlock we spawn the portal anyway, even if the module is not used, if the player is in the room with dream nail already.
         if (newScene.name == "Dream_Nailcollection" && PlayerData.instance.GetBool(nameof(PlayerData.hasDreamNail)))
         {
-            GameObject teleporterSprite = GameObject.Instantiate(EnemyModule.DreamGate);
+            GameObject teleporterSprite = GameObject.Instantiate(BossModule.DreamGate);
             teleporterSprite.transform.position = new(272.88f, 51.3f);
             GameObject teleporter = GameObject.Instantiate(ElevatorModule.Door);
             teleporter.name = "Dream Nail Escape";

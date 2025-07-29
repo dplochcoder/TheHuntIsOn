@@ -14,9 +14,7 @@ public class HuntGlobalSaveData
 
 	public int FocusCost { get; set; } = 33;
 
-	public ShadePlatformMode ShadePlatformSpawn { get; set; }
-
-    public bool RetainBosses { get; set; }
+	public int SpellCost { get; set; } = 33;
 
     #endregion
 }

@@ -23,13 +23,8 @@ public enum NetItem
     DashSlash,
     GreatSlash,
     Mask,
+    MaskShard,
     SoulVessel,
     NailUpgrade,
-    Movement1,
-    Movement2,
-    Movement3,
-    Movement4,
-    Movement5,
-    Movement6,
     Dreamer
 }

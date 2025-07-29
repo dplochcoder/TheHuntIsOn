@@ -12,11 +12,11 @@ using UnityEngine.SceneManagement;
 
 namespace TheHuntIsOn.Modules;
 
-internal class EnemyModule : Module
+internal class BossModule : Module
 {
     #region Properties
 
-    public override string MenuDescription => "Disables all non-boss enemies. Makes bosses invincible.";
+    public override string MenuDescription => "Makes bosses invincible and ensures boss adds spawn.";
 
     #endregion
 
@@ -69,16 +69,16 @@ internal class EnemyModule : Module
             healthManager.hp = 9999;
             return false;
         }
-        else if ((enemy.name.Contains("Fly") && enemy.scene.name == "Crossroads_04") ||
+        /*else if ((enemy.name.Contains("Fly") && enemy.scene.name == "Crossroads_04") ||
                   enemy.scene.name == "Fungus3_23_boss" ||
                   enemy.scene.name == "Ruins2_11_boss")
             return false;
         else if (enemy.name.StartsWith("Acid Walker") ||
                  enemy.scene.name.StartsWith("Room_Colosseum") ||
                  enemy.name == "Radiance")
-            return false;
+            return false;*/
 
-        return true;
+        return isAlreadyDead;
     }
 
     private void DeactivateIfPlayerdataTrue_OnEnable(On.DeactivateIfPlayerdataTrue.orig_OnEnable orig, DeactivateIfPlayerdataTrue self)
