@@ -1,6 +1,8 @@
 using System;
 using System.Diagnostics.Eventing.Reader;
+using System.Linq;
 using Hkmp.Api.Client;
+using Hkmp.Api.Command.Client;
 using Hkmp.Api.Server;
 using KorzUtils.Helper;
 using Modding;
@@ -19,6 +21,9 @@ internal class EventNetworkModule : Module
     public HuntClientAddon HuntClientAddon { get; private set; }
 
     public HuntServerAddon HuntServerAddon { get; private set; }
+
+
+    public static IClientApi _clientApi;
     
     private bool AreAddonsLoaded { get; set; }
 
@@ -315,84 +320,81 @@ internal class EventNetworkModule : Module
     private void PlayMakerFSM_OnEnable(On.PlayMakerFSM.orig_OnEnable orig, PlayMakerFSM self)
     {
         orig(self);
-        
+
         // Make sure that the player causing changes is the speedrunner
-        if (!IsModuleUsed || TheHuntIsOn.SaveData.IsHunter)
-        {
-            return;
-        }
+        if (!IsModuleUsed || TheHuntIsOn.SaveData.IsHunter) return;
 
         if (self.name.Equals("Stag") && self.Fsm.Name.Equals("Stag Control")) 
         {
             self.InsertCustomAction("Fade", () =>
             {
                 SendEvent(NetEvent.Stag);
-            }, 0);
+            }, 0);            
 
             self.InsertCustomAction("Dirtmouth", () =>
             {
-                if(GameManager.instance.sceneName != "Room_Town_Stag_Station")
-                    SendEvent(NetEvent.StagDirtmouth);
+                if (GameManager.instance.sceneName != "Room_Town_Stag_Station")
+                    UsedStag(NetEvent.StagDirtmouth);
             }, 2);
 
             self.InsertCustomAction("Crossroads", () =>
             {
                 if (GameManager.instance.sceneName != "Crossroads_47")
-                    SendEvent(NetEvent.StagCrossroads);
+                    UsedStag(NetEvent.StagCrossroads);
             }, 2);
 
             self.InsertCustomAction("Greenpath", () =>
             {
                 if (GameManager.instance.sceneName != "Fungus1_16_alt")
-                    SendEvent(NetEvent.StagGreenpath);
+                    UsedStag(NetEvent.StagGreenpath);
             }, 2);
 
             self.InsertCustomAction("Fungal Wastes", () =>
             {
                 if (GameManager.instance.sceneName != "Fungus2_02")
-                    SendEvent(NetEvent.StagFungalWastes);
+                    UsedStag(NetEvent.StagFungalWastes);
             }, 2);
 
             self.InsertCustomAction("City Storerooms", () =>
             {
                 if (GameManager.instance.sceneName != "Ruins1_29")
-                    SendEvent(NetEvent.StagCityStorerooms);
+                    UsedStag(NetEvent.StagCityStorerooms);
             }, 2);
 
             self.InsertCustomAction("Resting Grounds", () =>
             {
                 if (GameManager.instance.sceneName != "RestingGrounds_09")
-                    SendEvent(NetEvent.StagRestingGrounds);
+                    UsedStag(NetEvent.StagRestingGrounds);
             }, 2);
 
             self.InsertCustomAction("Kings Station", () =>
             {
                 if (GameManager.instance.sceneName != "Ruins2_08")
-                    SendEvent(NetEvent.StagKingsStation);
+                    UsedStag(NetEvent.StagKingsStation);
             }, 2);
 
             self.InsertCustomAction("Deepnest", () =>
             {
                 if (GameManager.instance.sceneName != "Deepnest_09")
-                    SendEvent(NetEvent.StagDeepnest);
+                    UsedStag(NetEvent.StagDeepnest);
             }, 2);
 
             self.InsertCustomAction("Royal Gardens", () =>
             {
                 if (GameManager.instance.sceneName != "Fungus3_40")
-                    SendEvent(NetEvent.StagRoyalGardens);
+                    UsedStag(NetEvent.StagRoyalGardens);
             }, 2);
 
             self.InsertCustomAction("Hidden Station", () =>
             {
                 if (GameManager.instance.sceneName != "Abyss_22")
-                    SendEvent(NetEvent.StagHiddenStation);
+                    UsedStag(NetEvent.StagHiddenStation);
             }, 2);
 
             self.InsertCustomAction("Stag Nest", () =>
             {
                 if (GameManager.instance.sceneName != "Cliffs_03")
-                    SendEvent(NetEvent.StagStagNest);
+                    UsedStag(NetEvent.StagStagNest);
             }, 2);
         }
         else if (self.name.Equals("Hero Death") && self.Fsm.Name.Equals("Hero Death Anim"))
@@ -486,6 +488,14 @@ internal class EventNetworkModule : Module
                 }, 0);
             }
         }
+    }
+
+    void UsedStag(NetEvent stagEvent)
+    {
+        if (TheHuntIsOn.SaveData.IsHunter) return;
+        if (!_clientApi.ClientManager.Players.Any(p => (p.Team != _clientApi.ClientManager.Team) && p.IsInLocalScene)) return;
+
+        SendEvent(stagEvent);
     }
 
     private void NetManager_OnGrantItemsEvent(NetItem[] netItems)

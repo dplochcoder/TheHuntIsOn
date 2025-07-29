@@ -19,9 +19,6 @@ Adjusts the amount of soul to cast a spell if the player is a hunter.
 
 ## Modules
 
-### Arena Module
-Prevents most boss arenas from being entered.
-
 ### Auto Trigger Boss Module
 Start certain boss (like dream warrior) encounters automatically once you enter their range.
 
@@ -31,11 +28,14 @@ Reduces Elder Baldur (at Greenpath entrance and Ancestral Mound only) HP to 5.
 ### Bench Module
 Benches no longer provide healing. *As the code for healing in the game is a bit sketchy, the hud is disabled and enabled quickly to sync it properly.*
 
+### Boss Module
+Increases boss HP to 9999. Adds teleporters so that players can enter and exit Dream Boss arenas.
+
 ### Charm Nerf Module
 Increases the notch cost of powerful PvP charms by 1. This includes Baldur Shell, Spore Shroom, Heart, and Nailmaster's Glory.
 
 ### Completion Module
-Unlocks many walls, doors, dive ground etc. all around the map as it has been visited already.
+Unlocks many walls, doors, dive ground etc. all around the map as it has been visited already. Provides starting items.
 
 ### Cutscene Skip Module
 Skips or speeds up specific cutscenes. This includes the Mothwing Cloak dreamer sequence, the Dream Nail segment, and the Black Egg Temple door opening sequence.
@@ -51,9 +51,6 @@ Exiting a dream sequence, like a boss fight or a dreamer does not longer provide
 
 ### Elevator Module
 Removes all small CoT elevators and places platform to help climbing them (if the cannot be climbed already by having claw for example). Also removes the lever in the big elevator and adds a door transition there to enter the other half more quickly.
-
-### Enemy Module
-Removes most non-boss enemies in the game with the exception of Colosseum enemies, Acid Walkers, and Gruz Mother and Collector adds. Increases boss HP to 9999. Adds teleporters so that players can enter and exit Dream Boss arenas.
 
 ### EventNetworkModule
 The EventNetworkModule networks certain events, such as obtained items by the speedrunner and then grants the hunters
@@ -91,6 +88,9 @@ The first string in each entry represents the trigger and can be one of the foll
 `RelicSale`, `LeverHit`, `CharmNotch`, `CharmCollected`, `PowerUp`, `BossKilled`, `Stag`, `StagDirtmouth`, 
 `StagCrossroads`, `StagGreenpath`, `StagFungalWastes`, `StagCityStorerooms`, `StagRestingGrounds`, `StagKingsStation`, 
 `StagDeepnest`, `StagRoyalGardens`, `StagHiddenStation`, `StagStagNest`
+
+Note that specific Stag events only trigger while another player who is not on the Speedrunner's HKMP team is within
+the same room as the Speedrunner. The general Stag event triggers regardless.
 
 The triggers `MovementX` trigger when the speedrunner obtains the X-th movement item. The following are counted as
 movement items:
@@ -138,10 +138,6 @@ Disables healing and soul gain from spas.
 
 ### Stag Module
 Disables stag travelling.
-
-### Starting Items Module
-Provides a loadout of starting items for Hunters. Specifically: four Masks, all Dreamers, Kingsoul, 
-Awoken Dream Nail, Lumafly Lantern, Tram Pass, King's Brand, all Stags Stations, and the map. 
 
 ### Tram Module
 Disables trams.

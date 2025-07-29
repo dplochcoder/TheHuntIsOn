@@ -70,7 +70,7 @@ internal class HelperPlatformModule : Module
                 MakePlatform(21.92f, 15.26f);
                 break;
             // Entrance to Fungal Wastes
-            case "Crossroads_18" when !HasDash && !HasClaw && !HasWings:
+            case "Crossroads_18" when !HasDash && !HasWings:
                 MakePlatform(27.30f, 37.00f);
                 break;
             // Hornet 2 Aspid Skip

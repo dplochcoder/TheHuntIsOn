@@ -1,4 +1,5 @@
 using Hkmp.Api.Client;
+using TheHuntIsOn.Modules;
 
 namespace TheHuntIsOn.HkmpAddon;
 
@@ -14,11 +15,16 @@ public class HuntClientAddon : ClientAddon
 
     public override bool NeedsNetwork => true;
 
+
     #endregion
 
     #region Methods
 
-    public override void Initialize(IClientApi clientApi) => NetManager = new ClientNetManager(this, clientApi.NetClient); 
+    public override void Initialize(IClientApi clientApi)
+    {
+        NetManager = new ClientNetManager(this, clientApi.NetClient);
+        EventNetworkModule._clientApi = clientApi;
+    }
 
     #endregion
 }

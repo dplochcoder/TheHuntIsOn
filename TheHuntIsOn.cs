@@ -42,17 +42,16 @@ public class TheHuntIsOn : Mod, IGlobalSettings<HuntGlobalSaveData>, ICustomMenu
     
     internal List<Module> Modules { get; set; } = new()
     {
-        // new ArenaModule(),
         new AutoTriggerBossModule(),
         new BaldurModule(),
         new BenchModule(),
+        new BossModule(),
         new CharmNerfModule(),
         new CompletionModule(),
         new CutsceneSkipModule(),
         new DisableSoulGainModule(),
         new DreamHealModule(),
         new ElevatorModule(),
-        new EnemyModule(),
         new EventNetworkModule(),
         new HelperPlatformModule(),
         new IntangibleGatesModule(),
@@ -65,7 +64,6 @@ public class TheHuntIsOn : Mod, IGlobalSettings<HuntGlobalSaveData>, ICustomMenu
         new ShadeSkipModule(),
         new SpaModule(),
         new StagModule(),
-        new StartingItemsModule(),
         new TramModule()
     };
 
@@ -93,12 +91,12 @@ public class TheHuntIsOn : Mod, IGlobalSettings<HuntGlobalSaveData>, ICustomMenu
         On.UIManager.ContinueGame += UIManager_ContinueGame;
         On.UIManager.ReturnToMainMenu += UIManager_ReturnToMainMenu;
         ShadeSkipModule.PlatformPrefab = preloadedObjects["Crossroads_04"]["_Scenery/plat_float_01"];
-        EnemyModule.TeleporterPrefab = preloadedObjects["White_Palace_03_hub"]["doorWarp"];
+        BossModule.TeleporterPrefab = preloadedObjects["White_Palace_03_hub"]["doorWarp"];
         ElevatorModule.Door = preloadedObjects["Crossroads_01"]["_Transition Gates/door1"];
-        EnemyModule.FKDreamEnter = preloadedObjects["Crossroads_10_boss_defeated"]["Prayer Room/FK Corpse/Dream Enter"];
-        EnemyModule.STDreamEnter = preloadedObjects["Ruins1_24_boss_defeated"]["Mage Lord Remains/Dream Enter"];
-        EnemyModule.HKDreamEnter = preloadedObjects["Room_Final_Boss_Core"]["Boss Control/Hollow Knight Boss/Dream Enter"];
-        EnemyModule.DreamTree = preloadedObjects["Crossroads_07"]["Dream Plant"];
+        BossModule.FKDreamEnter = preloadedObjects["Crossroads_10_boss_defeated"]["Prayer Room/FK Corpse/Dream Enter"];
+        BossModule.STDreamEnter = preloadedObjects["Ruins1_24_boss_defeated"]["Mage Lord Remains/Dream Enter"];
+        BossModule.HKDreamEnter = preloadedObjects["Room_Final_Boss_Core"]["Boss Control/Hollow Knight Boss/Dream Enter"];
+        BossModule.DreamTree = preloadedObjects["Crossroads_07"]["Dream Plant"];
     }
 
     private void SetupHKMP()

@@ -294,6 +294,40 @@ internal class CompletionModule : Module
         orig(self);
     }
 
+    private void ModHooks_NewGameHook()
+    {
+        if (IsModuleUsed)
+        {
+            var pd = PlayerData.instance;
+
+            pd.maxHealth = 4;
+            pd.maxHealthBase = 4;
+
+            pd.lurienDefeated = true;
+            pd.monomonDefeated = true;
+            pd.hegemolDefeated = true;
+
+            pd.charmSlots = 6;
+            pd.gotCharm_36 = true;
+            pd.gotCharm_3 = true;
+            pd.royalCharmState = 3;
+            pd.equippedCharm_3 = true;
+            pd.equippedCharm_36 = true;
+
+            pd.hasDreamNail = true;
+            pd.dreamNailUpgraded = true;
+
+            pd.hasLantern = true;
+            pd.hasTramPass = true;
+            pd.hasKingsBrand = true;
+
+            pd.hasMap = true;
+            pd.gladeDoorOpened = true;
+            pd.troupeInTown = true;
+            pd.geo = 9999;
+        }
+    }
+
     #endregion
 
     #region Methods
@@ -304,6 +338,7 @@ internal class CompletionModule : Module
         ModHooks.GetPlayerBoolHook += ModHooks_GetPlayerBoolHook;
         On.SceneData.FindMyState_PersistentBoolData += SceneData_FindMyState_PersistentBoolData;
         On.HutongGames.PlayMaker.Actions.IntCompare.OnEnter += IntCompare_OnEnter;
+        ModHooks.NewGameHook += ModHooks_NewGameHook;
     }
 
     internal override void Disable()
@@ -312,6 +347,7 @@ internal class CompletionModule : Module
         ModHooks.GetPlayerBoolHook -= ModHooks_GetPlayerBoolHook;
         On.SceneData.FindMyState_PersistentBoolData -= SceneData_FindMyState_PersistentBoolData;
         On.HutongGames.PlayMaker.Actions.IntCompare.OnEnter -= IntCompare_OnEnter;
+        ModHooks.NewGameHook -= ModHooks_NewGameHook;
     }
 
     #endregion

@@ -24,34 +24,19 @@ internal class DisableSoulGainModule : Module
         return amount;
     }
 
-    private void NoDreamNailSoul(ILContext il)
+    private void DreamNailSoulAdjuster(ILContext il)
     {
         ILCursor cursor = new ILCursor(il).Goto(0);
 
         // Regular Soul
         cursor.TryGotoNext(i => i.MatchLdcI4(33));
         cursor.GotoNext();
-        cursor.EmitDelegate<Func<int, int>>(soul => 0);
+        cursor.EmitDelegate<Func<int, int>>(soul => IsModuleUsed ? 0 : 33);
 
         // Charm Soul
         cursor.TryGotoNext(i => i.MatchLdcI4(66));
         cursor.GotoNext();
-        cursor.EmitDelegate<Func<int, int>>(soul => 0);
-    }
-
-    private void RegularDreamNailSoul(ILContext il)
-    {
-        ILCursor cursor = new ILCursor(il).Goto(0);
-
-        // Regular Soul
-        cursor.TryGotoNext(i => i.MatchLdcI4(33));
-        cursor.GotoNext();
-        cursor.EmitDelegate<Func<int, int>>(soul => 33);
-
-        // Charm Soul
-        cursor.TryGotoNext(i => i.MatchLdcI4(66));
-        cursor.GotoNext();
-        cursor.EmitDelegate<Func<int, int>>(soul => 66);
+        cursor.EmitDelegate<Func<int, int>>(soul => IsModuleUsed ? 0 : 66);
     }
 
     #endregion
@@ -61,15 +46,13 @@ internal class DisableSoulGainModule : Module
     internal override void Enable()
     {
         ModHooks.SoulGainHook += SoulGainHook;
-        if (IsModuleUsed) IL.EnemyDreamnailReaction.RecieveDreamImpact += NoDreamNailSoul;
-        else IL.EnemyDreamnailReaction.RecieveDreamImpact += RegularDreamNailSoul;
+        IL.EnemyDreamnailReaction.RecieveDreamImpact += DreamNailSoulAdjuster;
     }
 
     internal override void Disable()
     {
         ModHooks.SoulGainHook -= SoulGainHook;
-        if (!IsModuleUsed) IL.EnemyDreamnailReaction.RecieveDreamImpact -= NoDreamNailSoul;
-        else IL.EnemyDreamnailReaction.RecieveDreamImpact -= RegularDreamNailSoul;
+        IL.EnemyDreamnailReaction.RecieveDreamImpact -= DreamNailSoulAdjuster;
     }
 
     #endregion
