@@ -10,6 +10,7 @@ using Hkmp.Api.Server;
 using TheHuntIsOn.HkmpAddon;
 using TheHuntIsOn.Modules;
 using TheHuntIsOn.Modules.HealthModules;
+using TheHuntIsOn.Modules.PauseModule;
 using UnityEngine;
 using IL.InControl.NativeDeviceProfiles;
 using Satchel.BetterPreloads;
@@ -17,7 +18,7 @@ using Modding.Menu.Config;
 
 namespace TheHuntIsOn;
 
-public class TheHuntIsOn : Mod, IGlobalSettings<HuntGlobalSaveData>, ICustomMenuMod
+public class TheHuntIsOn : Mod, IGlobalSettings<HuntGlobalSaveData>, ILocalSettings<HuntLocalSaveData>, ICustomMenuMod
 {
     #region Constructors
 
@@ -35,6 +36,8 @@ public class TheHuntIsOn : Mod, IGlobalSettings<HuntGlobalSaveData>, ICustomMenu
     public static TheHuntIsOn Instance { get; set; }
 
     public static HuntGlobalSaveData GlobalSaveData { get; set; } = new();
+
+    public static HuntLocalSaveData LocalSaveData { get; set; } = new();
 
     public bool ToggleButtonInsideMenu { get; }
 
@@ -59,6 +62,7 @@ public class TheHuntIsOn : Mod, IGlobalSettings<HuntGlobalSaveData>, ICustomMenu
         new LifeseedModule(),
         new MaskModule(),
         new NotchModule(),
+        new PauseModule(),
         new RespawnModule(),
         new ShadeModule(),
         new ShadeSkipModule(),
@@ -246,6 +250,10 @@ public class TheHuntIsOn : Mod, IGlobalSettings<HuntGlobalSaveData>, ICustomMenu
             globalData.AffectionTable.Add(module.GetType().Name, module.Affection);
         return globalData;
     }
+
+    public void OnLoadLocal(HuntLocalSaveData saveData) => LocalSaveData = saveData ?? new();
+
+    public HuntLocalSaveData OnSaveLocal() => LocalSaveData;
 
     #endregion
 }
