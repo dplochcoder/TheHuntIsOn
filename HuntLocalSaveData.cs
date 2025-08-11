@@ -23,11 +23,14 @@ public class HuntLocalSaveData
     // Unpauses that have been scheduled but not finished yet.
     public List<PendingUnpause> PendingUnpauses = [];
 
+    // Time to wait to respawn after a death.
+    public int DeathTimer;
+
     #endregion
 
     #region Methods
 
-    public void StartPause(int sequenceNumber)
+    public void StartServerPause(int sequenceNumber)
     {
         if (sequenceNumber < StartedPauses) return;
 
@@ -36,7 +39,7 @@ public class HuntLocalSaveData
         PendingUnpauses = [.. PendingUnpauses.Where(p => p.SequenceNumber >= FinishedPauses)];
     }
 
-    public void ScheduleUnpause(int sequenceNumber, int duration)
+    public void ScheduleServerUnpause(int sequenceNumber, int duration)
     {
         if (sequenceNumber < FinishedPauses) return;
 
@@ -51,7 +54,7 @@ public class HuntLocalSaveData
         });
     }
 
-    public bool IsPaused(out float? remaining)
+    public bool IsServerPaused(out float? remaining)
     {
         remaining = null;
         if (FinishedPauses >= StartedPauses) return false;

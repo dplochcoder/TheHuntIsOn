@@ -101,9 +101,13 @@ internal class PauseController
         FixTimeScale();
     }
 
-    private void FixTimeScale() => TimeController.GenericTimeScale = (enabled && TheHuntIsOn.LocalSaveData.IsPaused(out _) && clientApi != null && clientApi.NetClient.IsConnected) ? 0f : hkmpTimescale;
+    internal bool IsServerPaused() => enabled && clientApi != null && clientApi.NetClient.IsConnected && TheHuntIsOn.LocalSaveData.IsServerPaused(out _);
 
-    internal void OnServerPause(ServerPausePacket packet) => TheHuntIsOn.LocalSaveData.StartPause(packet.SequenceNumber);
+    internal static bool IsGameplayPausable() => GameManager.instance.gameState == GlobalEnums.GameState.PAUSED || (GameManager.instance.gameState == GlobalEnums.GameState.PLAYING && HeroController.instance.acceptingInput);
 
-    internal void OnServerUnpause(ServerUnpausePacket packet) => TheHuntIsOn.LocalSaveData.ScheduleUnpause(packet.SequenceNumber, packet.Countdown);
+    private void FixTimeScale() => TimeController.GenericTimeScale = (IsServerPaused() && IsGameplayPausable()) ? 0f : hkmpTimescale;
+
+    internal void OnServerPause(ServerPausePacket packet) => TheHuntIsOn.LocalSaveData.StartServerPause(packet.SequenceNumber);
+
+    internal void OnServerUnpause(ServerUnpausePacket packet) => TheHuntIsOn.LocalSaveData.ScheduleServerUnpause(packet.SequenceNumber, packet.Countdown);
 }

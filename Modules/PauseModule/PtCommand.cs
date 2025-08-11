@@ -19,7 +19,8 @@ internal class PtCommand : IServerCommand
     private static readonly List<PtSubcommand> subcommands = [
         new PauseSubcommand(),
         new UnpauseSubcommand(),
-        new CountdownSubcommand()
+        new CountdownSubcommand(),
+        new SetDeathTimerSubcommand()
     ];
 
     private static string AllSubcommands() => string.Join("|", [.. subcommands.Select(s => s.Name()).OrderBy(s => s)]);
@@ -41,7 +42,7 @@ internal class PtCommand : IServerCommand
 
     internal static bool ParseInt(ICommandSender commandSender, string arg, out int value)
     {
-        if (int.TryParse(arg, out value)) return true;
+        if (int.TryParse(arg, out value) && value >= 0) return true;
         
         commandSender.SendMessage($"Invalid integer '{arg}'");
         return false;
@@ -172,6 +173,34 @@ internal class CountdownSubcommand : PtSubcommand
             Countdown = seconds,
             Message = msg
         });
+        return true;
+    }
+}
+
+internal class SetDeathTimerSubcommand : PtSubcommand
+{
+    public override string Name() => "deathtimer";
+
+    public override string Usage() => "'/pt deathtimer [X]': get the current respawn delay on death, or else set it";
+
+    public override bool Execute(ServerNetManager netManager, ICommandSender commandSender, string[] arguments)
+    {
+        if (arguments.Length == 0)
+        {
+            var time = TheHuntIsOn.LocalSaveData.DeathTimer;
+            if (time == 0) commandSender.SendMessage("deathtimer is not set.");
+            else commandSender.SendMessage($"deathtimer is set to {time} seconds.");
+            return true;
+        }
+        if (arguments.Length > 1)
+        {
+            commandSender.SendMessage("Too many arguments.");
+            return false;
+        }
+
+        if (!PtCommand.ParseInt(commandSender, arguments[0], out int seconds)) return false;
+
+        netManager.BroadcastPacket(new SetDeathTimerPacket() { DeathTimer = seconds });
         return true;
     }
 }

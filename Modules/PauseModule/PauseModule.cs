@@ -55,6 +55,7 @@ internal class PauseModule : Module
         PauseClientAddon.NetManager.ServerPauseEvent += pauseController.OnServerPause;
         PauseClientAddon.NetManager.ServerUnpauseEvent += pauseController.OnServerUnpause;
         // PauseClientAddon.NetManager.CountdownEvent += NetManager_OnCountdownEvent;
+        PauseClientAddon.NetManager.SetDeathTimerEvent += OnSetDeathTimer;
     }
 
     internal override void Disable()
@@ -66,9 +67,12 @@ internal class PauseModule : Module
         PauseClientAddon.NetManager.ServerPauseEvent -= pauseController.OnServerPause;
         PauseClientAddon.NetManager.ServerUnpauseEvent -= pauseController.OnServerUnpause;
         // PauseClientAddon.NetManager.CountdownEvent -= NetManager_OnCountdownEvent;
+        PauseClientAddon.NetManager.SetDeathTimerEvent -= OnSetDeathTimer;
     }
 
     internal void SetClientApi(IClientApi clientApi) => pauseController.SetClientApi(clientApi);
+
+    private void OnSetDeathTimer(SetDeathTimerPacket packet) => TheHuntIsOn.LocalSaveData.DeathTimer = packet.DeathTimer;
 
     #endregion
 }

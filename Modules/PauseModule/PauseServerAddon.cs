@@ -1,6 +1,4 @@
 ﻿using Hkmp.Api.Server;
-using System.Collections.Generic;
-using TheHuntIsOn.HkmpAddon;
 
 namespace TheHuntIsOn.Modules.PauseModule;
 
