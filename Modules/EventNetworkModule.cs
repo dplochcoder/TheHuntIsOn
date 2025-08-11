@@ -57,7 +57,7 @@ internal class EventNetworkModule : Module
     private int ModHooks_OnSetPlayerIntHook(string name, int orig)
     {
         // Make sure that the player causing changes is the speedrunner
-        if (!IsModuleUsed || TheHuntIsOn.SaveData.IsHunter)
+        if (!IsModuleUsed || TheHuntIsOn.GlobalSaveData.IsHunter)
         {
             return orig;
         }
@@ -189,7 +189,7 @@ internal class EventNetworkModule : Module
     private bool ModHooks_OnSetPlayerBoolHook(string name, bool orig)
     {
         // Make sure that the player causing changes is the speedrunner
-        if (!IsModuleUsed || TheHuntIsOn.SaveData.IsHunter)
+        if (!IsModuleUsed || TheHuntIsOn.GlobalSaveData.IsHunter)
         {
             return orig;
         }
@@ -319,7 +319,7 @@ internal class EventNetworkModule : Module
         orig(self);
 
         // Make sure that the player causing changes is the speedrunner
-        if (!IsModuleUsed || TheHuntIsOn.SaveData.IsHunter) return;
+        if (!IsModuleUsed || TheHuntIsOn.GlobalSaveData.IsHunter) return;
 
         if (self.name.Equals("Stag") && self.Fsm.Name.Equals("Stag Control")) 
         {
@@ -489,7 +489,7 @@ internal class EventNetworkModule : Module
 
     void UsedStag(NetEvent stagEvent)
     {
-        if (TheHuntIsOn.SaveData.IsHunter) return;
+        if (TheHuntIsOn.GlobalSaveData.IsHunter) return;
         if (!_clientApi.ClientManager.Players.Any(p => (p.Team != _clientApi.ClientManager.Team) && p.IsInLocalScene)) return;
 
         SendEvent(stagEvent);
@@ -498,7 +498,7 @@ internal class EventNetworkModule : Module
     private void NetManager_OnGrantItemsEvent(NetItem[] netItems)
     {
         // Check if the player is not the speedrunner
-        if (!IsModuleUsed || !TheHuntIsOn.SaveData.IsHunter)
+        if (!IsModuleUsed || !TheHuntIsOn.GlobalSaveData.IsHunter)
             return;
         
         LogHelper.Write<TheHuntIsOn>("OnGrantItems:");
