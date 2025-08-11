@@ -1,12 +1,9 @@
 using System;
-using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using Hkmp.Api.Client;
-using Hkmp.Api.Command.Client;
 using Hkmp.Api.Server;
 using KorzUtils.Helper;
 using Modding;
-using MonoMod.Cil;
 using Satchel;
 using TheHuntIsOn.HkmpAddon;
 
