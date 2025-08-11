@@ -52,8 +52,7 @@ internal class PauseModule : Module
 
         pauseController.Enable();
 
-        PauseClientAddon.NetManager.ServerPauseEvent += pauseController.OnServerPause;
-        PauseClientAddon.NetManager.ServerUnpauseEvent += pauseController.OnServerUnpause;
+        PauseClientAddon.NetManager.PauseStateUpdateEvent += OnPauseStateUpdate;
         // PauseClientAddon.NetManager.CountdownEvent += NetManager_OnCountdownEvent;
         PauseClientAddon.NetManager.SetDeathTimerEvent += OnSetDeathTimer;
     }
@@ -64,15 +63,16 @@ internal class PauseModule : Module
 
         pauseController.Disable();
 
-        PauseClientAddon.NetManager.ServerPauseEvent -= pauseController.OnServerPause;
-        PauseClientAddon.NetManager.ServerUnpauseEvent -= pauseController.OnServerUnpause;
+        PauseClientAddon.NetManager.PauseStateUpdateEvent -= OnPauseStateUpdate;
         // PauseClientAddon.NetManager.CountdownEvent -= NetManager_OnCountdownEvent;
         PauseClientAddon.NetManager.SetDeathTimerEvent -= OnSetDeathTimer;
     }
 
     internal void SetClientApi(IClientApi clientApi) => pauseController.SetClientApi(clientApi);
 
-    private void OnSetDeathTimer(SetDeathTimerPacket packet) => TheHuntIsOn.LocalSaveData.DeathTimer = packet.DeathTimer;
+    private void OnPauseStateUpdate(PauseStateUpdatePacket packet) => TheHuntIsOn.LocalSaveData.UpdatePauseState(packet);
+
+    private void OnSetDeathTimer(SetDeathTimerPacket packet) => TheHuntIsOn.LocalSaveData.DeathTimerSeconds = packet.DeathTimer;
 
     #endregion
 }
