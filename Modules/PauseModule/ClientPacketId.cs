@@ -2,8 +2,7 @@
 
 internal enum ClientPacketId
 {
-    ServerPause,
-    ServerUnpause,
+    PauseStateUpdate,
     Countdown,
     SetDeathTimer
 }

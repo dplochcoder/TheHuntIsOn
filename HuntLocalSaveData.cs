@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using TheHuntIsOn.Modules.PauseModule;
 
 namespace TheHuntIsOn;
 
@@ -14,61 +15,36 @@ public class HuntLocalSaveData
 {
     #region Properties
 
-    // The number of pause events that have started.
-    public int StartedPauses;
+    // Whether the server is currently paused.
+    public bool ServerPaused;
 
-    // The number of pause events that have been finished.
-    public int FinishedPauses;
-
-    // Unpauses that have been scheduled but not finished yet.
-    public List<PendingUnpause> PendingUnpauses = [];
+    // If paused, when the server should be unpaused.
+    public long UnpauseTimeTicks;
 
     // Time to wait to respawn after a death.
-    public int DeathTimer;
+    public int DeathTimerSeconds;
 
     #endregion
 
     #region Methods
 
-    public void StartServerPause(int sequenceNumber)
+    public void UpdatePauseState(PauseStateUpdatePacket packet)
     {
-        if (sequenceNumber < StartedPauses) return;
-
-        StartedPauses = sequenceNumber + 1;
-        FinishedPauses = sequenceNumber;
-        PendingUnpauses = [.. PendingUnpauses.Where(p => p.SequenceNumber >= FinishedPauses)];
+        ServerPaused = packet.ServerPaused;
+        UnpauseTimeTicks = packet.UnpauseTimeTicks;
     }
 
-    public void ScheduleServerUnpause(int sequenceNumber, int duration)
+    public bool IsServerPaused(out float? remainingSeconds)
     {
-        if (sequenceNumber < FinishedPauses) return;
+        remainingSeconds = null;
+        if (!ServerPaused) return false;
+        if (UnpauseTimeTicks == long.MaxValue) return true;
 
-        var existing = PendingUnpauses.First(p => p.SequenceNumber == sequenceNumber);
-        var target = DateTime.UtcNow.AddSeconds(duration).Ticks;
+        var now = DateTime.UtcNow.Ticks;
+        if (now >= UnpauseTimeTicks) return false;
 
-        if (existing != null) existing.UnpauseTicks = Math.Min(existing.UnpauseTicks, target);
-        else PendingUnpauses.Add(new()
-        {
-            SequenceNumber = sequenceNumber,
-            UnpauseTicks = target,
-        });
-    }
-
-    public bool IsServerPaused(out float? remaining)
-    {
-        remaining = null;
-        if (FinishedPauses >= StartedPauses) return false;
-
-        var pending = PendingUnpauses.First(p => p.SequenceNumber == StartedPauses - 1);
-        if (pending != null)
-        {
-            var now = DateTime.UtcNow.Ticks;
-            if (now >= pending.UnpauseTicks) return false;
-
-            TimeSpan span = new(now - pending.UnpauseTicks);
-            remaining = (float)span.TotalSeconds;
-        }
-        
+        TimeSpan span = new(now - UnpauseTimeTicks);
+        remainingSeconds = (float)span.TotalSeconds;
         return true;
     }
 

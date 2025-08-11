@@ -1,20 +1,17 @@
 ﻿using Hkmp.Api.Command.Server;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace TheHuntIsOn.Modules.PauseModule;
 
-internal class PtCommand : IServerCommand
+internal class PtCommand(ServerNetManager netManager) : IServerCommand
 {
     public string Trigger => "/pt";
 
     public string[] Aliases => [];
 
     public bool AuthorizedOnly => true;
-
-    private readonly ServerNetManager netManager;
-
-    public PtCommand(ServerNetManager netManager) => this.netManager = netManager;
 
     private static readonly List<PtSubcommand> subcommands = [
         new PauseSubcommand(),
@@ -99,14 +96,15 @@ internal class PauseSubcommand : PtSubcommand
             return false;
         }
 
-        var seq = TheHuntIsOn.LocalSaveData.FinishedPauses;
+        PauseStateUpdatePacket packet = new() { ServerPaused = true, UnpauseTimeTicks = long.MaxValue };
         if (arguments.Length == 1)
         {
             if (!PtCommand.ParseInt(commandSender, arguments[0], out var seconds)) return false;
-            netManager.BroadcastPacket(new ServerUnpausePacket() { SequenceNumber = seq, Countdown = seconds });
+            packet.UnpauseTimeTicks = DateTime.UtcNow.AddSeconds(seconds).Ticks;
         }
-        netManager.BroadcastPacket(new ServerPausePacket() { SequenceNumber = seq });
 
+        TheHuntIsOn.LocalSaveData.UpdatePauseState(packet);
+        netManager.BroadcastPacket(packet);
         return true;
     }
 }
@@ -125,18 +123,29 @@ internal class UnpauseSubcommand : PtSubcommand
             return false;
         }
 
-        var started = TheHuntIsOn.LocalSaveData.StartedPauses;
-        var finished = TheHuntIsOn.LocalSaveData.FinishedPauses;
-        if (started <= finished)
+        var isPaused = TheHuntIsOn.LocalSaveData.ServerPaused;
+        if (!isPaused)
         {
             commandSender.SendMessage("Server is already unpaused.");
             return true;
         }
 
-        ushort countdown = 0;
-        if (arguments.Length == 1 && !PtCommand.ParseInt(commandSender, arguments[0], out countdown)) return false;
+        PauseStateUpdatePacket packet = new();
+        if (arguments.Length == 1)
+        {
+            if (!PtCommand.ParseInt(commandSender, arguments[0], out var seconds)) return false;
 
-        netManager.BroadcastPacket(new ServerUnpausePacket() { SequenceNumber = finished, Countdown = countdown });
+            packet.ServerPaused = true;
+            packet.UnpauseTimeTicks = DateTime.UtcNow.AddSeconds(seconds).Ticks;
+        }
+        else
+        {
+            packet.ServerPaused = false;
+            packet.UnpauseTimeTicks = 0;
+        }
+
+        TheHuntIsOn.LocalSaveData.UpdatePauseState(packet);
+        netManager.BroadcastPacket(packet);
         return true;
     }
 }
@@ -187,7 +196,7 @@ internal class SetDeathTimerSubcommand : PtSubcommand
     {
         if (arguments.Length == 0)
         {
-            var time = TheHuntIsOn.LocalSaveData.DeathTimer;
+            var time = TheHuntIsOn.LocalSaveData.DeathTimerSeconds;
             if (time == 0) commandSender.SendMessage("deathtimer is not set.");
             else commandSender.SendMessage($"deathtimer is set to {time} seconds.");
             return true;
