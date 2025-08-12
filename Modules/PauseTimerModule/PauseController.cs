@@ -30,6 +30,7 @@ internal class PauseController
     internal void Enable()
     {
         enabled = true;
+        baseGameTimescale = hkmpTimescale = TimeController.GenericTimeScale;
 
         On.GameManager.SetTimeScale_float += OnGMSetTimeScaleF;
         On.GameManager.SetTimeScale_float_float += OnGMSetTimeScaleFF;
@@ -39,7 +40,7 @@ internal class PauseController
 
     internal void SetClientApi(IClientApi clientApi)
     {
-        if (clientApi != null) throw new System.ArgumentException("Cannot set clientApi twice");
+        if (this.clientApi != null) throw new System.ArgumentException("Cannot set clientApi twice");
 
         this.clientApi = clientApi;
         if (enabled) HookClientApi();

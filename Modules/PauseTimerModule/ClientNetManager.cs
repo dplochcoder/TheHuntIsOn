@@ -8,7 +8,7 @@ namespace TheHuntIsOn.Modules.PauseModule;
 
 public class ClientNetManager
 {
-    public event Action<SetDeathTimerPacket> SetDeathTimerEvent;
+    public event Action<SetRespawnTimerPacket> SetRespawnTimerEvent;
     public event Action<UpdateCountdownsPacket> UpdateCountdownsEvent;
     public event Action<UpdatePauseStatePacket> UpdatePauseStateEvent;
 
@@ -16,7 +16,7 @@ public class ClientNetManager
     {
         var netReceiver = netClient.GetNetworkReceiver<ClientPacketId>(addon, InstantiatePacket);
 
-        netReceiver.RegisterPacketHandler<SetDeathTimerPacket>(ClientPacketId.SetDeathTimer, packet => SetDeathTimerEvent?.Invoke(packet));
+        netReceiver.RegisterPacketHandler<SetRespawnTimerPacket>(ClientPacketId.SetRespawnTimer, packet => SetRespawnTimerEvent?.Invoke(packet));
         netReceiver.RegisterPacketHandler<UpdateCountdownsPacket>(ClientPacketId.UpdateCountdowns, packet => UpdateCountdownsEvent?.Invoke(packet));
         netReceiver.RegisterPacketHandler<UpdatePauseStatePacket>(ClientPacketId.UpdatePauseState, packet => UpdatePauseStateEvent?.Invoke(packet));
     }
@@ -24,7 +24,7 @@ public class ClientNetManager
     private static IPacketData InstantiatePacket(ClientPacketId packetId)
         => packetId switch
         {
-            ClientPacketId.SetDeathTimer => new PacketDataCollection<SetDeathTimerPacket>(),
+            ClientPacketId.SetRespawnTimer => new PacketDataCollection<SetRespawnTimerPacket>(),
             ClientPacketId.UpdateCountdowns => new PacketDataCollection<UpdateCountdownsPacket>(),
             ClientPacketId.UpdatePauseState => new PacketDataCollection<UpdatePauseStatePacket>(),
             _ => null,

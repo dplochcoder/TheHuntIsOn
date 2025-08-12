@@ -16,7 +16,7 @@ public class HuntLocalSaveData
     public long UnpauseTimeTicks;
 
     // Time to wait to respawn after a death.
-    public int DeathTimerSeconds;
+    public int RespawnTimerSeconds;
 
     // Globally broadcast countdowns.
     public List<Countdown> GlobalCountdowns = [];
@@ -46,7 +46,7 @@ public class HuntLocalSaveData
         var now = DateTime.UtcNow.Ticks;
         if (now >= UnpauseTimeTicks) return false;
 
-        TimeSpan span = new(now - UnpauseTimeTicks);
+        TimeSpan span = new(UnpauseTimeTicks - now);
         remainingSeconds = (float)span.TotalSeconds;
         return true;
     }
