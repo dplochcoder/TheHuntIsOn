@@ -39,6 +39,8 @@ internal abstract class Module
         _active = false;
     }
 
+    internal virtual void Initialize() { }
+
     internal abstract void Enable();
 
     internal abstract void Disable();
