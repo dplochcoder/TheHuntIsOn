@@ -2,7 +2,7 @@
 
 PauseTimer is a Module for TheHuntIsOn, which enables various time control features.
 
-Like the EventNetworkModule, it requires initialization to function. To use the PauseTimer module as server _or_ client, it needs to be enabled in mod options during mod setup, so you will need to restart your game after turning it on for the first time. you will first need to enable it in mod options, then restart the game.
+Like the EventNetworkModule, it requires initialization to function. To use the PauseTimer module as server _or_ client, it needs to be enabled in mod options during mod setup, so you will need to restart your game after turning it on for the first time.
 
 ## Pause Controls
 
