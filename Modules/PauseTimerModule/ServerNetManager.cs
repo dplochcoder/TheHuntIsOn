@@ -7,7 +7,7 @@ internal class ServerNetManager(ServerAddon addon, INetServer netServer)
 {
     private readonly IServerAddonNetworkSender<ClientPacketId> _netSender = netServer.GetNetworkSender<ClientPacketId>(addon);
 
-    public void BroadcastPacket(PauseStateUpdatePacket packet) => _netSender.BroadcastCollectionData(ClientPacketId.PauseStateUpdate, packet);
-    public void BroadcastPacket(CountdownPacket packet) => _netSender.BroadcastCollectionData(ClientPacketId.Countdown, packet);
+    public void BroadcastPacket(UpdateCountdownsPacket packet) => _netSender.BroadcastCollectionData(ClientPacketId.UpdateCountdowns, packet);
+    public void BroadcastPacket(UpdatePauseStatePacket packet) => _netSender.BroadcastCollectionData(ClientPacketId.UpdatePauseState, packet);
     public void BroadcastPacket(SetDeathTimerPacket packet) => _netSender.BroadcastCollectionData(ClientPacketId.SetDeathTimer, packet);
 }
