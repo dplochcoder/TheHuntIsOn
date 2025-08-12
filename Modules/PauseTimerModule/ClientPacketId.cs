@@ -4,5 +4,5 @@ internal enum ClientPacketId
 {
     UpdatePauseState,
     UpdateCountdowns,
-    SetDeathTimer
+    SetRespawnTimer
 }

@@ -2,7 +2,7 @@
 
 namespace TheHuntIsOn.Modules.PauseModule;
 
-public class SetDeathTimerPacket : IPacketData
+public class SetRespawnTimerPacket : IPacketData
 {
     #region Properties
 

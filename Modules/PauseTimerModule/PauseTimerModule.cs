@@ -50,24 +50,24 @@ internal class PauseTimerModule : Module
 
     internal override void Enable()
     {
-        if (!AreAddonsLoaded) return;
+        if (!AreAddonsLoaded || !IsModuleUsed) return;
 
         pauseController.Enable();
         countdownsDisplayer.Enable();
 
-        PauseTimerClientAddon.NetManager.SetDeathTimerEvent += OnSetDeathTimer;
+        PauseTimerClientAddon.NetManager.SetRespawnTimerEvent += OnSetDeathTimer;
         PauseTimerClientAddon.NetManager.UpdateCountdownsEvent += OnUpdateCountdowns;
         PauseTimerClientAddon.NetManager.UpdatePauseStateEvent += OnUpdatePauseState;
     }
 
     internal override void Disable()
     {
-        if (!AreAddonsLoaded) return;
+        if (!AreAddonsLoaded || !IsModuleUsed) return;
 
         pauseController.Disable();
         countdownsDisplayer.Disable();
 
-        PauseTimerClientAddon.NetManager.SetDeathTimerEvent -= OnSetDeathTimer;
+        PauseTimerClientAddon.NetManager.SetRespawnTimerEvent -= OnSetDeathTimer;
         PauseTimerClientAddon.NetManager.UpdateCountdownsEvent -= OnUpdateCountdowns;
         PauseTimerClientAddon.NetManager.UpdatePauseStateEvent -= OnUpdatePauseState;
     }
@@ -78,7 +78,7 @@ internal class PauseTimerModule : Module
         countdownsDisplayer.SetClientApi(clientApi);
     }
 
-    private void OnSetDeathTimer(SetDeathTimerPacket packet) => TheHuntIsOn.LocalSaveData.DeathTimerSeconds = packet.DeathTimer;
+    private void OnSetDeathTimer(SetRespawnTimerPacket packet) => TheHuntIsOn.LocalSaveData.RespawnTimerSeconds = packet.DeathTimer;
 
     private void OnUpdateCountdowns(UpdateCountdownsPacket packet) => TheHuntIsOn.LocalSaveData.UpdateCountdowns(DateTime.UtcNow, packet);
 
