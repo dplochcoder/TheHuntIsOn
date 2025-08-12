@@ -34,7 +34,7 @@ internal class EventNetworkModule : Module
     /// This way if module affection is set to none and the game is restarted, players can connect to server that
     /// do not have the TheHuntIsOn server addon.
     /// </summary>
-    public void Initialize()
+    internal override void Initialize()
     {
         if (Affection == ModuleAffection.None)
         {

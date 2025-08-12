@@ -91,7 +91,8 @@ public class TheHuntIsOn : Mod, IGlobalSettings<HuntGlobalSaveData>, ILocalSetti
 
     public override void Initialize(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
     {
-        SetupHKMP();
+        Modules.ForEach(m => m.Initialize());
+
         On.UIManager.StartNewGame += UIManager_StartNewGame;
         On.UIManager.ContinueGame += UIManager_ContinueGame;
         On.UIManager.ReturnToMainMenu += UIManager_ReturnToMainMenu;
@@ -102,13 +103,6 @@ public class TheHuntIsOn : Mod, IGlobalSettings<HuntGlobalSaveData>, ILocalSetti
         EnemyModule.STDreamEnter = preloadedObjects["Ruins1_24_boss_defeated"]["Mage Lord Remains/Dream Enter"];
         EnemyModule.HKDreamEnter = preloadedObjects["Room_Final_Boss_Core"]["Boss Control/Hollow Knight Boss/Dream Enter"];
         EnemyModule.DreamTree = preloadedObjects["Crossroads_07"]["Dream Plant"];
-    }
-
-    private void SetupHKMP()
-    {
-        // Some funky code to get the EventNetworkModule from the list of modules
-        // Alternatively, the EventNetworkModule could be stored in the class
-        ((EventNetworkModule)Modules.Find(module => module.GetType() == typeof(EventNetworkModule))).Initialize();
     }
     
     #endregion
