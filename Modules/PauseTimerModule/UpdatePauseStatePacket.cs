@@ -2,7 +2,7 @@
 
 namespace TheHuntIsOn.Modules.PauseModule;
 
-public class PauseStateUpdatePacket : IPacketData
+public class UpdatePauseStatePacket : IPacketData
 {
     public bool ServerPaused;
 

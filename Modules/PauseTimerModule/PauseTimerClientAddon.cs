@@ -2,7 +2,7 @@
 
 namespace TheHuntIsOn.Modules.PauseModule;
 
-internal class PauseClientAddon : ClientAddon
+internal class PauseTimerClientAddon : ClientAddon
 {
     protected override string Name => AddonIdentifier.Name;
 
@@ -10,10 +10,10 @@ internal class PauseClientAddon : ClientAddon
 
     public override bool NeedsNetwork => true;
 
-    private readonly PauseModule pauseModule;
+    private readonly PauseTimerModule pauseModule;
     public ClientNetManager NetManager;
 
-    internal PauseClientAddon(PauseModule pauseModule) => this.pauseModule = pauseModule;
+    internal PauseTimerClientAddon(PauseTimerModule pauseModule) => this.pauseModule = pauseModule;
 
     public override void Initialize(IClientApi clientApi)
     {

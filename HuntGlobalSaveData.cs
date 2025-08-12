@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using TheHuntIsOn.Modules.PauseModule;
+using TheHuntIsOn.Modules.PauseTimerModule;
 
 namespace TheHuntIsOn;
 
@@ -16,11 +18,15 @@ public class HuntGlobalSaveData
 
 	public int SpellCost { get; set; } = 33;
 
-	public bool DisableEnemies { get; set; }
+    public bool DisableEnemies { get; set; }
 
-	public bool InvincibleBosses { get; set; }
+    public bool InvincibleBosses { get; set; }
 
-	public bool DreamBossAccess { get; set; }
+    public bool DreamBossAccess { get; set; }
+
+    public PauseTimerPosition PauseTimerPosition { get; set; } = PauseTimerPosition.BottomCenter;
+
+    public PauseTimerSize PauseTimerSize { get; set; } = PauseTimerSize.Normal;
 
     #endregion
 }

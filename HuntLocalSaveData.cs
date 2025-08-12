@@ -5,12 +5,6 @@ using TheHuntIsOn.Modules.PauseModule;
 
 namespace TheHuntIsOn;
 
-public class PendingUnpause
-{
-    public int SequenceNumber;
-    public long UnpauseTicks;
-}
-
 public class HuntLocalSaveData
 {
     #region Properties
@@ -24,11 +18,20 @@ public class HuntLocalSaveData
     // Time to wait to respawn after a death.
     public int DeathTimerSeconds;
 
+    // Globally broadcast countdowns.
+    public List<Countdown> GlobalCountdowns = [];
+
     #endregion
 
     #region Methods
 
-    public void UpdatePauseState(PauseStateUpdatePacket packet)
+    public void UpdateCountdowns(DateTime now, UpdateCountdownsPacket packet)
+    {
+        GlobalCountdowns.Clear();
+        GlobalCountdowns.AddRange([.. packet.Countdowns.Where(c => !c.IsCompleted(now))]);
+    }
+
+    public void UpdatePauseState(UpdatePauseStatePacket packet)
     {
         ServerPaused = packet.ServerPaused;
         UnpauseTimeTicks = packet.UnpauseTimeTicks;

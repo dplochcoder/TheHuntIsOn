@@ -1,20 +1,21 @@
-﻿using KorzUtils.Helper;
+﻿using Hkmp.Api.Client;
+using Hkmp.Api.Server;
+using IL.InControl.NativeDeviceProfiles;
+using KorzUtils.Helper;
 using Modding;
-using Satchel.BetterMenus;
+using Modding.Menu.Config;
 using Satchel;
+using Satchel.BetterMenus;
+using Satchel.BetterPreloads;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Hkmp.Api.Client;
-using Hkmp.Api.Server;
 using TheHuntIsOn.HkmpAddon;
 using TheHuntIsOn.Modules;
 using TheHuntIsOn.Modules.HealthModules;
 using TheHuntIsOn.Modules.PauseModule;
 using UnityEngine;
-using IL.InControl.NativeDeviceProfiles;
-using Satchel.BetterPreloads;
-using Modding.Menu.Config;
 
 namespace TheHuntIsOn;
 
@@ -62,7 +63,7 @@ public class TheHuntIsOn : Mod, IGlobalSettings<HuntGlobalSaveData>, ILocalSetti
         new LifeseedModule(),
         new MaskModule(),
         new NotchModule(),
-        new PauseModule(),
+        new PauseTimerModule(),
         new RespawnModule(),
         new ShadeModule(),
         new ShadeSkipModule(),
@@ -189,6 +190,28 @@ public class TheHuntIsOn : Mod, IGlobalSettings<HuntGlobalSaveData>, ILocalSetti
     internal static bool IsModuleUsed<T>() where T : Module 
         => Instance.Modules.FirstOrDefault(x => x is T)?.IsModuleUsed ?? false;
 
+    private static string MenuName(string str)
+    {
+        if (str.Length == 0) return str;
+
+        StringBuilder sb = new();
+        sb.Append(char.ToUpper(str[0]));
+        bool prevUpper = true;
+        for (int i = 1; i < str.Length; i++)
+        {
+            if (char.IsUpper(str[i]) && !prevUpper) sb.Append(' ');
+            prevUpper = char.IsUpper(str[i]);
+            sb.Append(str[i]);
+        }
+        return sb.ToString();
+    }
+
+    private static HorizontalOption CreateEnumOption<E>(string header, string description, Action<E> setter, Func<E> getter) where E : Enum
+    {
+        List<object> enums = [.. Enum.GetValues(typeof(E))];
+        return new HorizontalOption(header, description, [.. enums.Select(e => MenuName(Enum.GetName(typeof(E), e)))], x => setter((E)enums[x]), () => enums.IndexOf(getter()));
+    }
+
     #endregion
 
     #region Interfaces
@@ -197,12 +220,16 @@ public class TheHuntIsOn : Mod, IGlobalSettings<HuntGlobalSaveData>, ILocalSetti
     {
         List<Element> elements = new()
         {
-            new HorizontalOption("Role:", "Flag that indicates if player is a hunter or speedrunner.", new string[]{"Hunter", "Speedrunner" },
-            x => GlobalSaveData.IsHunter = x == 0,
-            () => GlobalSaveData.IsHunter ? 0 : 1),
+            new HorizontalOption("Role:", "Flag that indicates if player is a hunter or speedrunner.", ["Hunter", "Speedrunner"],
+                                 x => GlobalSaveData.IsHunter = x == 0,
+                                 () => GlobalSaveData.IsHunter ? 0 : 1),
             new CustomSlider("Hunter Focus Cost:", x => GlobalSaveData.FocusCost = (int)x, () => GlobalSaveData.FocusCost, 33, 99, true),
             new CustomSlider("Hunter Focus Speed:", x => GlobalSaveData.FocusSpeed = x, () => GlobalSaveData.FocusSpeed, 1, 3),
             new CustomSlider("Hunter Spell Cost:", x => GlobalSaveData.SpellCost = (int)x, () => GlobalSaveData.SpellCost, 33, 99, true),
+            CreateEnumOption("Timer position:", "Where to display pause, death, and custom countdown timers.",
+                             x => GlobalSaveData.PauseTimerPosition = x, () => GlobalSaveData.PauseTimerPosition),
+            CreateEnumOption("Timer size:", "Size of pause, death, and custom countdown timers.",
+                             x => GlobalSaveData.PauseTimerSize = x, () => GlobalSaveData.PauseTimerSize)
         };
         foreach (Module module in Modules)
         {
