@@ -167,14 +167,14 @@ internal class CountdownsDisplayer
 
         if (!EnsureParent()) return;
 
-        var statuses = ComputeStatuses();
+        List<string> statuses = [];
+        if (IsConnected()) statuses = ComputeStatuses();
         while (textMeshProCache.Count < statuses.Count) CreateTextMesh();
         UpdateStatuses(statuses);
     }
 
     private IEnumerator OnBeginSceneTransitionRoutine(On.GameManager.orig_BeginSceneTransitionRoutine orig, GameManager self, GameManager.SceneLoadInfo sceneLoadInfo)
     {
-        TheHuntIsOn.Instance.Log("OnBeginSceneTransition??");
         var src = orig(self, sceneLoadInfo);
         if (respawnTimer > 0 && IsConnected())
         {
