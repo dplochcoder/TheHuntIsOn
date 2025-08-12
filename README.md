@@ -125,7 +125,7 @@ Removes the full heal provided by completing a mask. The one extra hp by the mas
 Picking up new charm notches will no longer fully heal you.
 
 ### PauseTimer Module
-See the [README.md](Modules/PauseTimerModule/README.md).
+See the [README](Modules/PauseTimerModule/README.md).
 
 ### Respawn Module
 Causes the respawn after dying to always locate to KP regardless of the last bench used.
