@@ -14,6 +14,12 @@ internal class PauseTimerCommand(IServerApi serverApi, ServerNetManager netManag
 
     public bool AuthorizedOnly => true;
 
+    internal HuntLocalSaveData ServerState = new();
+
+    internal ServerNetManager NetManager => netManager;
+
+    internal void BroadcastMessage(string message) => serverApi.ServerManager.BroadcastMessage(message);
+
     private static readonly List<PauseTimerSubcommand> subcommands =
     [
         new PauseSubcommand(),
@@ -64,16 +70,16 @@ internal class PauseTimerCommand(IServerApi serverApi, ServerNetManager netManag
         return false;
     }
 
-    private static void UpdateCountdowns(ServerNetManager netManager, DateTime now, Func<Countdown, Countdown> map)
+    private void UpdateCountdowns(DateTime now, Func<Countdown, Countdown> map)
     {
-        UpdateCountdownsPacket packet = new() { Countdowns = [.. TheHuntIsOn.LocalSaveData.GlobalCountdowns.Select(map)] };
-        TheHuntIsOn.LocalSaveData.UpdateCountdowns(now, packet);
+        UpdateCountdownsPacket packet = new() { Countdowns = [.. ServerState.GlobalCountdowns.Select(map)] };
+        ServerState.UpdateCountdowns(now, packet);
         netManager.BroadcastPacket(packet);
     }
 
-    internal static void PauseCountdowns(ServerNetManager netManager, DateTime now) => UpdateCountdowns(netManager, now, c => c.Pause(now));
+    internal void PauseCountdowns(DateTime now) => UpdateCountdowns(now, c => c.Pause(now));
 
-    internal static void UnpauseCountdowns(ServerNetManager netManager, DateTime now, DateTime unpauseWhen) => UpdateCountdowns(netManager, now, c => c.UnpauseAt(now, unpauseWhen));
+    internal void UnpauseCountdowns(DateTime now, DateTime unpauseWhen) => UpdateCountdowns(now, c => c.UnpauseAt(now, unpauseWhen));
 
     public void Execute(ICommandSender commandSender, string[] arguments)
     {
@@ -115,7 +121,7 @@ internal class PauseTimerCommand(IServerApi serverApi, ServerNetManager netManag
             return;
         }
 
-        if (!subcommand.Execute(serverApi, netManager, commandSender, [.. arguments.Skip(2)])) commandSender.SendMessage($"Usage: {subcommand.Usage()}");
+        if (!subcommand.Execute(this, commandSender, [.. arguments.Skip(2)])) commandSender.SendMessage($"Usage: {subcommand.Usage()}");
     }
 }
 
@@ -127,7 +133,7 @@ internal abstract class PauseTimerSubcommand
 
     public abstract string Usage();
 
-    public abstract bool Execute(IServerApi serverApi, ServerNetManager netManager, ICommandSender send, string[] arguments);
+    public abstract bool Execute(PauseTimerCommand parent, ICommandSender send, string[] arguments);
 }
 
 internal class PauseSubcommand : PauseTimerSubcommand
@@ -136,7 +142,7 @@ internal class PauseSubcommand : PauseTimerSubcommand
 
     public override string Usage() => "'/pt pause [X]': Pause the game for all players. If X is specified, unpause after X seconds.";
 
-    public override bool Execute(IServerApi serverApi, ServerNetManager netManager, ICommandSender commandSender, string[] arguments)
+    public override bool Execute(PauseTimerCommand parent, ICommandSender commandSender, string[] arguments)
     {
         if (!PauseTimerCommand.MaxArguments(commandSender, arguments, 1)) return false;
 
@@ -149,15 +155,14 @@ internal class PauseSubcommand : PauseTimerSubcommand
 
             var unpauseAt = now.AddSeconds(seconds);
             packet.UnpauseTimeTicks = unpauseAt.Ticks;
-            PauseTimerCommand.PauseCountdowns(netManager, now);
-            PauseTimerCommand.UnpauseCountdowns(netManager, now, unpauseAt);
+            parent.PauseCountdowns(now);
+            parent.UnpauseCountdowns(now, unpauseAt);
         }
-        else PauseTimerCommand.PauseCountdowns(netManager, now);
+        else parent.PauseCountdowns(now);
 
-        TheHuntIsOn.LocalSaveData.UpdatePauseState(packet);
-        netManager.BroadcastPacket(packet);
+        parent.NetManager.BroadcastPacket(packet);
         commandSender.SendMessage(seconds == 0 ? "Paused server." : $"Paused server for {seconds} seconds.");
-        serverApi.ServerManager.BroadcastMessage(seconds == 0 ? "Server paused." : $"Server paused for {seconds} seconds.");
+        parent.BroadcastMessage(seconds == 0 ? "Server paused." : $"Server paused for {seconds} seconds.");
         return true;
     }
 }
@@ -168,11 +173,11 @@ internal class UnpauseSubcommand : PauseTimerSubcommand
 
     public override string Usage() => "'/pt unpause [X]': Unpause the game for all players. If X is specified, unpause after X seconds.";
 
-    public override bool Execute(IServerApi serverApi, ServerNetManager netManager, ICommandSender commandSender, string[] arguments)
+    public override bool Execute(PauseTimerCommand parent, ICommandSender commandSender, string[] arguments)
     {
         if (!PauseTimerCommand.MaxArguments(commandSender, arguments, 1)) return false;
 
-        var isPaused = TheHuntIsOn.LocalSaveData.ServerPaused;
+        var isPaused = parent.ServerState.ServerPaused;
         if (!isPaused)
         {
             commandSender.SendMessage("Server is already unpaused.");
@@ -189,19 +194,19 @@ internal class UnpauseSubcommand : PauseTimerSubcommand
             var unpauseAt = now.AddSeconds(seconds);
             packet.ServerPaused = true;
             packet.UnpauseTimeTicks = unpauseAt.Ticks;
-            PauseTimerCommand.UnpauseCountdowns(netManager, now, unpauseAt);
+            parent.UnpauseCountdowns(now, unpauseAt);
         }
         else
         {
             packet.ServerPaused = false;
             packet.UnpauseTimeTicks = 0;
-            PauseTimerCommand.UnpauseCountdowns(netManager, now, now);
+            parent.UnpauseCountdowns(now, now);
         }
 
-        TheHuntIsOn.LocalSaveData.UpdatePauseState(packet);
-        netManager.BroadcastPacket(packet);
+        parent.ServerState.UpdatePauseState(packet);
+        parent.NetManager.BroadcastPacket(packet);
         commandSender.SendMessage(seconds == 0 ? "Unpaused server." : $"Scheduled unpause in {seconds} seconds.");
-        serverApi.ServerManager.BroadcastMessage(seconds == 0 ? "Server unpaused." : $"Server unpausing in {seconds} seconds.");
+        parent.BroadcastMessage(seconds == 0 ? "Server unpaused." : $"Server unpausing in {seconds} seconds.");
         return true;
     }
 }
@@ -212,7 +217,7 @@ internal class CountdownSubcommand : PauseTimerSubcommand
 
     public override string Usage() => "'/pt countdown X [msg...]': Start a countdown for all players on the server lasting X seconds, with an optional message attached.";
 
-    public override bool Execute(IServerApi serverApi, ServerNetManager netManager, ICommandSender commandSender, string[] arguments)
+    public override bool Execute(PauseTimerCommand parent, ICommandSender commandSender, string[] arguments)
     {
         if (!PauseTimerCommand.MinArguments(commandSender, arguments, 1)) return false;
 
@@ -222,7 +227,7 @@ internal class CountdownSubcommand : PauseTimerSubcommand
         Countdown countdown = new() { FinishTimeTicks = now.AddSeconds(seconds).Ticks };
 
         // Respect any active pauses or timed unpauses.
-        if (TheHuntIsOn.LocalSaveData.IsServerPaused(out var remaining))
+        if (parent.ServerState.IsServerPaused(out var remaining))
         {
             if (remaining.HasValue) countdown = countdown.UnpauseAt(now, now.AddSeconds(remaining.Value));
             else countdown = countdown.Pause(now);
@@ -237,16 +242,16 @@ internal class CountdownSubcommand : PauseTimerSubcommand
                 return false;
             }
         }
-
-        UpdateCountdownsPacket packet = new() { Countdowns = [.. TheHuntIsOn.LocalSaveData.GlobalCountdowns.Concat([countdown])] };
+            
+        UpdateCountdownsPacket packet = new() { Countdowns = [.. parent.ServerState.GlobalCountdowns.Concat([countdown])] };
         if (packet.Countdowns.Count > UpdateCountdownsPacket.MaxCountdowns)
         {
             commandSender.SendMessage("Too many countdowns. Try '/pt clearcountdowns'.");
             return true;
         }
 
-        TheHuntIsOn.LocalSaveData.UpdateCountdowns(now, packet);
-        netManager.BroadcastPacket(packet);
+        parent.ServerState.UpdateCountdowns(now, packet);
+        parent.NetManager.BroadcastPacket(packet);
         commandSender.SendMessage($"Broadcasted new {seconds} second countdown.");
         return true;
     }
@@ -258,13 +263,13 @@ internal class ClearCountdownsSubcommand : PauseTimerSubcommand
 
     public override string Usage() => "'/pt clearcountdowns': clear all outstanding countdowns";
 
-    public override bool Execute(IServerApi serverApi, ServerNetManager netManager, ICommandSender commandSender, string[] arguments)
+    public override bool Execute(PauseTimerCommand parent, ICommandSender commandSender, string[] arguments)
     {
         if (!PauseTimerCommand.MaxArguments(commandSender, arguments, 0)) return false;
 
         UpdateCountdownsPacket packet = new();
-        TheHuntIsOn.LocalSaveData.UpdateCountdowns(DateTime.UtcNow, packet);
-        netManager.BroadcastPacket(packet);
+        parent.ServerState.UpdateCountdowns(DateTime.UtcNow, packet);
+        parent.NetManager.BroadcastPacket(packet);
         commandSender.SendMessage("Cleared all active countdowns.");
         return true;
     }
@@ -278,13 +283,13 @@ internal class SetRespawnTimerSubcommand : PauseTimerSubcommand
 
     public override string Usage() => "'/pt respawntimer [X]': get the current respawn delay on death, or else set it";
 
-    public override bool Execute(IServerApi serverApi, ServerNetManager netManager, ICommandSender commandSender, string[] arguments)
+    public override bool Execute(PauseTimerCommand parent, ICommandSender commandSender, string[] arguments)
     {
         if (!PauseTimerCommand.MaxArguments(commandSender, arguments, 1)) return false;
 
         if (arguments.Length == 0)
         {
-            var time = TheHuntIsOn.LocalSaveData.RespawnTimerSeconds;
+            var time = parent.ServerState.RespawnTimerSeconds;
             if (time == 0) commandSender.SendMessage("Respawn timer is not set.");
             else commandSender.SendMessage($"Respawn timer is set to {time} seconds.");
             return true;
@@ -292,8 +297,9 @@ internal class SetRespawnTimerSubcommand : PauseTimerSubcommand
 
         if (!PauseTimerCommand.ParseInt(commandSender, arguments[0], out int seconds)) return false;
 
-        netManager.BroadcastPacket(new SetRespawnTimerPacket() { DeathTimer = seconds });
-        serverApi.ServerManager.BroadcastMessage($"Respawn timer updated to {seconds} seconds.");
+        parent.ServerState.RespawnTimerSeconds = seconds;
+        parent.NetManager.BroadcastPacket(new SetRespawnTimerPacket() { DeathTimer = seconds });
+        parent.BroadcastMessage($"Respawn timer updated to {seconds} seconds.");
         return true;
     }
 }
