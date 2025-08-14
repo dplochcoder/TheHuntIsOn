@@ -160,6 +160,7 @@ internal class PauseSubcommand : PauseTimerSubcommand
         }
         else parent.PauseCountdowns(now);
 
+        parent.ServerState.UpdatePauseState(packet);
         parent.NetManager.BroadcastPacket(packet);
         commandSender.SendMessage(seconds == 0 ? "Paused server." : $"Paused server for {seconds} seconds.");
         parent.BroadcastMessage(seconds == 0 ? "Server paused." : $"Server paused for {seconds} seconds.");
