@@ -16,7 +16,7 @@ internal class EnemyModule : Module
 {
     #region Properties
 
-    public override string MenuDescription => "Disables all non-boss enemies. Makes bosses invincible.";
+    public override string MenuDescription => "Adjusts enemy spawns depending on toggles enabled below.";
 
     #endregion
 
@@ -55,30 +55,38 @@ internal class EnemyModule : Module
 
         HealthManager healthManager = enemy.GetComponent<HealthManager>();
 
-        if (healthManager.hp > 200 ||
-            enemy.name == "Mega Moss Charger" ||
-            enemy.name == "Giant Fly" ||
-            enemy.name == "False Knight New" ||
-            enemy.name == "Mage Knight" ||
-            enemy.name == "Mage Lord Phase2" ||
-            enemy.name == "Head" ||
-            enemy.name == "Mantis Lord S1" ||
-            enemy.name == "Mantis Lord S2" ||
-            enemy.name == "Ghost Warrior Xero")
+        if (InvincibleBosses)
         {
-            healthManager.hp = 9999;
-            return false;
+            if (healthManager.hp > 200 ||
+                enemy.name == "Mega Moss Charger" ||
+                enemy.name == "Giant Fly" ||
+                enemy.name == "False Knight New" ||
+                enemy.name == "Mage Knight" ||
+                enemy.name == "Mage Lord Phase2" ||
+                enemy.name == "Head" ||
+                enemy.name == "Mantis Lord S1" ||
+                enemy.name == "Mantis Lord S2" ||
+                enemy.name == "Ghost Warrior Xero")
+            {
+                healthManager.hp = 9999;
+                return false;
+            }
         }
-        else if ((enemy.name.Contains("Fly") && enemy.scene.name == "Crossroads_04") ||
-                  enemy.scene.name == "Fungus3_23_boss" ||
-                  enemy.scene.name == "Ruins2_11_boss")
-            return false;
-        else if (enemy.name.StartsWith("Acid Walker") ||
+
+        if (DisableEnemies)
+        {
+            if ((enemy.name.Contains("Fly") && enemy.scene.name == "Crossroads_04") ||
+                 enemy.scene.name == "Fungus3_23_boss" ||
+                 enemy.scene.name == "Ruins2_11_boss" ||
+                 enemy.name.StartsWith("Acid Walker") ||
                  enemy.scene.name.StartsWith("Room_Colosseum") ||
                  enemy.name == "Radiance")
-            return false;
+                return false;
+            else
+                return true;
+        }
 
-        return true;
+        return isAlreadyDead;
     }
 
     private void DeactivateIfPlayerdataTrue_OnEnable(On.DeactivateIfPlayerdataTrue.orig_OnEnable orig, DeactivateIfPlayerdataTrue self)
@@ -248,22 +256,30 @@ internal class EnemyModule : Module
     internal override void Enable()
     {
         ModHooks.OnEnableEnemyHook += ModHooks_OnEnableEnemyHook;
-        On.DeactivateIfPlayerdataTrue.OnEnable += DeactivateIfPlayerdataTrue_OnEnable;
-        On.DeactivateIfPlayerdataFalse.OnEnable += DeactivateIfPlayerdataFalse_OnEnable;
-        On.PlayMakerFSM.OnEnable += PlayMakerFSM_OnEnable;
-        On.HutongGames.PlayMaker.Actions.PlayerDataBoolTest.OnEnter += PlayerDataBoolTest_OnEnter;
-        UnityEngine.SceneManagement.SceneManager.activeSceneChanged += SceneManager_activeSceneChanged;
+        if(DreamBossAccess)
+        {
+            On.DeactivateIfPlayerdataTrue.OnEnable += DeactivateIfPlayerdataTrue_OnEnable;
+            On.DeactivateIfPlayerdataFalse.OnEnable += DeactivateIfPlayerdataFalse_OnEnable;
+            On.PlayMakerFSM.OnEnable += PlayMakerFSM_OnEnable;
+            On.HutongGames.PlayMaker.Actions.PlayerDataBoolTest.OnEnter += PlayerDataBoolTest_OnEnter;
+            UnityEngine.SceneManagement.SceneManager.activeSceneChanged += SceneManager_activeSceneChanged;
+        }
+        
         On.HutongGames.PlayMaker.Actions.BeginSceneTransition.OnEnter += BeginSceneTransition_OnEnter;
     }
 
     internal override void Disable()
     {
         ModHooks.OnEnableEnemyHook -= ModHooks_OnEnableEnemyHook;
-        On.DeactivateIfPlayerdataTrue.OnEnable -= DeactivateIfPlayerdataTrue_OnEnable;
-        On.DeactivateIfPlayerdataFalse.OnEnable -= DeactivateIfPlayerdataFalse_OnEnable;
-        On.PlayMakerFSM.OnEnable -= PlayMakerFSM_OnEnable;
-        On.HutongGames.PlayMaker.Actions.PlayerDataBoolTest.OnEnter -= PlayerDataBoolTest_OnEnter;
-        UnityEngine.SceneManagement.SceneManager.activeSceneChanged -= SceneManager_activeSceneChanged;
+        if(!DreamBossAccess)
+        {
+            On.DeactivateIfPlayerdataTrue.OnEnable -= DeactivateIfPlayerdataTrue_OnEnable;
+            On.DeactivateIfPlayerdataFalse.OnEnable -= DeactivateIfPlayerdataFalse_OnEnable;
+            On.PlayMakerFSM.OnEnable -= PlayMakerFSM_OnEnable;
+            On.HutongGames.PlayMaker.Actions.PlayerDataBoolTest.OnEnter -= PlayerDataBoolTest_OnEnter;
+            UnityEngine.SceneManagement.SceneManager.activeSceneChanged -= SceneManager_activeSceneChanged;
+        }
+       
         On.HutongGames.PlayMaker.Actions.BeginSceneTransition.OnEnter -= BeginSceneTransition_OnEnter;
     }
 

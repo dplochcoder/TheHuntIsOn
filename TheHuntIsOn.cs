@@ -1,12 +1,19 @@
 ﻿using KorzUtils.Helper;
 using Modding;
 using Satchel.BetterMenus;
+using Satchel;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Hkmp.Api.Client;
+using Hkmp.Api.Server;
+using TheHuntIsOn.HkmpAddon;
 using TheHuntIsOn.Modules;
 using TheHuntIsOn.Modules.HealthModules;
 using UnityEngine;
+using IL.InControl.NativeDeviceProfiles;
+using Satchel.BetterPreloads;
+using Modding.Menu.Config;
 
 namespace TheHuntIsOn;
 
@@ -38,7 +45,7 @@ public class TheHuntIsOn : Mod, IGlobalSettings<HuntGlobalSaveData>, ICustomMenu
         new AutoTriggerBossModule(),
         new BaldurModule(),
         new BenchModule(),
-        new BossModule(),
+        new EnemyModule(),
         new CharmNerfModule(),
         new CompletionModule(),
         new CutsceneSkipModule(),
@@ -84,12 +91,12 @@ public class TheHuntIsOn : Mod, IGlobalSettings<HuntGlobalSaveData>, ICustomMenu
         On.UIManager.ContinueGame += UIManager_ContinueGame;
         On.UIManager.ReturnToMainMenu += UIManager_ReturnToMainMenu;
         ShadeSkipModule.PlatformPrefab = preloadedObjects["Crossroads_04"]["_Scenery/plat_float_01"];
-        BossModule.TeleporterPrefab = preloadedObjects["White_Palace_03_hub"]["doorWarp"];
+        EnemyModule.TeleporterPrefab = preloadedObjects["White_Palace_03_hub"]["doorWarp"];
         ElevatorModule.Door = preloadedObjects["Crossroads_01"]["_Transition Gates/door1"];
-        BossModule.FKDreamEnter = preloadedObjects["Crossroads_10_boss_defeated"]["Prayer Room/FK Corpse/Dream Enter"];
-        BossModule.STDreamEnter = preloadedObjects["Ruins1_24_boss_defeated"]["Mage Lord Remains/Dream Enter"];
-        BossModule.HKDreamEnter = preloadedObjects["Room_Final_Boss_Core"]["Boss Control/Hollow Knight Boss/Dream Enter"];
-        BossModule.DreamTree = preloadedObjects["Crossroads_07"]["Dream Plant"];
+        EnemyModule.FKDreamEnter = preloadedObjects["Crossroads_10_boss_defeated"]["Prayer Room/FK Corpse/Dream Enter"];
+        EnemyModule.STDreamEnter = preloadedObjects["Ruins1_24_boss_defeated"]["Mage Lord Remains/Dream Enter"];
+        EnemyModule.HKDreamEnter = preloadedObjects["Room_Final_Boss_Core"]["Boss Control/Hollow Knight Boss/Dream Enter"];
+        EnemyModule.DreamTree = preloadedObjects["Crossroads_07"]["Dream Plant"];
     }
 
     private void SetupHKMP()
@@ -199,7 +206,17 @@ public class TheHuntIsOn : Mod, IGlobalSettings<HuntGlobalSaveData>, ICustomMenu
             x => module.Affection = (ModuleAffection)x,
             () => (int)module.Affection));
         }
-        MenuRef ??= new("The Hunt is on", elements.ToArray());
+        elements.Add(new TextPanel("EnemyModule Toggles:", 1000, 35));
+        elements.Add(new HorizontalOption("Disable Enemies", "Disables basic enemy spawns (with exceptions).", new string[] { "Off", "On" },
+            x => Module.DisableEnemies = x == 1,
+            () => Module.DisableEnemies ? 1 : 0));
+        elements.Add(new HorizontalOption("Invincible Bosses", "Sets boss HP to 9999.", new string[] { "Off", "On" },
+            x => Module.InvincibleBosses = x == 1,
+            () => Module.InvincibleBosses ? 1 : 0));
+        elements.Add(new HorizontalOption("Dream Boss Access", "Creates new entrances to dream boss scenes.", new string[] { "Off", "On" },
+            x => Module.DreamBossAccess = x == 1,
+            () => Module.DreamBossAccess ? 1 : 0));
+        MenuRef ??= new("The Hunt Is On", elements.ToArray());
         return MenuRef.GetMenuScreen(modListMenu);
     }
 
@@ -211,6 +228,9 @@ public class TheHuntIsOn : Mod, IGlobalSettings<HuntGlobalSaveData>, ICustomMenu
         foreach (Module module in Modules)
             if (SaveData.AffectionTable.ContainsKey(module.GetType().Name))
                 module.Affection = SaveData.AffectionTable[module.GetType().Name];
+        Module.DisableEnemies = SaveData.DisableEnemies;
+        Module.InvincibleBosses = SaveData.InvincibleBosses;
+        Module.DreamBossAccess = SaveData.DreamBossAccess;
     }
 
     public HuntGlobalSaveData OnSaveGlobal()
@@ -221,6 +241,9 @@ public class TheHuntIsOn : Mod, IGlobalSettings<HuntGlobalSaveData>, ICustomMenu
         globalData.FocusSpeed = SaveData.FocusSpeed;
         globalData.SpellCost = SaveData.SpellCost;
         globalData.IsHunter = SaveData.IsHunter;
+        globalData.DisableEnemies = Module.DisableEnemies;
+        globalData.InvincibleBosses = Module.InvincibleBosses;
+        globalData.DreamBossAccess = Module.DreamBossAccess;
 
         foreach (Module module in Modules)
             globalData.AffectionTable.Add(module.GetType().Name, module.Affection);

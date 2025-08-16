@@ -52,6 +52,9 @@ Exiting a dream sequence, like a boss fight or a dreamer does not longer provide
 ### Elevator Module
 Removes all small CoT elevators and places platform to help climbing them (if the cannot be climbed already by having claw for example). Also removes the lever in the big elevator and adds a door transition there to enter the other half more quickly.
 
+### Enemy Module
+Causes different changes to enemy spawning behavior based upon the Enemy Module toggles enabled.
+
 ### EventNetworkModule
 The EventNetworkModule networks certain events, such as obtained items by the speedrunner and then grants the hunters
 items based on this and sends a message.
@@ -128,7 +131,7 @@ Picking up new charm notches will no longer fully heal you.
 Causes the respawn after dying to always locate to KP regardless of the last bench used.
 
 ### Shade Module
-Removes the shade and all it's effect (removing geo and breaking the soul vessel).
+Removes the shade and all its effects (removing geo and breaking the soul vessel).
 
 ### Shade Skip Module
 Allows navigation (creates platforms) through skip locations requiring the shade.

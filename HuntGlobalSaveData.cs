@@ -16,5 +16,11 @@ public class HuntGlobalSaveData
 
 	public int SpellCost { get; set; } = 33;
 
+	public bool DisableEnemies { get; set; }
+
+	public bool InvincibleBosses { get; set; }
+
+	public bool DreamBossAccess { get; set; }
+
     #endregion
 }
