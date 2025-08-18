@@ -28,9 +28,6 @@ Reduces Elder Baldur (at Greenpath entrance and Ancestral Mound only) HP to 5.
 ### Bench Module
 Benches no longer provide healing. *As the code for healing in the game is a bit sketchy, the hud is disabled and enabled quickly to sync it properly.*
 
-### Boss Module
-Increases boss HP to 9999. Adds teleporters so that players can enter and exit Dream Boss arenas.
-
 ### Charm Nerf Module
 Increases the notch cost of powerful PvP charms by 1. This includes Baldur Shell, Spore Shroom, Heart, and Nailmaster's Glory.
 

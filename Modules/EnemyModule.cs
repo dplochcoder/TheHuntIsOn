@@ -55,7 +55,7 @@ internal class EnemyModule : Module
 
         HealthManager healthManager = enemy.GetComponent<HealthManager>();
 
-        if (InvincibleBosses)
+        if (TheHuntIsOn.SaveData.InvincibleBosses)
         {
             if (healthManager.hp > 200 ||
                 enemy.name == "Mega Moss Charger" ||
@@ -73,7 +73,7 @@ internal class EnemyModule : Module
             }
         }
 
-        if (DisableEnemies)
+        if (TheHuntIsOn.SaveData.DisableEnemies)
         {
             if ((enemy.name.Contains("Fly") && enemy.scene.name == "Crossroads_04") ||
                  enemy.scene.name == "Fungus3_23_boss" ||
@@ -91,14 +91,14 @@ internal class EnemyModule : Module
 
     private void DeactivateIfPlayerdataTrue_OnEnable(On.DeactivateIfPlayerdataTrue.orig_OnEnable orig, DeactivateIfPlayerdataTrue self)
     {
-        if (IsModuleUsed && self.gameObject.name == "Dung Defender_Sleep")
+        if (IsModuleUsed && TheHuntIsOn.SaveData.DreamBossAccess && self.gameObject.name == "Dung Defender_Sleep")
             return;
         orig(self);
     }
 
     private void DeactivateIfPlayerdataFalse_OnEnable(On.DeactivateIfPlayerdataFalse.orig_OnEnable orig, DeactivateIfPlayerdataFalse self)
     {
-        if (IsModuleUsed && self.gameObject.name == "Dung Defender_Sleep")
+        if (IsModuleUsed && TheHuntIsOn.SaveData.DreamBossAccess && self.gameObject.name == "Dung Defender_Sleep")
             return;
         orig(self);
     }
@@ -106,7 +106,7 @@ internal class EnemyModule : Module
 
     private void PlayMakerFSM_OnEnable(On.PlayMakerFSM.orig_OnEnable orig, PlayMakerFSM self)
     {
-        if (IsModuleUsed)
+        if (IsModuleUsed && TheHuntIsOn.SaveData.DreamBossAccess)
         {
             if (self.gameObject.name == "Fk Break Wall" && self.FsmName == "Control")
                 self.GetState("Pause").AdjustTransitions("Initial");
@@ -129,7 +129,7 @@ internal class EnemyModule : Module
 
     private void PlayerDataBoolTest_OnEnter(On.HutongGames.PlayMaker.Actions.PlayerDataBoolTest.orig_OnEnter orig, HutongGames.PlayMaker.Actions.PlayerDataBoolTest self)
     {
-        if (IsModuleUsed &&
+        if (IsModuleUsed && TheHuntIsOn.SaveData.DreamBossAccess &&
             ((self.IsCorrectContext("Control", "IK Remains", "Check") && self.boolName.Value == "infectedKnightDreamDefeated") ||
             (self.IsCorrectContext("Control", "Mage Lord Remains", "Check") && self.boolName.Value == "mageLordDreamDefeated") ||
             (self.IsCorrectContext("Control", "FK Corpse", "Check") && self.boolName.Value == "falseKnightDreamDefeated") ||
@@ -143,7 +143,7 @@ internal class EnemyModule : Module
 
     private void SceneManager_activeSceneChanged(Scene arg0, Scene newScene)
     {
-        if (IsModuleUsed)
+        if (IsModuleUsed && TheHuntIsOn.SaveData.DreamBossAccess)
         {
             switch (newScene.name)
             {
@@ -256,30 +256,22 @@ internal class EnemyModule : Module
     internal override void Enable()
     {
         ModHooks.OnEnableEnemyHook += ModHooks_OnEnableEnemyHook;
-        if(DreamBossAccess)
-        {
-            On.DeactivateIfPlayerdataTrue.OnEnable += DeactivateIfPlayerdataTrue_OnEnable;
-            On.DeactivateIfPlayerdataFalse.OnEnable += DeactivateIfPlayerdataFalse_OnEnable;
-            On.PlayMakerFSM.OnEnable += PlayMakerFSM_OnEnable;
-            On.HutongGames.PlayMaker.Actions.PlayerDataBoolTest.OnEnter += PlayerDataBoolTest_OnEnter;
-            UnityEngine.SceneManagement.SceneManager.activeSceneChanged += SceneManager_activeSceneChanged;
-        }
-        
+        On.DeactivateIfPlayerdataTrue.OnEnable += DeactivateIfPlayerdataTrue_OnEnable;
+        On.DeactivateIfPlayerdataFalse.OnEnable += DeactivateIfPlayerdataFalse_OnEnable;
+        On.PlayMakerFSM.OnEnable += PlayMakerFSM_OnEnable;
+        On.HutongGames.PlayMaker.Actions.PlayerDataBoolTest.OnEnter += PlayerDataBoolTest_OnEnter;
+        UnityEngine.SceneManagement.SceneManager.activeSceneChanged += SceneManager_activeSceneChanged;
         On.HutongGames.PlayMaker.Actions.BeginSceneTransition.OnEnter += BeginSceneTransition_OnEnter;
     }
 
     internal override void Disable()
     {
         ModHooks.OnEnableEnemyHook -= ModHooks_OnEnableEnemyHook;
-        if(!DreamBossAccess)
-        {
-            On.DeactivateIfPlayerdataTrue.OnEnable -= DeactivateIfPlayerdataTrue_OnEnable;
-            On.DeactivateIfPlayerdataFalse.OnEnable -= DeactivateIfPlayerdataFalse_OnEnable;
-            On.PlayMakerFSM.OnEnable -= PlayMakerFSM_OnEnable;
-            On.HutongGames.PlayMaker.Actions.PlayerDataBoolTest.OnEnter -= PlayerDataBoolTest_OnEnter;
-            UnityEngine.SceneManagement.SceneManager.activeSceneChanged -= SceneManager_activeSceneChanged;
-        }
-       
+        On.DeactivateIfPlayerdataTrue.OnEnable -= DeactivateIfPlayerdataTrue_OnEnable;
+        On.DeactivateIfPlayerdataFalse.OnEnable -= DeactivateIfPlayerdataFalse_OnEnable;
+        On.PlayMakerFSM.OnEnable -= PlayMakerFSM_OnEnable;
+        On.HutongGames.PlayMaker.Actions.PlayerDataBoolTest.OnEnter -= PlayerDataBoolTest_OnEnter;
+        UnityEngine.SceneManagement.SceneManager.activeSceneChanged -= SceneManager_activeSceneChanged;
         On.HutongGames.PlayMaker.Actions.BeginSceneTransition.OnEnter -= BeginSceneTransition_OnEnter;
     }
 

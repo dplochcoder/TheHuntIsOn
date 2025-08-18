@@ -45,13 +45,13 @@ public class TheHuntIsOn : Mod, IGlobalSettings<HuntGlobalSaveData>, ICustomMenu
         new AutoTriggerBossModule(),
         new BaldurModule(),
         new BenchModule(),
-        new EnemyModule(),
         new CharmNerfModule(),
         new CompletionModule(),
         new CutsceneSkipModule(),
         new DisableSoulGainModule(),
         new DreamHealModule(),
         new ElevatorModule(),
+        new EnemyModule(),
         new EventNetworkModule(),
         new HelperPlatformModule(),
         new IntangibleGatesModule(),
@@ -208,14 +208,14 @@ public class TheHuntIsOn : Mod, IGlobalSettings<HuntGlobalSaveData>, ICustomMenu
         }
         elements.Add(new TextPanel("EnemyModule Toggles:", 1000, 35));
         elements.Add(new HorizontalOption("Disable Enemies", "Disables basic enemy spawns (with exceptions).", new string[] { "Off", "On" },
-            x => Module.DisableEnemies = x == 1,
-            () => Module.DisableEnemies ? 1 : 0));
+            x => SaveData.DisableEnemies = x == 1,
+            () => SaveData.DisableEnemies ? 1 : 0));
         elements.Add(new HorizontalOption("Invincible Bosses", "Sets boss HP to 9999.", new string[] { "Off", "On" },
-            x => Module.InvincibleBosses = x == 1,
-            () => Module.InvincibleBosses ? 1 : 0));
-        elements.Add(new HorizontalOption("Dream Boss Access", "Creates new entrances to dream boss scenes.", new string[] { "Off", "On" },
-            x => Module.DreamBossAccess = x == 1,
-            () => Module.DreamBossAccess ? 1 : 0));
+            x => SaveData.InvincibleBosses = x == 1,
+            () => SaveData.InvincibleBosses ? 1 : 0));
+        elements.Add(new HorizontalOption("Dream Boss Access", "Creates new entrances and exits for dream bosses.", new string[] { "Off", "On" },
+            x => SaveData.DreamBossAccess = x == 1,
+            () => SaveData.DreamBossAccess ? 1 : 0));
         MenuRef ??= new("The Hunt Is On", elements.ToArray());
         return MenuRef.GetMenuScreen(modListMenu);
     }
@@ -228,9 +228,6 @@ public class TheHuntIsOn : Mod, IGlobalSettings<HuntGlobalSaveData>, ICustomMenu
         foreach (Module module in Modules)
             if (SaveData.AffectionTable.ContainsKey(module.GetType().Name))
                 module.Affection = SaveData.AffectionTable[module.GetType().Name];
-        Module.DisableEnemies = SaveData.DisableEnemies;
-        Module.InvincibleBosses = SaveData.InvincibleBosses;
-        Module.DreamBossAccess = SaveData.DreamBossAccess;
     }
 
     public HuntGlobalSaveData OnSaveGlobal()
@@ -241,9 +238,9 @@ public class TheHuntIsOn : Mod, IGlobalSettings<HuntGlobalSaveData>, ICustomMenu
         globalData.FocusSpeed = SaveData.FocusSpeed;
         globalData.SpellCost = SaveData.SpellCost;
         globalData.IsHunter = SaveData.IsHunter;
-        globalData.DisableEnemies = Module.DisableEnemies;
-        globalData.InvincibleBosses = Module.InvincibleBosses;
-        globalData.DreamBossAccess = Module.DreamBossAccess;
+        globalData.DisableEnemies = SaveData.DisableEnemies;
+        globalData.InvincibleBosses = SaveData.InvincibleBosses;
+        globalData.DreamBossAccess = SaveData.DreamBossAccess;
 
         foreach (Module module in Modules)
             globalData.AffectionTable.Add(module.GetType().Name, module.Affection);
