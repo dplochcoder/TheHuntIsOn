@@ -75,12 +75,22 @@ internal class EnemyModule : Module
 
         if (TheHuntIsOn.SaveData.DisableEnemies)
         {
-            if ((enemy.name.Contains("Fly") && enemy.scene.name == "Crossroads_04") ||
-                 enemy.scene.name == "Fungus3_23_boss" ||
-                 enemy.scene.name == "Ruins2_11_boss" ||
-                 enemy.name.StartsWith("Acid Walker") ||
-                 enemy.scene.name.StartsWith("Room_Colosseum") ||
-                 enemy.name == "Radiance")
+            if (healthManager.hp > 200 ||
+                enemy.name == "Mega Moss Charger" ||
+                enemy.name == "Giant Fly" ||
+                enemy.name == "False Knight New" ||
+                enemy.name == "Mage Knight" ||
+                enemy.name == "Mage Lord Phase2" ||
+                enemy.name == "Head" ||
+                enemy.name == "Mantis Lord S1" ||
+                enemy.name == "Mantis Lord S2" ||
+                enemy.name == "Ghost Warrior Xero" ||
+                (enemy.name.Contains("Fly") && enemy.scene.name == "Crossroads_04") ||
+                enemy.scene.name == "Fungus3_23_boss" ||
+                enemy.scene.name == "Ruins2_11_boss" ||
+                enemy.name.StartsWith("Acid Walker") ||
+                enemy.scene.name.StartsWith("Room_Colosseum") ||
+                enemy.name == "Radiance")
                 return false;
             else
                 return true;
