@@ -16,7 +16,7 @@ internal class EnemyModule : Module
 {
     #region Properties
 
-    public override string MenuDescription => "Disables all non-boss enemies. Makes bosses invincible.";
+    public override string MenuDescription => "Adjusts enemy spawns depending on toggles enabled below.";
 
     #endregion
 
@@ -55,42 +55,60 @@ internal class EnemyModule : Module
 
         HealthManager healthManager = enemy.GetComponent<HealthManager>();
 
-        if (healthManager.hp > 200 ||
-            enemy.name == "Mega Moss Charger" ||
-            enemy.name == "Giant Fly" ||
-            enemy.name == "False Knight New" ||
-            enemy.name == "Mage Knight" ||
-            enemy.name == "Mage Lord Phase2" ||
-            enemy.name == "Head" ||
-            enemy.name == "Mantis Lord S1" ||
-            enemy.name == "Mantis Lord S2" ||
-            enemy.name == "Ghost Warrior Xero")
+        if (TheHuntIsOn.SaveData.InvincibleBosses)
         {
-            healthManager.hp = 9999;
-            return false;
+            if (healthManager.hp > 200 ||
+                enemy.name == "Mega Moss Charger" ||
+                enemy.name == "Giant Fly" ||
+                enemy.name == "False Knight New" ||
+                enemy.name == "Mage Knight" ||
+                enemy.name == "Mage Lord Phase2" ||
+                enemy.name == "Head" ||
+                enemy.name == "Mantis Lord S1" ||
+                enemy.name == "Mantis Lord S2" ||
+                enemy.name == "Ghost Warrior Xero")
+            {
+                healthManager.hp = 9999;
+                return false;
+            }
         }
-        else if ((enemy.name.Contains("Fly") && enemy.scene.name == "Crossroads_04") ||
-                  enemy.scene.name == "Fungus3_23_boss" ||
-                  enemy.scene.name == "Ruins2_11_boss")
-            return false;
-        else if (enemy.name.StartsWith("Acid Walker") ||
-                 enemy.scene.name.StartsWith("Room_Colosseum") ||
-                 enemy.name == "Radiance")
-            return false;
 
-        return true;
+        if (TheHuntIsOn.SaveData.DisableEnemies)
+        {
+            if (healthManager.hp > 200 ||
+                enemy.name == "Mega Moss Charger" ||
+                enemy.name == "Giant Fly" ||
+                enemy.name == "False Knight New" ||
+                enemy.name == "Mage Knight" ||
+                enemy.name == "Mage Lord Phase2" ||
+                enemy.name == "Head" ||
+                enemy.name == "Mantis Lord S1" ||
+                enemy.name == "Mantis Lord S2" ||
+                enemy.name == "Ghost Warrior Xero" ||
+                (enemy.name.Contains("Fly") && enemy.scene.name == "Crossroads_04") ||
+                enemy.scene.name == "Fungus3_23_boss" ||
+                enemy.scene.name == "Ruins2_11_boss" ||
+                enemy.name.StartsWith("Acid Walker") ||
+                enemy.scene.name.StartsWith("Room_Colosseum") ||
+                enemy.name == "Radiance")
+                return false;
+            else
+                return true;
+        }
+
+        return isAlreadyDead;
     }
 
     private void DeactivateIfPlayerdataTrue_OnEnable(On.DeactivateIfPlayerdataTrue.orig_OnEnable orig, DeactivateIfPlayerdataTrue self)
     {
-        if (IsModuleUsed && self.gameObject.name == "Dung Defender_Sleep")
+        if (IsModuleUsed && TheHuntIsOn.SaveData.DreamBossAccess && self.gameObject.name == "Dung Defender_Sleep")
             return;
         orig(self);
     }
 
     private void DeactivateIfPlayerdataFalse_OnEnable(On.DeactivateIfPlayerdataFalse.orig_OnEnable orig, DeactivateIfPlayerdataFalse self)
     {
-        if (IsModuleUsed && self.gameObject.name == "Dung Defender_Sleep")
+        if (IsModuleUsed && TheHuntIsOn.SaveData.DreamBossAccess && self.gameObject.name == "Dung Defender_Sleep")
             return;
         orig(self);
     }
@@ -98,7 +116,7 @@ internal class EnemyModule : Module
 
     private void PlayMakerFSM_OnEnable(On.PlayMakerFSM.orig_OnEnable orig, PlayMakerFSM self)
     {
-        if (IsModuleUsed)
+        if (IsModuleUsed && TheHuntIsOn.SaveData.DreamBossAccess)
         {
             if (self.gameObject.name == "Fk Break Wall" && self.FsmName == "Control")
                 self.GetState("Pause").AdjustTransitions("Initial");
@@ -121,7 +139,7 @@ internal class EnemyModule : Module
 
     private void PlayerDataBoolTest_OnEnter(On.HutongGames.PlayMaker.Actions.PlayerDataBoolTest.orig_OnEnter orig, HutongGames.PlayMaker.Actions.PlayerDataBoolTest self)
     {
-        if (IsModuleUsed &&
+        if (IsModuleUsed && TheHuntIsOn.SaveData.DreamBossAccess &&
             ((self.IsCorrectContext("Control", "IK Remains", "Check") && self.boolName.Value == "infectedKnightDreamDefeated") ||
             (self.IsCorrectContext("Control", "Mage Lord Remains", "Check") && self.boolName.Value == "mageLordDreamDefeated") ||
             (self.IsCorrectContext("Control", "FK Corpse", "Check") && self.boolName.Value == "falseKnightDreamDefeated") ||
@@ -135,7 +153,7 @@ internal class EnemyModule : Module
 
     private void SceneManager_activeSceneChanged(Scene arg0, Scene newScene)
     {
-        if (IsModuleUsed)
+        if (IsModuleUsed && TheHuntIsOn.SaveData.DreamBossAccess)
         {
             switch (newScene.name)
             {
