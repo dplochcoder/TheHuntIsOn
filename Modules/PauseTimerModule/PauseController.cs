@@ -16,7 +16,7 @@ internal class PauseController
         var mgr = clientApi.ClientManager;
         mgr.ConnectEvent += FixTimeScale;
         mgr.DisconnectEvent += FixTimeScale;
-        mgr.SetTimeScaleEvent += OnHKMPSetTimeScale;
+        mgr.PauseManager.SetTimeScaleEvent += OnHKMPSetTimeScale;
     }
 
     private void UnhookClientApi()
@@ -24,7 +24,7 @@ internal class PauseController
         var mgr = clientApi.ClientManager;
         mgr.ConnectEvent -= FixTimeScale;
         mgr.DisconnectEvent -= FixTimeScale;
-        mgr.SetTimeScaleEvent -= OnHKMPSetTimeScale;
+        mgr.PauseManager.SetTimeScaleEvent -= OnHKMPSetTimeScale;
     }
 
     internal void Enable()
