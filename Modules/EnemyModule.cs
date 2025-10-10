@@ -50,7 +50,7 @@ internal class EnemyModule : Module
 
         HealthManager healthManager = enemy.GetComponent<HealthManager>();
 
-        if (TheHuntIsOn.SaveData.InvincibleBosses)
+        if (TheHuntIsOn.GlobalSaveData.InvincibleBosses)
         {
             if (healthManager.hp > 200 ||
                 enemy.name == "Mega Moss Charger" ||
@@ -68,7 +68,7 @@ internal class EnemyModule : Module
             }
         }
 
-        if (TheHuntIsOn.SaveData.DisableEnemies)
+        if (TheHuntIsOn.GlobalSaveData.DisableEnemies)
         {
             if (healthManager.hp > 200 ||
                 enemy.name == "Mega Moss Charger" ||
@@ -96,14 +96,14 @@ internal class EnemyModule : Module
 
     private void DeactivateIfPlayerdataTrue_OnEnable(On.DeactivateIfPlayerdataTrue.orig_OnEnable orig, DeactivateIfPlayerdataTrue self)
     {
-        if (IsModuleUsed && TheHuntIsOn.SaveData.DreamBossAccess && self.gameObject.name == "Dung Defender_Sleep")
+        if (IsModuleUsed && TheHuntIsOn.GlobalSaveData.DreamBossAccess && self.gameObject.name == "Dung Defender_Sleep")
             return;
         orig(self);
     }
 
     private void DeactivateIfPlayerdataFalse_OnEnable(On.DeactivateIfPlayerdataFalse.orig_OnEnable orig, DeactivateIfPlayerdataFalse self)
     {
-        if (IsModuleUsed && TheHuntIsOn.SaveData.DreamBossAccess && self.gameObject.name == "Dung Defender_Sleep")
+        if (IsModuleUsed && TheHuntIsOn.GlobalSaveData.DreamBossAccess && self.gameObject.name == "Dung Defender_Sleep")
             return;
         orig(self);
     }
@@ -111,7 +111,7 @@ internal class EnemyModule : Module
 
     private void PlayMakerFSM_OnEnable(On.PlayMakerFSM.orig_OnEnable orig, PlayMakerFSM self)
     {
-        if (IsModuleUsed && TheHuntIsOn.SaveData.DreamBossAccess)
+        if (IsModuleUsed && TheHuntIsOn.GlobalSaveData.DreamBossAccess)
         {
             if (self.gameObject.name == "Fk Break Wall" && self.FsmName == "Control")
                 self.GetState("Pause").AdjustTransitions("Initial");
@@ -134,7 +134,7 @@ internal class EnemyModule : Module
 
     private void PlayerDataBoolTest_OnEnter(On.HutongGames.PlayMaker.Actions.PlayerDataBoolTest.orig_OnEnter orig, HutongGames.PlayMaker.Actions.PlayerDataBoolTest self)
     {
-        if (IsModuleUsed && TheHuntIsOn.SaveData.DreamBossAccess &&
+        if (IsModuleUsed && TheHuntIsOn.GlobalSaveData.DreamBossAccess &&
             ((self.IsCorrectContext("Control", "IK Remains", "Check") && self.boolName.Value == "infectedKnightDreamDefeated") ||
             (self.IsCorrectContext("Control", "Mage Lord Remains", "Check") && self.boolName.Value == "mageLordDreamDefeated") ||
             (self.IsCorrectContext("Control", "FK Corpse", "Check") && self.boolName.Value == "falseKnightDreamDefeated") ||
@@ -148,7 +148,7 @@ internal class EnemyModule : Module
 
     private void SceneManager_activeSceneChanged(Scene arg0, Scene newScene)
     {
-        if (IsModuleUsed && TheHuntIsOn.SaveData.DreamBossAccess)
+        if (IsModuleUsed && TheHuntIsOn.GlobalSaveData.DreamBossAccess)
         {
             switch (newScene.name)
             {

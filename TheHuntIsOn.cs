@@ -1,17 +1,11 @@
-﻿using Hkmp.Api.Client;
-using Hkmp.Api.Server;
-using IL.InControl.NativeDeviceProfiles;
-using KorzUtils.Helper;
+﻿using KorzUtils.Helper;
 using Modding;
-using Modding.Menu.Config;
-using Satchel;
 using Satchel.BetterMenus;
-using Satchel.BetterPreloads;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using TheHuntIsOn.HkmpAddon;
+using System.Text;
 using TheHuntIsOn.Modules;
 using TheHuntIsOn.Modules.HealthModules;
 using TheHuntIsOn.Modules.PauseModule;
@@ -233,14 +227,14 @@ public class TheHuntIsOn : Mod, IGlobalSettings<HuntGlobalSaveData>, ILocalSetti
         }
         elements.Add(new TextPanel("EnemyModule Toggles:", 1000, 35));
         elements.Add(new HorizontalOption("Disable Enemies", "Disables basic enemy spawns (with exceptions).", new string[] { "Off", "On" },
-            x => SaveData.DisableEnemies = x == 1,
-            () => SaveData.DisableEnemies ? 1 : 0));
+            x => GlobalSaveData.DisableEnemies = x == 1,
+            () => GlobalSaveData.DisableEnemies ? 1 : 0));
         elements.Add(new HorizontalOption("Invincible Bosses", "Sets boss HP to 9999.", new string[] { "Off", "On" },
-            x => SaveData.InvincibleBosses = x == 1,
-            () => SaveData.InvincibleBosses ? 1 : 0));
+            x => GlobalSaveData.InvincibleBosses = x == 1,
+            () => GlobalSaveData.InvincibleBosses ? 1 : 0));
         elements.Add(new HorizontalOption("Dream Boss Access", "Creates new entrances and exits for dream bosses.", new string[] { "Off", "On" },
-            x => SaveData.DreamBossAccess = x == 1,
-            () => SaveData.DreamBossAccess ? 1 : 0));
+            x => GlobalSaveData.DreamBossAccess = x == 1,
+            () => GlobalSaveData.DreamBossAccess ? 1 : 0));
         MenuRef ??= new("The Hunt Is On", elements.ToArray());
         return MenuRef.GetMenuScreen(modListMenu);
     }
@@ -263,8 +257,8 @@ public class TheHuntIsOn : Mod, IGlobalSettings<HuntGlobalSaveData>, ILocalSetti
         globalData.FocusSpeed = GlobalSaveData.FocusSpeed;
         globalData.SpellCost = GlobalSaveData.SpellCost;
         globalData.IsHunter = GlobalSaveData.IsHunter;
-        globalData.DisableEnemies = SaveData.DisableEnemies;
-        globalData.InvincibleBosses = GlobalSaveDataGlobalSaveDataInvincibleBosses;
+        globalData.DisableEnemies = GlobalSaveData.DisableEnemies;
+        globalData.InvincibleBosses = GlobalSaveData.InvincibleBosses;
         globalData.DreamBossAccess = GlobalSaveData.DreamBossAccess;
 
         foreach (Module module in Modules)
