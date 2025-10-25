@@ -5,8 +5,8 @@ namespace TheHuntIsOn.Modules.PauseModule;
 
 internal class PauseController
 {
-    private float baseGameTimescale;
-    private float hkmpTimescale;
+    private float baseGameTimescale = 1;
+    private float hkmpTimescale = 1;
 
     private bool enabled;
     private IClientApi clientApi;
