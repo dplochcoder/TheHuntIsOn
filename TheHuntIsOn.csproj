@@ -5,7 +5,7 @@
 		<TargetFramework>net472</TargetFramework>
 		<RootNamespace>TheHuntIsOn</RootNamespace>
 		<AssemblyTitle>TheHuntIsOn</AssemblyTitle>
-		<AssemblyVersion>1.0.1</AssemblyVersion>
+		<AssemblyVersion>1.1.0</AssemblyVersion>
 		<Deterministic>true</Deterministic>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<LangVersion>latest</LangVersion>
@@ -15,7 +15,7 @@
 		<ExportDir>bin\Publish</ExportDir>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<DocumentationFile></DocumentationFile>
-		<FileVersion>1.0.2.0</FileVersion>
+		<FileVersion>1.1.0.0</FileVersion>
 	</PropertyGroup>
   <Import Project="LocalOverrides.targets" Condition="Exists('LocalOverrides.targets')" />
 
