@@ -12,90 +12,90 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <ExportDir>bin\Publish</ExportDir>
+    <ExportDir>bin/Publish</ExportDir>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <DocumentationFile></DocumentationFile>
   </PropertyGroup>
   <Import Project="LocalOverrides.targets" Condition="Exists('LocalOverrides.targets')" />
 
   <ItemGroup>
-    <None Remove="Resources\SceneData.json" />
+    <None Remove="Resources/SceneData.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Resources\SceneData.json" />
-    <EmbeddedResource Include="Resources\default-networked-events.json" />
+    <EmbeddedResource Include="Resources/SceneData.json" />
+    <EmbeddedResource Include="Resources/default-networked-events.json" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
-      <HintPath>$(HollowKnightRefs)\Assembly-CSharp.dll</HintPath>
+      <HintPath>$(HollowKnightRefs)/Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="HKMP">
-      <HintPath>$(HollowKnightRefs)\Mods\HKMP\HKMP.dll</HintPath>
+      <HintPath>$(HollowKnightRefs)/Mods/HKMP/HKMP.dll</HintPath>
     </Reference>
     <Reference Include="KorzUtils">
-      <HintPath>$(HollowKnightRefs)\Mods\KorzUtils\KorzUtils.dll</HintPath>
+      <HintPath>$(HollowKnightRefs)/Mods/KorzUtils/KorzUtils.dll</HintPath>
     </Reference>
     <Reference Include="MMHOOK_Assembly-CSharp">
-      <HintPath>$(HollowKnightRefs)\MMHOOK_Assembly-CSharp.dll</HintPath>
+      <HintPath>$(HollowKnightRefs)/MMHOOK_Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="MMHOOK_PlayMaker">
-      <HintPath>$(HollowKnightRefs)\MMHOOK_PlayMaker.dll</HintPath>
+      <HintPath>$(HollowKnightRefs)/MMHOOK_PlayMaker.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Cecil">
-      <HintPath>$(HollowKnightRefs)\Mono.Cecil.dll</HintPath>
+      <HintPath>$(HollowKnightRefs)/Mono.Cecil.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Security">
-      <HintPath>$(HollowKnightRefs)\Mono.Security.dll</HintPath>
+      <HintPath>$(HollowKnightRefs)/Mono.Security.dll</HintPath>
     </Reference>
     <Reference Include="MonoMod.RuntimeDetour">
-      <HintPath>$(HollowKnightRefs)\MonoMod.RuntimeDetour.dll</HintPath>
+      <HintPath>$(HollowKnightRefs)/MonoMod.RuntimeDetour.dll</HintPath>
     </Reference>
     <Reference Include="MonoMod.Utils">
-      <HintPath>$(HollowKnightRefs)\MonoMod.Utils.dll</HintPath>
+      <HintPath>$(HollowKnightRefs)/MonoMod.Utils.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>$(HollowKnightRefs)\Newtonsoft.Json.dll</HintPath>
+      <HintPath>$(HollowKnightRefs)/Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PlayMaker">
-      <HintPath>$(HollowKnightRefs)\PlayMaker.dll</HintPath>
+      <HintPath>$(HollowKnightRefs)/PlayMaker.dll</HintPath>
     </Reference>
     <Reference Include="Satchel">
-      <HintPath>$(HollowKnightRefs)\Mods\Satchel\Satchel.dll</HintPath>
+      <HintPath>$(HollowKnightRefs)/Mods/Satchel/Satchel.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>$(HollowKnightRefs)\UnityEngine.dll</HintPath>
+      <HintPath>$(HollowKnightRefs)/UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AudioModule">
-      <HintPath>$(HollowKnightRefs)\UnityEngine.AudioModule.dll</HintPath>
+      <HintPath>$(HollowKnightRefs)/UnityEngine.AudioModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>$(HollowKnightRefs)\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>$(HollowKnightRefs)/UnityEngine.CoreModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.ImageConversionModule">
-      <HintPath>$(HollowKnightRefs)\UnityEngine.ImageConversionModule.dll</HintPath>
+      <HintPath>$(HollowKnightRefs)/UnityEngine.ImageConversionModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.ParticleSystemModule">
-      <HintPath>$(HollowKnightRefs)\UnityEngine.ParticleSystemModule.dll</HintPath>
+      <HintPath>$(HollowKnightRefs)/UnityEngine.ParticleSystemModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.Physics2DModule">
-      <HintPath>$(HollowKnightRefs)\UnityEngine.Physics2DModule.dll</HintPath>
+      <HintPath>$(HollowKnightRefs)/UnityEngine.Physics2DModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>$(HollowKnightRefs)\UnityEngine.UI.dll</HintPath>
+      <HintPath>$(HollowKnightRefs)/UnityEngine.UI.dll</HintPath>
     </Reference>
   </ItemGroup>
 
   <Target Name="CopyMod" AfterTargets="PostBuildEvent">
     <Copy
       SourceFiles="$(TargetPath);$(TargetDir)$(TargetName).pdb"
-      DestinationFolder="$(HollowKnightRefs)\Mods\$(TargetName)"
+      DestinationFolder="$(HollowKnightRefs)/Mods/$(TargetName)"
       OverwriteReadOnlyFiles="true"
     />
   </Target>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="cd $(HollowKnightRefs)\Mods\$(TargetName)&#xD;&#xA;del *.dll&#xD;&#xA;del *.pdb" />
+    <Exec Command="cd $(HollowKnightRefs)/Mods/$(TargetName)&#xD;&#xA;del *.dll&#xD;&#xA;del *.pdb" />
   </Target>
 </Project>
