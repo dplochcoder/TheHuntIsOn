@@ -1,9 +1,9 @@
-﻿using KorzUtils.Enums;
+﻿using System;
+using KorzUtils.Enums;
 using KorzUtils.Helper;
 using Modding;
 using MonoMod.Cil;
 using MonoMod.RuntimeDetour;
-using System;
 
 namespace TheHuntIsOn;
 
@@ -68,14 +68,20 @@ internal static class HealthControl
             : PlayerData.instance.GetInt("health");
 
         int lifeblood = PlayerData.instance.GetInt("healthBlue");
-        int actualDamage = PlayerData.instance.GetBool(nameof(PlayerData.overcharmed)) ? damageAmount * 2 : damageAmount;
+        int actualDamage = PlayerData.instance.GetBool(nameof(PlayerData.overcharmed))
+            ? damageAmount * 2
+            : damageAmount;
         // If the attack is deadly, we don't need to calculate anything.
         if (actualDamage >= currentHealth + lifeblood)
             return damageAmount;
 
         // To determine which of the charms should lose a "point" we check for the index.
-        int lifebloodHeartIndex = PlayerData.instance.equippedCharms.IndexOf((int)CharmRef.LifebloodHeart);
-        int lifebloodCoreIndex = PlayerData.instance.equippedCharms.IndexOf((int)CharmRef.LifebloodCore);
+        int lifebloodHeartIndex = PlayerData.instance.equippedCharms.IndexOf(
+            (int)CharmRef.LifebloodHeart
+        );
+        int lifebloodCoreIndex = PlayerData.instance.equippedCharms.IndexOf(
+            (int)CharmRef.LifebloodCore
+        );
         for (int i = 0; i < actualDamage; i++)
             if (CharmHelper.EquippedCharm(CharmRef.JonisBlessing))
                 JoniUsedHealth++;
@@ -104,15 +110,17 @@ internal static class HealthControl
         ILCursor cursor = new(il);
         cursor.Goto(0);
 
-        cursor.GotoNext(MoveType.After,
-            x => x.MatchCallvirt<PlayerData>("get_CurrentMaxHealth"));
+        cursor.GotoNext(MoveType.After, x => x.MatchCallvirt<PlayerData>("get_CurrentMaxHealth"));
         cursor.EmitDelegate<Func<int, int>>(x =>
         {
             if (BlockHeal)
             {
                 LogHelper.Write("Current health: " + CurrentHealth + "; CurrentMaxHealth: " + x);
                 int currentHealth = CurrentHealth;
-                if (CharmHelper.EquippedCharm(CharmRef.FragileHeart) && !CharmHelper.EquippedCharm(CharmRef.JonisBlessing))
+                if (
+                    CharmHelper.EquippedCharm(CharmRef.FragileHeart)
+                    && !CharmHelper.EquippedCharm(CharmRef.JonisBlessing)
+                )
                     currentHealth += 2 - FragileHeartHealth;
                 return Math.Min(x, currentHealth);
             }
@@ -150,7 +158,10 @@ internal static class HealthControl
         return healthToRestore;
     }
 
-    private static void HeroController_MaxHealth(On.HeroController.orig_MaxHealth orig, HeroController self)
+    private static void HeroController_MaxHealth(
+        On.HeroController.orig_MaxHealth orig,
+        HeroController self
+    )
     {
         if (BlockHeal)
         {
@@ -182,24 +193,29 @@ internal static class HealthControl
         LifebloodHeart = 0;
         JoniUsedHealth = 0;
         FragileHeartHealth = 0;
-        CurrentHealth = maxHealth == 1
-        ? PlayerData.instance.GetInt(nameof(PlayerData.maxHealthBase))
-        : (CharmHelper.EquippedCharm(CharmRef.FragileHeart)
-            ? maxHealth - 2
-            : maxHealth);
+        CurrentHealth =
+            maxHealth == 1
+                ? PlayerData.instance.GetInt(nameof(PlayerData.maxHealthBase))
+                : (CharmHelper.EquippedCharm(CharmRef.FragileHeart) ? maxHealth - 2 : maxHealth);
     }
 
     private static void SetJoniHook()
     {
-        _hook = new(typeof(HeroController).GetMethod("orig_CharmUpdate", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public),
+        _hook = new(
+            typeof(HeroController).GetMethod(
+                "orig_CharmUpdate",
+                System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public
+            ),
             new ILContext.Manipulator(x =>
             {
                 ILCursor cursor = new(x);
                 cursor.Goto(0);
-                cursor.GotoNext(MoveType.After,
-                    x => x.MatchMul());
-                cursor.EmitDelegate<Func<float, float>>(x => BlockHeal ? Math.Max(1, x - JoniUsedHealth) : x);
-            }));
+                cursor.GotoNext(MoveType.After, x => x.MatchMul());
+                cursor.EmitDelegate<Func<float, float>>(x =>
+                    BlockHeal ? Math.Max(1, x - JoniUsedHealth) : x
+                );
+            })
+        );
     }
 
     #endregion

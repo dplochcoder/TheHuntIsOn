@@ -13,15 +13,15 @@ internal class EventNetworkModule : Module
 {
     #region Properties
 
-    public override string MenuDescription => "Networks speedrunner caused events and grants items to hunters.";
+    public override string MenuDescription =>
+        "Networks speedrunner caused events and grants items to hunters.";
 
     public HuntClientAddon HuntClientAddon { get; private set; }
 
     public HuntServerAddon HuntServerAddon { get; private set; }
 
-
     public static IClientApi _clientApi;
-    
+
     private bool AreAddonsLoaded { get; set; }
 
     #endregion
@@ -109,10 +109,14 @@ internal class EventNetworkModule : Module
         }
         else if (name == nameof(PlayerData.maxHealth))
         {
-            if (orig == PlayerData.instance.GetInt(nameof(PlayerData.maxHealth)) || // If max health hasn't changed
-               (orig - PlayerData.instance.GetInt(nameof(PlayerData.maxHealth)) > 1) || // If max health gained is more than 1 (equipping Fragile Heart)
-               (orig - PlayerData.instance.GetInt(nameof(PlayerData.maxHealth)) < -1)) // If max health lost is more than 1 (unequipping Fragile Heart)
-               return orig;
+            if (
+                orig == PlayerData.instance.GetInt(nameof(PlayerData.maxHealth))
+                || // If max health hasn't changed
+                (orig - PlayerData.instance.GetInt(nameof(PlayerData.maxHealth)) > 1)
+                || // If max health gained is more than 1 (equipping Fragile Heart)
+                (orig - PlayerData.instance.GetInt(nameof(PlayerData.maxHealth)) < -1)
+            ) // If max health lost is more than 1 (unequipping Fragile Heart)
+                return orig;
 
             // Speedrunner obtained a Mask
             SendEvent(NetEvent.Mask);
@@ -120,7 +124,8 @@ internal class EventNetworkModule : Module
         }
         else if (name == nameof(PlayerData.MPReserveMax))
         {
-            if (orig == PlayerData.instance.GetInt(nameof(PlayerData.MPReserveMax))) return orig;
+            if (orig == PlayerData.instance.GetInt(nameof(PlayerData.MPReserveMax)))
+                return orig;
 
             // Speedrunner obtained a full Soul Vessel
             SendEvent(NetEvent.SoulVessel);
@@ -137,46 +142,48 @@ internal class EventNetworkModule : Module
             SendEvent(NetEvent.CharmNotch);
             SendEvent(NetEvent.PowerUp);
         }
-        else if (name
-                 is nameof(PlayerData.killsInfectedKnight)
-                 or nameof(PlayerData.killsMawlek)
-                 or nameof(PlayerData.killsNailBros)
-                 or nameof(PlayerData.killsJarCollector)
-                 or nameof(PlayerData.killsMegaBeamMiner)
-                 or nameof(PlayerData.killsDungDefender)
-                 or nameof(PlayerData.killsWhiteDefender)
-                 or nameof(PlayerData.killsFalseKnight)
-                 or nameof(PlayerData.killsFlukeMother)
-                 or nameof(PlayerData.killsLobsterLancer)
-                 or nameof(PlayerData.killsNailsage)
-                 or nameof(PlayerData.killsGrimm)
-                 or nameof(PlayerData.killsNightmareGrimm)
-                 or nameof(PlayerData.killsBigFly)
-                 or nameof(PlayerData.killsHiveKnight)
-                 or nameof(PlayerData.killsHollowKnight)
-                 or nameof(PlayerData.killsHornet)
-                 or nameof(PlayerData.killsMantisLord)
-                 or nameof(PlayerData.killsMegaMossCharger)
-                 or nameof(PlayerData.killsMimicSpider)
-                 or nameof(PlayerData.killsOblobble)
-                 or nameof(PlayerData.killsPaintmaster)
-                 or nameof(PlayerData.killsFinalBoss)
-                 or nameof(PlayerData.killsMageLord)
-                 or nameof(PlayerData.killsMageKnight)
-                 or nameof(PlayerData.killsTraitorLord)
-                 or nameof(PlayerData.killsMegaJellyfish)
-                 or nameof(PlayerData.killsBigBuzzer)
-                 or nameof(PlayerData.killsBlackKnight)
-                 or nameof(PlayerData.killsZote)
-                 or nameof(PlayerData.killsGreyPrince)
-                 or nameof(PlayerData.killsHollowKnightPrime)
-                 or nameof(PlayerData.killsGhostXero)
-                 or nameof(PlayerData.killsGhostAladar)
-                 or nameof(PlayerData.killsGhostHu)
-                 or nameof(PlayerData.killsGhostMarmu)
-                 or nameof(PlayerData.killsGhostNoEyes)
-                 or nameof(PlayerData.killsGhostGalien)
-                 or nameof(PlayerData.killsGhostMarkoth))
+        else if (
+            name
+            is nameof(PlayerData.killsInfectedKnight)
+                or nameof(PlayerData.killsMawlek)
+                or nameof(PlayerData.killsNailBros)
+                or nameof(PlayerData.killsJarCollector)
+                or nameof(PlayerData.killsMegaBeamMiner)
+                or nameof(PlayerData.killsDungDefender)
+                or nameof(PlayerData.killsWhiteDefender)
+                or nameof(PlayerData.killsFalseKnight)
+                or nameof(PlayerData.killsFlukeMother)
+                or nameof(PlayerData.killsLobsterLancer)
+                or nameof(PlayerData.killsNailsage)
+                or nameof(PlayerData.killsGrimm)
+                or nameof(PlayerData.killsNightmareGrimm)
+                or nameof(PlayerData.killsBigFly)
+                or nameof(PlayerData.killsHiveKnight)
+                or nameof(PlayerData.killsHollowKnight)
+                or nameof(PlayerData.killsHornet)
+                or nameof(PlayerData.killsMantisLord)
+                or nameof(PlayerData.killsMegaMossCharger)
+                or nameof(PlayerData.killsMimicSpider)
+                or nameof(PlayerData.killsOblobble)
+                or nameof(PlayerData.killsPaintmaster)
+                or nameof(PlayerData.killsFinalBoss)
+                or nameof(PlayerData.killsMageLord)
+                or nameof(PlayerData.killsMageKnight)
+                or nameof(PlayerData.killsTraitorLord)
+                or nameof(PlayerData.killsMegaJellyfish)
+                or nameof(PlayerData.killsBigBuzzer)
+                or nameof(PlayerData.killsBlackKnight)
+                or nameof(PlayerData.killsZote)
+                or nameof(PlayerData.killsGreyPrince)
+                or nameof(PlayerData.killsHollowKnightPrime)
+                or nameof(PlayerData.killsGhostXero)
+                or nameof(PlayerData.killsGhostAladar)
+                or nameof(PlayerData.killsGhostHu)
+                or nameof(PlayerData.killsGhostMarmu)
+                or nameof(PlayerData.killsGhostNoEyes)
+                or nameof(PlayerData.killsGhostGalien)
+                or nameof(PlayerData.killsGhostMarkoth)
+        )
         {
             // Speedrunner defeated a boss
             orig = 1;
@@ -198,22 +205,33 @@ internal class EventNetworkModule : Module
 
         // Count the number of movement items before this new boolean is set
         var numMovement = 0;
-        if (pd.hasDash) numMovement++;
-        if (pd.hasWalljump) numMovement++;
-        if (pd.hasSuperDash) numMovement++;
-        if (pd.hasDoubleJump) numMovement++;
-        if (pd.hasAcidArmour) numMovement++;
+        if (pd.hasDash)
+            numMovement++;
+        if (pd.hasWalljump)
+            numMovement++;
+        if (pd.hasSuperDash)
+            numMovement++;
+        if (pd.hasDoubleJump)
+            numMovement++;
+        if (pd.hasAcidArmour)
+            numMovement++;
 
         // This method will network the number of movement items we have obtained, based on the number of existing
         // movement items and the newly set boolean from the hook
         void SendConditionalMovement()
         {
-            if (numMovement == 0) SendEvent(NetEvent.Movement1);
-            if (numMovement == 1) SendEvent(NetEvent.Movement2);
-            if (numMovement == 2) SendEvent(NetEvent.Movement3);
-            if (numMovement == 3) SendEvent(NetEvent.Movement4);
-            if (numMovement == 4) SendEvent(NetEvent.Movement5);
-            if (numMovement == 5) SendEvent(NetEvent.Movement6);
+            if (numMovement == 0)
+                SendEvent(NetEvent.Movement1);
+            if (numMovement == 1)
+                SendEvent(NetEvent.Movement2);
+            if (numMovement == 2)
+                SendEvent(NetEvent.Movement3);
+            if (numMovement == 3)
+                SendEvent(NetEvent.Movement4);
+            if (numMovement == 4)
+                SendEvent(NetEvent.Movement5);
+            if (numMovement == 5)
+                SendEvent(NetEvent.Movement6);
         }
 
         if (orig)
@@ -267,26 +285,30 @@ internal class EventNetworkModule : Module
                 SendEvent(NetEvent.GreatSlash);
                 SendEvent(NetEvent.PowerUp);
             }
-            else if (name
-                     is nameof(pd.lurienDefeated)
-                     or nameof(pd.hegemolDefeated)
-                     or nameof(pd.monomonDefeated))
+            else if (
+                name
+                is nameof(pd.lurienDefeated)
+                    or nameof(pd.hegemolDefeated)
+                    or nameof(pd.monomonDefeated)
+            )
             {
                 SendEvent(NetEvent.Dreamer);
             }
-            else if (name
-                     is nameof(pd.openedCrossroads)
-                     or nameof(pd.openedDeepnest)
-                     or nameof(pd.openedGreenpath)
-                     or nameof(pd.openedRuins1)
-                     or nameof(pd.openedRuins2)
-                     or nameof(pd.openedFungalWastes)
-                     or nameof(pd.openedHiddenStation)
-                     or nameof(pd.openedRoyalGardens)
-                     or nameof(pd.tollBenchCity)
-                     or nameof(pd.tollBenchAbyss)
-                     or nameof(pd.tollBenchQueensGardens)
-                     or nameof(pd.cityLift1))
+            else if (
+                name
+                is nameof(pd.openedCrossroads)
+                    or nameof(pd.openedDeepnest)
+                    or nameof(pd.openedGreenpath)
+                    or nameof(pd.openedRuins1)
+                    or nameof(pd.openedRuins2)
+                    or nameof(pd.openedFungalWastes)
+                    or nameof(pd.openedHiddenStation)
+                    or nameof(pd.openedRoyalGardens)
+                    or nameof(pd.tollBenchCity)
+                    or nameof(pd.tollBenchAbyss)
+                    or nameof(pd.tollBenchQueensGardens)
+                    or nameof(pd.cityLift1)
+            )
             {
                 SendEvent(NetEvent.Toll);
             }
@@ -294,14 +316,16 @@ internal class EventNetworkModule : Module
             {
                 SendEvent(NetEvent.LeverHit);
             }
-            else if (name is nameof(pd.killedHollowKnight) or nameof(pd.killedFinalBoss)) 
+            else if (name is nameof(pd.killedHollowKnight) or nameof(pd.killedFinalBoss))
             {
                 SendEvent(NetEvent.FinalBossKilled);
             }
-            else if (name 
-                     is nameof(pd.infectedKnightDreamDefeated)
-                     or nameof(pd.falseKnightDreamDefeated)
-                     or nameof(pd.mageLordDreamDefeated))
+            else if (
+                name
+                is nameof(pd.infectedKnightDreamDefeated)
+                    or nameof(pd.falseKnightDreamDefeated)
+                    or nameof(pd.mageLordDreamDefeated)
+            )
             {
                 SendEvent(NetEvent.BossKilled);
             }
@@ -319,178 +343,281 @@ internal class EventNetworkModule : Module
         orig(self);
 
         // Make sure that the player causing changes is the speedrunner
-        if (!IsModuleUsed || TheHuntIsOn.GlobalSaveData.IsHunter) return;
+        if (!IsModuleUsed || TheHuntIsOn.GlobalSaveData.IsHunter)
+            return;
 
-        if (self.name.Equals("Stag") && self.Fsm.Name.Equals("Stag Control")) 
+        if (self.name.Equals("Stag") && self.Fsm.Name.Equals("Stag Control"))
         {
-            self.InsertCustomAction("Fade", () =>
-            {
-                SendEvent(NetEvent.Stag);
-            }, 0);            
+            self.InsertCustomAction(
+                "Fade",
+                () =>
+                {
+                    SendEvent(NetEvent.Stag);
+                },
+                0
+            );
 
-            self.InsertCustomAction("Dirtmouth", () =>
-            {
-                if (GameManager.instance.sceneName != "Room_Town_Stag_Station")
-                    UsedStag(NetEvent.StagDirtmouth);
-            }, 2);
+            self.InsertCustomAction(
+                "Dirtmouth",
+                () =>
+                {
+                    if (GameManager.instance.sceneName != "Room_Town_Stag_Station")
+                        UsedStag(NetEvent.StagDirtmouth);
+                },
+                2
+            );
 
-            self.InsertCustomAction("Crossroads", () =>
-            {
-                if (GameManager.instance.sceneName != "Crossroads_47")
-                    UsedStag(NetEvent.StagCrossroads);
-            }, 2);
+            self.InsertCustomAction(
+                "Crossroads",
+                () =>
+                {
+                    if (GameManager.instance.sceneName != "Crossroads_47")
+                        UsedStag(NetEvent.StagCrossroads);
+                },
+                2
+            );
 
-            self.InsertCustomAction("Greenpath", () =>
-            {
-                if (GameManager.instance.sceneName != "Fungus1_16_alt")
-                    UsedStag(NetEvent.StagGreenpath);
-            }, 2);
+            self.InsertCustomAction(
+                "Greenpath",
+                () =>
+                {
+                    if (GameManager.instance.sceneName != "Fungus1_16_alt")
+                        UsedStag(NetEvent.StagGreenpath);
+                },
+                2
+            );
 
-            self.InsertCustomAction("Fungal Wastes", () =>
-            {
-                if (GameManager.instance.sceneName != "Fungus2_02")
-                    UsedStag(NetEvent.StagFungalWastes);
-            }, 2);
+            self.InsertCustomAction(
+                "Fungal Wastes",
+                () =>
+                {
+                    if (GameManager.instance.sceneName != "Fungus2_02")
+                        UsedStag(NetEvent.StagFungalWastes);
+                },
+                2
+            );
 
-            self.InsertCustomAction("City Storerooms", () =>
-            {
-                if (GameManager.instance.sceneName != "Ruins1_29")
-                    UsedStag(NetEvent.StagCityStorerooms);
-            }, 2);
+            self.InsertCustomAction(
+                "City Storerooms",
+                () =>
+                {
+                    if (GameManager.instance.sceneName != "Ruins1_29")
+                        UsedStag(NetEvent.StagCityStorerooms);
+                },
+                2
+            );
 
-            self.InsertCustomAction("Resting Grounds", () =>
-            {
-                if (GameManager.instance.sceneName != "RestingGrounds_09")
-                    UsedStag(NetEvent.StagRestingGrounds);
-            }, 2);
+            self.InsertCustomAction(
+                "Resting Grounds",
+                () =>
+                {
+                    if (GameManager.instance.sceneName != "RestingGrounds_09")
+                        UsedStag(NetEvent.StagRestingGrounds);
+                },
+                2
+            );
 
-            self.InsertCustomAction("Kings Station", () =>
-            {
-                if (GameManager.instance.sceneName != "Ruins2_08")
-                    UsedStag(NetEvent.StagKingsStation);
-            }, 2);
+            self.InsertCustomAction(
+                "Kings Station",
+                () =>
+                {
+                    if (GameManager.instance.sceneName != "Ruins2_08")
+                        UsedStag(NetEvent.StagKingsStation);
+                },
+                2
+            );
 
-            self.InsertCustomAction("Deepnest", () =>
-            {
-                if (GameManager.instance.sceneName != "Deepnest_09")
-                    UsedStag(NetEvent.StagDeepnest);
-            }, 2);
+            self.InsertCustomAction(
+                "Deepnest",
+                () =>
+                {
+                    if (GameManager.instance.sceneName != "Deepnest_09")
+                        UsedStag(NetEvent.StagDeepnest);
+                },
+                2
+            );
 
-            self.InsertCustomAction("Royal Gardens", () =>
-            {
-                if (GameManager.instance.sceneName != "Fungus3_40")
-                    UsedStag(NetEvent.StagRoyalGardens);
-            }, 2);
+            self.InsertCustomAction(
+                "Royal Gardens",
+                () =>
+                {
+                    if (GameManager.instance.sceneName != "Fungus3_40")
+                        UsedStag(NetEvent.StagRoyalGardens);
+                },
+                2
+            );
 
-            self.InsertCustomAction("Hidden Station", () =>
-            {
-                if (GameManager.instance.sceneName != "Abyss_22")
-                    UsedStag(NetEvent.StagHiddenStation);
-            }, 2);
+            self.InsertCustomAction(
+                "Hidden Station",
+                () =>
+                {
+                    if (GameManager.instance.sceneName != "Abyss_22")
+                        UsedStag(NetEvent.StagHiddenStation);
+                },
+                2
+            );
 
-            self.InsertCustomAction("Stag Nest", () =>
-            {
-                if (GameManager.instance.sceneName != "Cliffs_03")
-                    UsedStag(NetEvent.StagStagNest);
-            }, 2);
+            self.InsertCustomAction(
+                "Stag Nest",
+                () =>
+                {
+                    if (GameManager.instance.sceneName != "Cliffs_03")
+                        UsedStag(NetEvent.StagStagNest);
+                },
+                2
+            );
         }
         else if (self.name.Equals("Hero Death") && self.Fsm.Name.Equals("Hero Death Anim"))
         {
-            self.InsertCustomAction("Start", () =>
-            {
-                SendEvent(NetEvent.RunnerDeath);
-            }, 0);
+            self.InsertCustomAction(
+                "Start",
+                () =>
+                {
+                    SendEvent(NetEvent.RunnerDeath);
+                },
+                0
+            );
 
-            self.InsertCustomAction("Anim Start", () =>
-            {
-                SendEvent(NetEvent.RunnerDreamDeath);
-            }, 0);
+            self.InsertCustomAction(
+                "Anim Start",
+                () =>
+                {
+                    SendEvent(NetEvent.RunnerDreamDeath);
+                },
+                0
+            );
         }
-        else if (self.name.Equals("Inspect Region") && self.Fsm.Name.Equals("Control") &&
-            self.gameObject.scene.name is "Room_Tram" or "Room_Tram_RG")
+        else if (
+            self.name.Equals("Inspect Region")
+            && self.Fsm.Name.Equals("Control")
+            && self.gameObject.scene.name is "Room_Tram" or "Room_Tram_RG"
+        )
         {
-            self.InsertCustomAction("Send Event", () =>
-            {
-                SendEvent(NetEvent.Tram);
-            }, 1);
+            self.InsertCustomAction(
+                "Send Event",
+                () =>
+                {
+                    SendEvent(NetEvent.Tram);
+                },
+                1
+            );
         }
         else if (self.name.Equals("Toll Gate Machine") && self.Fsm.Name.Equals("Toll Machine"))
         {
             if (self.gameObject.scene.name is "Mines_33" or "Fungus1_31")
             {
-                self.InsertCustomAction("Open Gates", () =>
-                {
-                    SendEvent(NetEvent.Toll);
-                }, 2);
+                self.InsertCustomAction(
+                    "Open Gates",
+                    () =>
+                    {
+                        SendEvent(NetEvent.Toll);
+                    },
+                    2
+                );
             }
         }
-        else if (self.name.Equals("Ghost Warrior NPC") && self.Fsm.Name.Equals("Conversation Control"))
+        else if (
+            self.name.Equals("Ghost Warrior NPC") && self.Fsm.Name.Equals("Conversation Control")
+        )
         {
-            self.InsertCustomAction("Collected", () =>
-            {
-                SendEvent(NetEvent.DreamWarriorAbsorbed);
-            }, 1);
+            self.InsertCustomAction(
+                "Collected",
+                () =>
+                {
+                    SendEvent(NetEvent.DreamWarriorAbsorbed);
+                },
+                1
+            );
 
-            self.InsertCustomAction("Start Fight", () =>
-            {
-                SendEvent(NetEvent.DreamWarriorStarted);
-            }, 7);
+            self.InsertCustomAction(
+                "Start Fight",
+                () =>
+                {
+                    SendEvent(NetEvent.DreamWarriorStarted);
+                },
+                7
+            );
         }
         else if (self.name.Equals("UI List") && self.Fsm.Name.Equals("Confirm Control"))
         {
             var yesState = self.Fsm.GetState("Yes");
-            if (yesState == null) return;
+            if (yesState == null)
+                return;
 
             var numActions = yesState.Actions.Length;
-            if (numActions > 3) return;
+            if (numActions > 3)
+                return;
 
             if (self.gameObject.scene.name == "Ruins1_05b")
             {
-                self.InsertCustomAction("Yes", () =>
-                {
-                    SendEvent(NetEvent.RelicSale);
-                }, 0);
+                self.InsertCustomAction(
+                    "Yes",
+                    () =>
+                    {
+                        SendEvent(NetEvent.RelicSale);
+                    },
+                    0
+                );
             }
             else
             {
-                self.InsertCustomAction("Yes", () =>
-                {
-                    SendEvent(NetEvent.ShopPurchase);
-                }, 0);
+                self.InsertCustomAction(
+                    "Yes",
+                    () =>
+                    {
+                        SendEvent(NetEvent.ShopPurchase);
+                    },
+                    0
+                );
             }
         }
         else if (self.name.Equals("Nailsmith") && self.Fsm.Name.Equals("Conversation Control"))
         {
-            self.InsertCustomAction("Upgrade", () =>
-            {
-                SendEvent(NetEvent.PowerUp);
-                SendEvent(NetEvent.NailUpgrade);
-            }, 5);
-        }
-        else if (self.name.StartsWith("Gate Switch") ||
-                 self.name.StartsWith("Toll Gate Switch") ||
-                 self.name.StartsWith("Waterways_Crank_Lever") ||
-                 self.name.StartsWith("Ruins Lever") ||
-                 self.name.StartsWith("Mantis Lever") ||
-                 self.name.StartsWith("Mines Lever") ||
-                 self.name.StartsWith("WP Lever") ||
-                 self.name.StartsWith("White Palace Orb Lever"))
-        {
-            if (self.Fsm.Name.Equals("Switch Control") || 
-                self.Fsm.Name.Equals("toll switch"))
-            {
-                self.InsertCustomAction("Hit", () =>
+            self.InsertCustomAction(
+                "Upgrade",
+                () =>
                 {
-                    SendEvent(NetEvent.LeverHit);
-                }, 0);
+                    SendEvent(NetEvent.PowerUp);
+                    SendEvent(NetEvent.NailUpgrade);
+                },
+                5
+            );
+        }
+        else if (
+            self.name.StartsWith("Gate Switch")
+            || self.name.StartsWith("Toll Gate Switch")
+            || self.name.StartsWith("Waterways_Crank_Lever")
+            || self.name.StartsWith("Ruins Lever")
+            || self.name.StartsWith("Mantis Lever")
+            || self.name.StartsWith("Mines Lever")
+            || self.name.StartsWith("WP Lever")
+            || self.name.StartsWith("White Palace Orb Lever")
+        )
+        {
+            if (self.Fsm.Name.Equals("Switch Control") || self.Fsm.Name.Equals("toll switch"))
+            {
+                self.InsertCustomAction(
+                    "Hit",
+                    () =>
+                    {
+                        SendEvent(NetEvent.LeverHit);
+                    },
+                    0
+                );
             }
         }
     }
 
     void UsedStag(NetEvent stagEvent)
     {
-        if (TheHuntIsOn.GlobalSaveData.IsHunter) return;
-        if (!_clientApi.ClientManager.Players.Any(p => (p.Team != _clientApi.ClientManager.Team) && p.IsInLocalScene)) return;
+        if (TheHuntIsOn.GlobalSaveData.IsHunter)
+            return;
+        if (
+            !_clientApi.ClientManager.Players.Any(p =>
+                (p.Team != _clientApi.ClientManager.Team) && p.IsInLocalScene
+            )
+        )
+            return;
 
         SendEvent(stagEvent);
     }
@@ -500,7 +627,7 @@ internal class EventNetworkModule : Module
         // Check if the player is not the speedrunner
         if (!IsModuleUsed || !TheHuntIsOn.GlobalSaveData.IsHunter)
             return;
-        
+
         LogHelper.Write<TheHuntIsOn>("OnGrantItems:");
 
         var pd = PlayerData.instance;
@@ -633,7 +760,8 @@ internal class EventNetworkModule : Module
 
     internal override void Enable()
     {
-        if (!AreAddonsLoaded) return;
+        if (!AreAddonsLoaded)
+            return;
 
         ModHooks.SetPlayerIntHook += ModHooks_OnSetPlayerIntHook;
         ModHooks.SetPlayerBoolHook += ModHooks_OnSetPlayerBoolHook;
@@ -644,7 +772,8 @@ internal class EventNetworkModule : Module
 
     internal override void Disable()
     {
-        if (!AreAddonsLoaded) return;
+        if (!AreAddonsLoaded)
+            return;
 
         ModHooks.SetPlayerIntHook -= ModHooks_OnSetPlayerIntHook;
         ModHooks.SetPlayerBoolHook -= ModHooks_OnSetPlayerBoolHook;

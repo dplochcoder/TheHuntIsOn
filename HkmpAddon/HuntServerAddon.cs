@@ -12,7 +12,8 @@ public class HuntServerAddon : ServerAddon
     #region Members
 
     private const string NetworkedEventsFileName = "networked-events.json";
-    private const string DefaultNetworkedEventsFilePath = "TheHuntIsOn.Resources.default-networked-events.json";
+    private const string DefaultNetworkedEventsFilePath =
+        "TheHuntIsOn.Resources.default-networked-events.json";
 
     #endregion
 
@@ -26,7 +27,7 @@ public class HuntServerAddon : ServerAddon
 
     private ServerNetManager NetManager { get; set; }
 
-    private Dictionary<NetEvent, ItemGrant> NetworkedEvents { get; set; } 
+    private Dictionary<NetEvent, ItemGrant> NetworkedEvents { get; set; }
 
     #endregion
 
@@ -38,7 +39,9 @@ public class HuntServerAddon : ServerAddon
 
         if (!File.Exists(GetNetworkedEventsFilePath()))
         {
-            Logger.Info($"Could not find networked items file: {NetworkedEventsFileName}, copying default");
+            Logger.Info(
+                $"Could not find networked items file: {NetworkedEventsFileName}, copying default"
+            );
             ExportDefaultNetworkedEvents();
         }
 
@@ -63,8 +66,14 @@ public class HuntServerAddon : ServerAddon
 
     private void ExportDefaultNetworkedEvents()
     {
-        using var resourceStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(DefaultNetworkedEventsFilePath);
-        using var fileStream = new FileStream(GetNetworkedEventsFilePath(), FileMode.Create, FileAccess.Write);
+        using var resourceStream = Assembly
+            .GetExecutingAssembly()
+            .GetManifestResourceStream(DefaultNetworkedEventsFilePath);
+        using var fileStream = new FileStream(
+            GetNetworkedEventsFilePath(),
+            FileMode.Create,
+            FileAccess.Write
+        );
 
         resourceStream?.CopyTo(fileStream);
         fileStream.Flush();
@@ -76,7 +85,9 @@ public class HuntServerAddon : ServerAddon
         {
             var fileContents = File.ReadAllText(GetNetworkedEventsFilePath());
 
-            NetworkedEvents = JsonConvert.DeserializeObject<Dictionary<NetEvent, ItemGrant>>(fileContents);
+            NetworkedEvents = JsonConvert.DeserializeObject<Dictionary<NetEvent, ItemGrant>>(
+                fileContents
+            );
 
             Logger.Info("Loaded networked events");
         }
@@ -92,7 +103,7 @@ public class HuntServerAddon : ServerAddon
         var directory = Directory.GetParent(location)!;
 
         return Path.Combine(directory.FullName, NetworkedEventsFileName);
-    } 
+    }
 
     #endregion
 }

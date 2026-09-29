@@ -1,7 +1,7 @@
-﻿using HutongGames.PlayMaker.Actions;
+﻿using System.Collections;
+using HutongGames.PlayMaker.Actions;
 using KorzUtils.Helper;
 using Modding;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -11,7 +11,8 @@ internal class EnemyModule : Module
 {
     #region Properties
 
-    public override string MenuDescription => "Adjusts enemy spawns depending on toggles enabled below.";
+    public override string MenuDescription =>
+        "Adjusts enemy spawns depending on toggles enabled below.";
 
     #endregion
 
@@ -26,9 +27,11 @@ internal class EnemyModule : Module
         get
         {
             if (_dreamGate == null)
-                _dreamGate = HeroController.instance.gameObject.LocateMyFSM("Dream Nail")
+                _dreamGate = HeroController
+                    .instance.gameObject.LocateMyFSM("Dream Nail")
                     .GetState("Spawn Gate")
-                    .GetFirstAction<SpawnObjectFromGlobalPool>().gameObject.Value;
+                    .GetFirstAction<SpawnObjectFromGlobalPool>()
+                    .gameObject.Value;
 
             return _dreamGate;
         }
@@ -52,16 +55,18 @@ internal class EnemyModule : Module
 
         if (TheHuntIsOn.GlobalSaveData.InvincibleBosses)
         {
-            if (healthManager.hp > 200 ||
-                enemy.name == "Mega Moss Charger" ||
-                enemy.name == "Giant Fly" ||
-                enemy.name == "False Knight New" ||
-                enemy.name == "Mage Knight" ||
-                enemy.name == "Mage Lord Phase2" ||
-                enemy.name == "Head" ||
-                enemy.name == "Mantis Lord S1" ||
-                enemy.name == "Mantis Lord S2" ||
-                enemy.name == "Ghost Warrior Xero")
+            if (
+                healthManager.hp > 200
+                || enemy.name == "Mega Moss Charger"
+                || enemy.name == "Giant Fly"
+                || enemy.name == "False Knight New"
+                || enemy.name == "Mage Knight"
+                || enemy.name == "Mage Lord Phase2"
+                || enemy.name == "Head"
+                || enemy.name == "Mantis Lord S1"
+                || enemy.name == "Mantis Lord S2"
+                || enemy.name == "Ghost Warrior Xero"
+            )
             {
                 healthManager.hp = 9999;
                 return false;
@@ -70,22 +75,24 @@ internal class EnemyModule : Module
 
         if (TheHuntIsOn.GlobalSaveData.DisableEnemies)
         {
-            if (healthManager.hp > 200 ||
-                enemy.name == "Mega Moss Charger" ||
-                enemy.name == "Giant Fly" ||
-                enemy.name == "False Knight New" ||
-                enemy.name == "Mage Knight" ||
-                enemy.name == "Mage Lord Phase2" ||
-                enemy.name == "Head" ||
-                enemy.name == "Mantis Lord S1" ||
-                enemy.name == "Mantis Lord S2" ||
-                enemy.name == "Ghost Warrior Xero" ||
-                (enemy.name.Contains("Fly") && enemy.scene.name == "Crossroads_04") ||
-                enemy.scene.name == "Fungus3_23_boss" ||
-                enemy.scene.name == "Ruins2_11_boss" ||
-                enemy.name.StartsWith("Acid Walker") ||
-                enemy.scene.name.StartsWith("Room_Colosseum") ||
-                enemy.name == "Radiance")
+            if (
+                healthManager.hp > 200
+                || enemy.name == "Mega Moss Charger"
+                || enemy.name == "Giant Fly"
+                || enemy.name == "False Knight New"
+                || enemy.name == "Mage Knight"
+                || enemy.name == "Mage Lord Phase2"
+                || enemy.name == "Head"
+                || enemy.name == "Mantis Lord S1"
+                || enemy.name == "Mantis Lord S2"
+                || enemy.name == "Ghost Warrior Xero"
+                || (enemy.name.Contains("Fly") && enemy.scene.name == "Crossroads_04")
+                || enemy.scene.name == "Fungus3_23_boss"
+                || enemy.scene.name == "Ruins2_11_boss"
+                || enemy.name.StartsWith("Acid Walker")
+                || enemy.scene.name.StartsWith("Room_Colosseum")
+                || enemy.name == "Radiance"
+            )
                 return false;
             else
                 return true;
@@ -94,20 +101,33 @@ internal class EnemyModule : Module
         return isAlreadyDead;
     }
 
-    private void DeactivateIfPlayerdataTrue_OnEnable(On.DeactivateIfPlayerdataTrue.orig_OnEnable orig, DeactivateIfPlayerdataTrue self)
+    private void DeactivateIfPlayerdataTrue_OnEnable(
+        On.DeactivateIfPlayerdataTrue.orig_OnEnable orig,
+        DeactivateIfPlayerdataTrue self
+    )
     {
-        if (IsModuleUsed && TheHuntIsOn.GlobalSaveData.DreamBossAccess && self.gameObject.name == "Dung Defender_Sleep")
+        if (
+            IsModuleUsed
+            && TheHuntIsOn.GlobalSaveData.DreamBossAccess
+            && self.gameObject.name == "Dung Defender_Sleep"
+        )
             return;
         orig(self);
     }
 
-    private void DeactivateIfPlayerdataFalse_OnEnable(On.DeactivateIfPlayerdataFalse.orig_OnEnable orig, DeactivateIfPlayerdataFalse self)
+    private void DeactivateIfPlayerdataFalse_OnEnable(
+        On.DeactivateIfPlayerdataFalse.orig_OnEnable orig,
+        DeactivateIfPlayerdataFalse self
+    )
     {
-        if (IsModuleUsed && TheHuntIsOn.GlobalSaveData.DreamBossAccess && self.gameObject.name == "Dung Defender_Sleep")
+        if (
+            IsModuleUsed
+            && TheHuntIsOn.GlobalSaveData.DreamBossAccess
+            && self.gameObject.name == "Dung Defender_Sleep"
+        )
             return;
         orig(self);
     }
-
 
     private void PlayMakerFSM_OnEnable(On.PlayMakerFSM.orig_OnEnable orig, PlayMakerFSM self)
     {
@@ -132,15 +152,32 @@ internal class EnemyModule : Module
         orig(self);
     }
 
-    private void PlayerDataBoolTest_OnEnter(On.HutongGames.PlayMaker.Actions.PlayerDataBoolTest.orig_OnEnter orig, HutongGames.PlayMaker.Actions.PlayerDataBoolTest self)
+    private void PlayerDataBoolTest_OnEnter(
+        On.HutongGames.PlayMaker.Actions.PlayerDataBoolTest.orig_OnEnter orig,
+        HutongGames.PlayMaker.Actions.PlayerDataBoolTest self
+    )
     {
-        if (IsModuleUsed && TheHuntIsOn.GlobalSaveData.DreamBossAccess &&
-            ((self.IsCorrectContext("Control", "IK Remains", "Check") && self.boolName.Value == "infectedKnightDreamDefeated") ||
-            (self.IsCorrectContext("Control", "Mage Lord Remains", "Check") && self.boolName.Value == "mageLordDreamDefeated") ||
-            (self.IsCorrectContext("Control", "FK Corpse", "Check") && self.boolName.Value == "falseKnightDreamDefeated") ||
-            self.IsCorrectContext("Conversation Control", "Dreamer Plaque Inspect", "End") ||
-            self.IsCorrectContext("Control", "Dreamer Scene 2", "Init") ||
-            self.IsCorrectContext("FSM", "PostDreamnail", "Check")))
+        if (
+            IsModuleUsed
+            && TheHuntIsOn.GlobalSaveData.DreamBossAccess
+            && (
+                (
+                    self.IsCorrectContext("Control", "IK Remains", "Check")
+                    && self.boolName.Value == "infectedKnightDreamDefeated"
+                )
+                || (
+                    self.IsCorrectContext("Control", "Mage Lord Remains", "Check")
+                    && self.boolName.Value == "mageLordDreamDefeated"
+                )
+                || (
+                    self.IsCorrectContext("Control", "FK Corpse", "Check")
+                    && self.boolName.Value == "falseKnightDreamDefeated"
+                )
+                || self.IsCorrectContext("Conversation Control", "Dreamer Plaque Inspect", "End")
+                || self.IsCorrectContext("Control", "Dreamer Scene 2", "Init")
+                || self.IsCorrectContext("FSM", "PostDreamnail", "Check")
+            )
+        )
             self.isTrue = self.isFalse;
 
         orig(self);
@@ -161,7 +198,11 @@ internal class EnemyModule : Module
                     FKentry.SetActive(true);
                     break;
                 case "Ruins1_24":
-                    GameObject.Find("door_dreamReturn").transform.position = new Vector3(4.1f, 18.65f, 0.007f);
+                    GameObject.Find("door_dreamReturn").transform.position = new Vector3(
+                        4.1f,
+                        18.65f,
+                        0.007f
+                    );
                     GameObject STcorpse = GameObject.Instantiate(DreamTree);
                     STcorpse.transform.position = new Vector3(4.1f, 22.35f, 0.007f);
                     STcorpse.SetActive(true);
@@ -170,13 +211,28 @@ internal class EnemyModule : Module
                     STentry.SetActive(true);
                     break;
                 case "Dream_02_Mage_Lord":
-                    CreateTeleporter(new Vector3(39.20f, 10.4f), "Soul Tyrant Exit", "Ruins1_24", "left1");
+                    CreateTeleporter(
+                        new Vector3(39.20f, 10.4f),
+                        "Soul Tyrant Exit",
+                        "Ruins1_24",
+                        "left1"
+                    );
                     break;
                 case "Dream_Mighty_Zote":
-                    CreateTeleporter(new Vector3(9.1f, 6.4f), "Grey Prince Zote Exit", "Room_Bretta_Basement", "top1");
+                    CreateTeleporter(
+                        new Vector3(9.1f, 6.4f),
+                        "Grey Prince Zote Exit",
+                        "Room_Bretta_Basement",
+                        "top1"
+                    );
                     break;
                 case "Dream_Nailcollection":
-                    CreateTeleporter(new Vector3(272.88f, 52.4f), "Dream Nail Escape", "RestingGrounds_07", "right1");
+                    CreateTeleporter(
+                        new Vector3(272.88f, 52.4f),
+                        "Dream Nail Escape",
+                        "RestingGrounds_07",
+                        "right1"
+                    );
                     break;
                 case "Room_Final_Boss_Core":
                     GameObject HKcorpse = GameObject.Instantiate(DreamTree);
@@ -188,9 +244,24 @@ internal class EnemyModule : Module
                     GameManager.instance.StartCoroutine(ModifyRadianceRoom());
                     break;
                 case "Dream_Final_Boss":
-                    CreateTeleporter(new Vector3(50.0f, 21.4f), "Radiance Exit (Start)", "Room_Final_Boss_Core", "left1");
-                    CreateTeleporter(new Vector3(42.3f, 36.7f), "Radiance Exit (Plats)", "Room_Final_Boss_Core", "left1");
-                    CreateTeleporter(new Vector3(63.3f, 138.2f), "Radiance Exit (Climb)", "Room_Final_Boss_Core", "left1");
+                    CreateTeleporter(
+                        new Vector3(50.0f, 21.4f),
+                        "Radiance Exit (Start)",
+                        "Room_Final_Boss_Core",
+                        "left1"
+                    );
+                    CreateTeleporter(
+                        new Vector3(42.3f, 36.7f),
+                        "Radiance Exit (Plats)",
+                        "Room_Final_Boss_Core",
+                        "left1"
+                    );
+                    CreateTeleporter(
+                        new Vector3(63.3f, 138.2f),
+                        "Radiance Exit (Climb)",
+                        "Room_Final_Boss_Core",
+                        "left1"
+                    );
                     GameManager.instance.StartCoroutine(ModifyRadianceRoom());
                     break;
                 default:
@@ -199,7 +270,10 @@ internal class EnemyModule : Module
         }
     }
 
-    private void BeginSceneTransition_OnEnter(On.HutongGames.PlayMaker.Actions.BeginSceneTransition.orig_OnEnter orig, HutongGames.PlayMaker.Actions.BeginSceneTransition self)
+    private void BeginSceneTransition_OnEnter(
+        On.HutongGames.PlayMaker.Actions.BeginSceneTransition.orig_OnEnter orig,
+        HutongGames.PlayMaker.Actions.BeginSceneTransition self
+    )
     {
         if (IsModuleUsed && self.IsCorrectContext("Door Control", "Radiance Enter", "Change Scene"))
             GameManager.instance.StartCoroutine(ModifyRadianceRoom());
@@ -217,7 +291,12 @@ internal class EnemyModule : Module
     /// <param name="portalName">The name of the portal.</param>
     /// <param name="sceneTo">The name of the scene the portal should send the player to.</param>
     /// <param name="entryLocation">The transition the player should appear from within the specified scene.</param>
-    private void CreateTeleporter(Vector3 playerLocation, string portalName, string sceneTo, string entryLocation)
+    private void CreateTeleporter(
+        Vector3 playerLocation,
+        string portalName,
+        string sceneTo,
+        string entryLocation
+    )
     {
         var portalInteractionLocation = new Vector3(playerLocation.x, (playerLocation.y - 0.31f));
         var portalSpriteLocation = new Vector3(playerLocation.x, (playerLocation.y - 1.51f));
@@ -236,7 +315,10 @@ internal class EnemyModule : Module
         teleportFsm.FsmVariables.FindFsmString("Prompt Name").Value = "Exit";
         teleportFsm.FsmVariables.FindFsmBool("Crossroads Ascent").Value = false;
         teleportFsm.GetState("Enter").GetLastAction<SendEventByName>().sendEvent.Value = "FADE OUT";
-        teleportFsm.GetState("Change Scene").GetFirstAction<BeginSceneTransition>().preventCameraFadeOut = true;
+        teleportFsm
+            .GetState("Change Scene")
+            .GetFirstAction<BeginSceneTransition>()
+            .preventCameraFadeOut = true;
     }
 
     private IEnumerator ModifyRadianceRoom()
@@ -255,7 +337,10 @@ internal class EnemyModule : Module
         GameManager.instance.FadeSceneIn();
 
         // Let the UI reappear.
-        GameObject.Find("_GameCameras/HudCamera/Hud Canvas").LocateMyFSM("Slide Out").SendEvent("IN");
+        GameObject
+            .Find("_GameCameras/HudCamera/Hud Canvas")
+            .LocateMyFSM("Slide Out")
+            .SendEvent("IN");
     }
 
     internal override void Enable()
@@ -265,8 +350,10 @@ internal class EnemyModule : Module
         On.DeactivateIfPlayerdataFalse.OnEnable += DeactivateIfPlayerdataFalse_OnEnable;
         On.PlayMakerFSM.OnEnable += PlayMakerFSM_OnEnable;
         On.HutongGames.PlayMaker.Actions.PlayerDataBoolTest.OnEnter += PlayerDataBoolTest_OnEnter;
-        UnityEngine.SceneManagement.SceneManager.activeSceneChanged += SceneManager_activeSceneChanged;
-        On.HutongGames.PlayMaker.Actions.BeginSceneTransition.OnEnter += BeginSceneTransition_OnEnter;
+        UnityEngine.SceneManagement.SceneManager.activeSceneChanged +=
+            SceneManager_activeSceneChanged;
+        On.HutongGames.PlayMaker.Actions.BeginSceneTransition.OnEnter +=
+            BeginSceneTransition_OnEnter;
     }
 
     internal override void Disable()
@@ -276,8 +363,10 @@ internal class EnemyModule : Module
         On.DeactivateIfPlayerdataFalse.OnEnable -= DeactivateIfPlayerdataFalse_OnEnable;
         On.PlayMakerFSM.OnEnable -= PlayMakerFSM_OnEnable;
         On.HutongGames.PlayMaker.Actions.PlayerDataBoolTest.OnEnter -= PlayerDataBoolTest_OnEnter;
-        UnityEngine.SceneManagement.SceneManager.activeSceneChanged -= SceneManager_activeSceneChanged;
-        On.HutongGames.PlayMaker.Actions.BeginSceneTransition.OnEnter -= BeginSceneTransition_OnEnter;
+        UnityEngine.SceneManagement.SceneManager.activeSceneChanged -=
+            SceneManager_activeSceneChanged;
+        On.HutongGames.PlayMaker.Actions.BeginSceneTransition.OnEnter -=
+            BeginSceneTransition_OnEnter;
     }
 
     #endregion

@@ -17,10 +17,16 @@ internal class StagModule : Module
     {
         if (IsModuleUsed)
         {
-            if (self.gameObject.name == "Stag" && (self.FsmName == "Stag Control" || self.FsmName == "npc_control"))
+            if (
+                self.gameObject.name == "Stag"
+                && (self.FsmName == "Stag Control" || self.FsmName == "npc_control")
+            )
             {
-                self.AddState("Sturdy", () => GameHelper.DisplayMessage("They don't seem to listen..."),
-                    FsmTransitionData.FromTargetState("Cancel Frame").WithEventName("FINISHED"));
+                self.AddState(
+                    "Sturdy",
+                    () => GameHelper.DisplayMessage("They don't seem to listen..."),
+                    FsmTransitionData.FromTargetState("Cancel Frame").WithEventName("FINISHED")
+                );
                 self.GetState("Can Talk?").AdjustTransitions("Sturdy");
             }
         }
@@ -33,8 +39,8 @@ internal class StagModule : Module
     #region Methods
 
     internal override void Enable() => On.PlayMakerFSM.OnEnable += PlayMakerFSM_OnEnable;
-    
+
     internal override void Disable() => On.PlayMakerFSM.OnEnable -= PlayMakerFSM_OnEnable;
-    
+
     #endregion
 }

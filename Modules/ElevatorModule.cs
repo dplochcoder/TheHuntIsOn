@@ -1,5 +1,5 @@
-﻿using KorzUtils.Helper;
-using System.Collections;
+﻿using System.Collections;
+using KorzUtils.Helper;
 using UnityEngine;
 
 namespace TheHuntIsOn.Modules;
@@ -24,7 +24,13 @@ internal class ElevatorModule : Module
 
     private void PlayMakerFSM_OnEnable(On.PlayMakerFSM.orig_OnEnable orig, PlayMakerFSM self)
     {
-        if (IsModuleUsed && (self.gameObject.name.StartsWith("Lift Call Lever") || self.gameObject.name.StartsWith("Ruins Lift")))
+        if (
+            IsModuleUsed
+            && (
+                self.gameObject.name.StartsWith("Lift Call Lever")
+                || self.gameObject.name.StartsWith("Ruins Lift")
+            )
+        )
         {
             GameObject.Destroy(self.gameObject);
             return;
@@ -32,7 +38,10 @@ internal class ElevatorModule : Module
         orig(self);
     }
 
-    private void SceneManager_activeSceneChanged(UnityEngine.SceneManagement.Scene arg0, UnityEngine.SceneManagement.Scene newScene)
+    private void SceneManager_activeSceneChanged(
+        UnityEngine.SceneManagement.Scene arg0,
+        UnityEngine.SceneManagement.Scene newScene
+    )
     {
         if (!IsModuleUsed)
             return;
@@ -53,7 +62,12 @@ internal class ElevatorModule : Module
             fsm.FsmVariables.FindFsmString("New Scene").Value = "Crossroads_49";
             fsm.FsmVariables.FindFsmBool("Crossroads Ascent").Value = false;
             fsm.FsmVariables.FindFsmString("Entry Gate").Value = "left1";
-            fsm.GetState("Change Scene").AddActions(() => GameManager.instance.StartCoroutine(AdjustStartPosition(new(14.8f, 158.4f), "Crossroads_49")));
+            fsm.GetState("Change Scene")
+                .AddActions(() =>
+                    GameManager.instance.StartCoroutine(
+                        AdjustStartPosition(new(14.8f, 158.4f), "Crossroads_49")
+                    )
+                );
         }
         else if (newScene.name == "Crossroads_49")
         {
@@ -83,7 +97,12 @@ internal class ElevatorModule : Module
             fsm.FsmVariables.FindFsmString("New Scene").Value = "Ruins2_10";
             fsm.FsmVariables.FindFsmBool("Crossroads Ascent").Value = false;
             fsm.FsmVariables.FindFsmString("Entry Gate").Value = "right1";
-            fsm.GetState("Change Scene").AddActions(() => GameManager.instance.StartCoroutine(AdjustStartPosition(new(11.93f, 158.4f), "Ruins2_10")));
+            fsm.GetState("Change Scene")
+                .AddActions(() =>
+                    GameManager.instance.StartCoroutine(
+                        AdjustStartPosition(new(11.93f, 158.4f), "Ruins2_10")
+                    )
+                );
         }
         else if (newScene.name == "Ruins2_10")
         {
@@ -153,9 +172,15 @@ internal class ElevatorModule : Module
         }
     }
 
-    private void SetPlayerDataBool_OnEnter(On.HutongGames.PlayMaker.Actions.SetPlayerDataBool.orig_OnEnter orig, HutongGames.PlayMaker.Actions.SetPlayerDataBool self)
+    private void SetPlayerDataBool_OnEnter(
+        On.HutongGames.PlayMaker.Actions.SetPlayerDataBool.orig_OnEnter orig,
+        HutongGames.PlayMaker.Actions.SetPlayerDataBool self
+    )
     {
-        if (IsModuleUsed && self.IsCorrectContext("Toll Machine", "Toll Machine Lift", "Send Message"))
+        if (
+            IsModuleUsed
+            && self.IsCorrectContext("Toll Machine", "Toll Machine Lift", "Send Message")
+        )
             _teleporter.SetActive(true);
         orig(self);
     }
@@ -168,20 +193,23 @@ internal class ElevatorModule : Module
     {
         On.PlayMakerFSM.OnEnable += PlayMakerFSM_OnEnable;
         On.HutongGames.PlayMaker.Actions.SetPlayerDataBool.OnEnter += SetPlayerDataBool_OnEnter;
-        UnityEngine.SceneManagement.SceneManager.activeSceneChanged += SceneManager_activeSceneChanged;
-        
+        UnityEngine.SceneManagement.SceneManager.activeSceneChanged +=
+            SceneManager_activeSceneChanged;
     }
 
     internal override void Disable()
     {
         On.HutongGames.PlayMaker.Actions.SetPlayerDataBool.OnEnter -= SetPlayerDataBool_OnEnter;
         On.PlayMakerFSM.OnEnable -= PlayMakerFSM_OnEnable;
-        UnityEngine.SceneManagement.SceneManager.activeSceneChanged -= SceneManager_activeSceneChanged;
+        UnityEngine.SceneManagement.SceneManager.activeSceneChanged -=
+            SceneManager_activeSceneChanged;
     }
 
     private IEnumerator AdjustStartPosition(Vector3 startPosition, string sceneToWait)
     {
-        yield return new WaitUntil(() => UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == sceneToWait);
+        yield return new WaitUntil(() =>
+            UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == sceneToWait
+        );
         yield return new WaitForFinishedEnteringScene();
         HeroController.instance.transform.position = startPosition;
     }
@@ -191,7 +219,11 @@ internal class ElevatorModule : Module
         float currentHeight = bottomLeft.y - 1f;
         while (currentHeight <= topRight.y)
         {
-            GameObject platform = GameObject.Instantiate(ShadeSkipModule.PlatformPrefab, new(placeLeft ? bottomLeft.x : topRight.x, currentHeight, 0f), Quaternion.identity);
+            GameObject platform = GameObject.Instantiate(
+                ShadeSkipModule.PlatformPrefab,
+                new(placeLeft ? bottomLeft.x : topRight.x, currentHeight, 0f),
+                Quaternion.identity
+            );
             platform.SetActive(true);
             currentHeight += 5f;
             placeLeft = !placeLeft;

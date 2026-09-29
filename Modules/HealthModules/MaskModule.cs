@@ -1,6 +1,6 @@
-﻿using KorzUtils.Helper;
+﻿using System;
+using KorzUtils.Helper;
 using MonoMod.Cil;
-using System;
 
 namespace TheHuntIsOn.Modules.HealthModules;
 
@@ -21,18 +21,28 @@ internal class MaskModule : Module
         orig(self);
     }
 
-    private void SendEventByName_OnEnter(On.HutongGames.PlayMaker.Actions.SendEventByName.orig_OnEnter orig, HutongGames.PlayMaker.Actions.SendEventByName self)
+    private void SendEventByName_OnEnter(
+        On.HutongGames.PlayMaker.Actions.SendEventByName.orig_OnEnter orig,
+        HutongGames.PlayMaker.Actions.SendEventByName self
+    )
     {
-        if (IsModuleUsed && self.IsCorrectContext("Heart Container UI", "Heart Container UI*", "Max Up"))
+        if (
+            IsModuleUsed
+            && self.IsCorrectContext("Heart Container UI", "Heart Container UI*", "Max Up")
+        )
         {
             int currentSoul = PlayerData.instance.GetInt(nameof(PlayerData.MPCharge));
             // The soul is depleted on reappearing so we restore that.
-            CoroutineHelper.WaitForHero(x =>
-            {
-                GameCameras.instance.hudCanvas.gameObject.SetActive(false);
-                GameCameras.instance.hudCanvas.gameObject.SetActive(true);
-                CoroutineHelper.WaitFrames(HeroController.instance.AddMPCharge, x, true);
-            }, currentSoul, true);
+            CoroutineHelper.WaitForHero(
+                x =>
+                {
+                    GameCameras.instance.hudCanvas.gameObject.SetActive(false);
+                    GameCameras.instance.hudCanvas.gameObject.SetActive(true);
+                    CoroutineHelper.WaitFrames(HeroController.instance.AddMPCharge, x, true);
+                },
+                currentSoul,
+                true
+            );
         }
         orig(self);
     }
@@ -41,15 +51,24 @@ internal class MaskModule : Module
     {
         ILCursor cursor = new(il);
         cursor.Goto(0);
-        if (cursor.TryGotoNext(MoveType.After,
-            x => x.MatchCallvirt<PlayerData>("SetIntSwappedArgs"),
-            x => x.MatchLdarg(0),
-            x => x.MatchLdarg(0),
-            x => x.MatchLdstr("maxHealth"),
-            x => x.MatchCallvirt<PlayerData>("GetInt")))
-            cursor.EmitDelegate<Func<int, int>>(x => IsModuleUsed ? PlayerData.instance.GetInt(nameof(PlayerData.health)) : x);
+        if (
+            cursor.TryGotoNext(
+                MoveType.After,
+                x => x.MatchCallvirt<PlayerData>("SetIntSwappedArgs"),
+                x => x.MatchLdarg(0),
+                x => x.MatchLdarg(0),
+                x => x.MatchLdstr("maxHealth"),
+                x => x.MatchCallvirt<PlayerData>("GetInt")
+            )
+        )
+            cursor.EmitDelegate<Func<int, int>>(x =>
+                IsModuleUsed ? PlayerData.instance.GetInt(nameof(PlayerData.health)) : x
+            );
         else
-            LogHelper.Write<TheHuntIsOn>("Failed to prevent mask heal.", KorzUtils.Enums.LogType.Error);
+            LogHelper.Write<TheHuntIsOn>(
+                "Failed to prevent mask heal.",
+                KorzUtils.Enums.LogType.Error
+            );
     }
 
     #endregion

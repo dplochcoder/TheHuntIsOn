@@ -1,6 +1,6 @@
-﻿using KorzUtils.Data;
+﻿using System;
+using KorzUtils.Data;
 using KorzUtils.Helper;
-using System;
 using UnityEngine;
 
 namespace TheHuntIsOn.Modules.HealthModules;
@@ -19,7 +19,11 @@ internal class SpaModule : Module
     {
         if (IsModuleUsed && self.FsmName == "Spa Region")
         {
-            self.AddState("Destroy", () => GameObject.Destroy(self.gameObject), Array.Empty<FsmTransitionData>());
+            self.AddState(
+                "Destroy",
+                () => GameObject.Destroy(self.gameObject),
+                Array.Empty<FsmTransitionData>()
+            );
             self.GetState("Init").AdjustTransition("FINISHED", "Destroy");
         }
         orig(self);

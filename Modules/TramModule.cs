@@ -19,14 +19,20 @@ internal class TramModule : Module
         {
             if (self.gameObject.name == "Tram Call Box" && self.FsmName == "Conversation Control")
             {
-                self.AddState("Malfunction", () => GameHelper.DisplayMessage("Doesn't seem to work."),
-                    FsmTransitionData.FromTargetState("End").WithEventName("FINISHED"));
+                self.AddState(
+                    "Malfunction",
+                    () => GameHelper.DisplayMessage("Doesn't seem to work."),
+                    FsmTransitionData.FromTargetState("End").WithEventName("FINISHED")
+                );
                 self.GetState("Got Pass?").AdjustTransitions("Malfunction");
             }
             else if (self.gameObject.name == "Door Inspect" && self.FsmName == "Tram Door")
             {
-                self.AddState("Malfunction", () => GameHelper.DisplayMessage("Doesn't seem to work."),
-                    FsmTransitionData.FromTargetState("Box Down").WithEventName("FINISHED"));
+                self.AddState(
+                    "Malfunction",
+                    () => GameHelper.DisplayMessage("Doesn't seem to work."),
+                    FsmTransitionData.FromTargetState("Box Down").WithEventName("FINISHED")
+                );
                 self.GetState("Check Pass").AdjustTransitions("Malfunction");
             }
         }
@@ -38,8 +44,8 @@ internal class TramModule : Module
     #region Methods
 
     internal override void Enable() => On.PlayMakerFSM.OnEnable += PlayMakerFSM_OnEnable;
-    
+
     internal override void Disable() => On.PlayMakerFSM.OnEnable -= PlayMakerFSM_OnEnable;
-    
+
     #endregion
 }

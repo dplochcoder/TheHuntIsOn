@@ -1,5 +1,5 @@
-﻿using Hkmp.Api.Client;
-using System.Collections;
+﻿using System.Collections;
+using Hkmp.Api.Client;
 
 namespace TheHuntIsOn.Modules.PauseModule;
 
@@ -35,15 +35,18 @@ internal class PauseController
         On.GameManager.SetTimeScale_float += OnGMSetTimeScaleF;
         On.GameManager.SetTimeScale_float_float += OnGMSetTimeScaleFF;
         On.GameManager.Update += OnGMUpdate;
-        if (clientApi != null) HookClientApi();
+        if (clientApi != null)
+            HookClientApi();
     }
 
     internal void SetClientApi(IClientApi clientApi)
     {
-        if (this.clientApi != null) throw new System.ArgumentException("Cannot set clientApi twice");
+        if (this.clientApi != null)
+            throw new System.ArgumentException("Cannot set clientApi twice");
 
         this.clientApi = clientApi;
-        if (enabled) HookClientApi();
+        if (enabled)
+            HookClientApi();
     }
 
     internal void Disable()
@@ -54,11 +57,16 @@ internal class PauseController
         On.GameManager.SetTimeScale_float_float -= OnGMSetTimeScaleFF;
         On.GameManager.Update -= OnGMUpdate;
 
-        if (clientApi != null) UnhookClientApi();
+        if (clientApi != null)
+            UnhookClientApi();
         clientApi = null;
     }
 
-    private void OnGMSetTimeScaleF(On.GameManager.orig_SetTimeScale_float orig, GameManager self, float timeScale)
+    private void OnGMSetTimeScaleF(
+        On.GameManager.orig_SetTimeScale_float orig,
+        GameManager self,
+        float timeScale
+    )
     {
         TimeController.GenericTimeScale = baseGameTimescale;
         orig(self, timeScale);
@@ -67,7 +75,12 @@ internal class PauseController
         FixTimeScale();
     }
 
-    private IEnumerator OnGMSetTimeScaleFF(On.GameManager.orig_SetTimeScale_float_float orig, GameManager self, float timeScale, float duration)
+    private IEnumerator OnGMSetTimeScaleFF(
+        On.GameManager.orig_SetTimeScale_float_float orig,
+        GameManager self,
+        float timeScale,
+        float duration
+    )
     {
         var original = orig(self, timeScale, duration);
 
@@ -84,7 +97,8 @@ internal class PauseController
 
                     yield return original.Current;
                 }
-                else break;
+                else
+                    break;
             }
         }
         return Altered();
@@ -102,9 +116,20 @@ internal class PauseController
         FixTimeScale();
     }
 
-    internal bool IsServerPaused() => enabled && clientApi != null && clientApi.NetClient.IsConnected && TheHuntIsOn.LocalSaveData.IsServerPaused(out _);
+    internal bool IsServerPaused() =>
+        enabled
+        && clientApi != null
+        && clientApi.NetClient.IsConnected
+        && TheHuntIsOn.LocalSaveData.IsServerPaused(out _);
 
-    internal static bool IsGameplayPausable() => GameManager.instance.gameState == GlobalEnums.GameState.PAUSED || (GameManager.instance.gameState == GlobalEnums.GameState.PLAYING && HeroController.instance.acceptingInput);
+    internal static bool IsGameplayPausable() =>
+        GameManager.instance.gameState == GlobalEnums.GameState.PAUSED
+        || (
+            GameManager.instance.gameState == GlobalEnums.GameState.PLAYING
+            && HeroController.instance.acceptingInput
+        );
 
-    private void FixTimeScale() => TimeController.GenericTimeScale = (IsServerPaused() && IsGameplayPausable()) ? 0f : hkmpTimescale;
+    private void FixTimeScale() =>
+        TimeController.GenericTimeScale =
+            (IsServerPaused() && IsGameplayPausable()) ? 0f : hkmpTimescale;
 }

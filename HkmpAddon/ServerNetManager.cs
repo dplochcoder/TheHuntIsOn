@@ -9,8 +9,8 @@ namespace TheHuntIsOn.HkmpAddon;
 
 public class ServerNetManager
 {
-    public event Action<ushort, NetEvent> EventTriggeredEvent; 
-    
+    public event Action<ushort, NetEvent> EventTriggeredEvent;
+
     private readonly IServerAddonNetworkSender<ClientPacketId> _netSender;
 
     #region Constructors
@@ -25,7 +25,7 @@ public class ServerNetManager
             ServerPacketId.EventTriggered,
             (id, packet) => EventTriggeredEvent?.Invoke(id, packet.NetEvent)
         );
-    } 
+    }
 
     #endregion
 
@@ -33,10 +33,10 @@ public class ServerNetManager
 
     public void SendGrantItems(List<NetItem> netItems)
     {
-        _netSender.BroadcastCollectionData(ClientPacketId.GrantItems, new GrantItemsPacket
-        {
-            NetItems = [.. netItems]
-        });
+        _netSender.BroadcastCollectionData(
+            ClientPacketId.GrantItems,
+            new GrantItemsPacket { NetItems = [.. netItems] }
+        );
     }
 
     private static IPacketData InstantiatePacket(ServerPacketId packetId)
@@ -46,7 +46,7 @@ public class ServerNetManager
             ServerPacketId.EventTriggered => new PacketDataCollection<EventTriggeredPacket>(),
             _ => null,
         };
-    } 
+    }
 
     #endregion
 }

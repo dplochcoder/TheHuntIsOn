@@ -58,5 +58,5 @@ public enum NetEvent
     RunnerDeath,
     RunnerDreamDeath,
     PowerUp,
-    BossKilled
+    BossKilled,
 }

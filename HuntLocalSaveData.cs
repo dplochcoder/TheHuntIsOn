@@ -40,11 +40,14 @@ public class HuntLocalSaveData
     public bool IsServerPaused(out float? remainingSeconds)
     {
         remainingSeconds = null;
-        if (!ServerPaused) return false;
-        if (UnpauseTimeTicks == long.MaxValue) return true;
+        if (!ServerPaused)
+            return false;
+        if (UnpauseTimeTicks == long.MaxValue)
+            return true;
 
         var now = DateTime.UtcNow.Ticks;
-        if (now >= UnpauseTimeTicks) return false;
+        if (now >= UnpauseTimeTicks)
+            return false;
 
         TimeSpan span = new(UnpauseTimeTicks - now);
         remainingSeconds = (float)span.TotalSeconds;

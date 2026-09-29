@@ -1,5 +1,5 @@
-﻿using Hkmp.Networking.Packet;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Hkmp.Networking.Packet;
 
 namespace TheHuntIsOn.Modules.PauseModule;
 

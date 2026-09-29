@@ -26,5 +26,5 @@ public enum NetItem
     MaskShard,
     SoulVessel,
     NailUpgrade,
-    Dreamer
+    Dreamer,
 }

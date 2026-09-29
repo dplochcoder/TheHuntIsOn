@@ -1,8 +1,8 @@
-﻿using HutongGames.PlayMaker.Actions;
+﻿using System.Collections.Generic;
+using System.Linq;
+using HutongGames.PlayMaker.Actions;
 using KorzUtils.Helper;
 using Modding;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace TheHuntIsOn.Modules;
@@ -13,102 +13,102 @@ internal class CompletionModule : Module
 
     private List<string> _affectedpd = new()
     {
-       "gladeDoorOpened",
-       /*"openedTown",
-       "openedCrossroads",
-       "openedGreenpath",
-       "openedRuins1",
-       "openedRuins2",
-       "openedFungalWastes",
-       "openedRoyalGardens",
-       "openedRestingGrounds",
-       "openedDeepnest",
-       "openedStagNest",
-       "openedHiddenStation",*/
-       "oneWayArchive",
-       "cityBridge1",
-       "cityBridge2",
-       "cityLift1",
-       "cityLift2",
-       "openedMageDoor",
-       "openedMageDoor_v2",
-       "brokenMageWindow",
-       "brokenMageWindowGlass",
-       "ruins1_5_tripleDoor",
-       "openedCityGate",
-       "city2_sewerDoor",
-       "openedLoveDoor",
-       "completedQuakeArea",
-       "waterwaysGate",
-       "openedWaterwaysManhole",
-       "waterwaysAcidDrained",
-       "dungDefenderWallBroken",
-       "brokeMinersWall",
-       "steppedBeyondBridge",
-       "deepnestBridgeCollapsed",
-       "spiderCapture",
-       "deepnest26b_switch",
-       "openedRestingGrounds02",
-       "restingGroundsCryptWall",
-       "openedGardensStagStation",
-       "blizzardEnded",
-       "abyssGateOpened",
-       "abyssLighthouse",
-       "blueVineDoor",
-       "shamanPillar",
-       "brettaRescued",
-       "zoteDefeated",
-       "bathHouseWall",
-       "brokeMinersWall",
-       "crossroadsMawlekWall",
-       "deepnestWall",
-       "dungDefenderWallBroken",
-       "outskirtsWall",
-       "falseKnightWallBroken",
-       "zoteStatueWallBroken",
-       "giantFlyDefeated",
-       "blocker1Defeated",
-       "blocker2Defeated",
-       "encounteredHornet",
-       "savedByHornet",
-       "mageLordEncountered",
-       "mageLordEncountered_2",
-       "duskKnightDefeated",
-       "flukeMotherEncountered",
-       "defeatedDoubleBlockers",
-       "defeatedNightmareGrimm",
-       "visitedDirtmouth",
-       "visitedCrossroads",
-       "visitedGreenpath",
-       "visitedFungus",
-       "visitedHive",
-       "visitedCrossroadsInfected",
-       "visitedRuins",
-       "visitedMines",
-       "visitedRoyalGardens",
-       "visitedWaterways",
-       "visitedAbyss",
-       "visitedOutskirts",
-       "visitedWhitePalace",
-       "visitedCliffs",
-       "visitedAbyss",
-       "visitedAbyssLower",
-       "visitedGodhome",
-       "visitedMines10",
-       "openedBlackEggDoor",
-       "whitePalaceOrb_1",
-       "whitePalaceOrb_2",
-       "whitePalaceOrb_3",
-       "godseekerUnlocked",
-       "colosseumBronzeOpened",
-       "colosseumBronzeCompleted",
-       "colosseumSilverOpened",
-       "colosseumSilverCompleted",
-       "colosseumGoldOpened",
-       "colosseumGoldCompleted",
-       "mineLiftOpened",
-       "slyRescued",
-       "openedMapperShop"
+        "gladeDoorOpened",
+        /*"openedTown",
+        "openedCrossroads",
+        "openedGreenpath",
+        "openedRuins1",
+        "openedRuins2",
+        "openedFungalWastes",
+        "openedRoyalGardens",
+        "openedRestingGrounds",
+        "openedDeepnest",
+        "openedStagNest",
+        "openedHiddenStation",*/
+        "oneWayArchive",
+        "cityBridge1",
+        "cityBridge2",
+        "cityLift1",
+        "cityLift2",
+        "openedMageDoor",
+        "openedMageDoor_v2",
+        "brokenMageWindow",
+        "brokenMageWindowGlass",
+        "ruins1_5_tripleDoor",
+        "openedCityGate",
+        "city2_sewerDoor",
+        "openedLoveDoor",
+        "completedQuakeArea",
+        "waterwaysGate",
+        "openedWaterwaysManhole",
+        "waterwaysAcidDrained",
+        "dungDefenderWallBroken",
+        "brokeMinersWall",
+        "steppedBeyondBridge",
+        "deepnestBridgeCollapsed",
+        "spiderCapture",
+        "deepnest26b_switch",
+        "openedRestingGrounds02",
+        "restingGroundsCryptWall",
+        "openedGardensStagStation",
+        "blizzardEnded",
+        "abyssGateOpened",
+        "abyssLighthouse",
+        "blueVineDoor",
+        "shamanPillar",
+        "brettaRescued",
+        "zoteDefeated",
+        "bathHouseWall",
+        "brokeMinersWall",
+        "crossroadsMawlekWall",
+        "deepnestWall",
+        "dungDefenderWallBroken",
+        "outskirtsWall",
+        "falseKnightWallBroken",
+        "zoteStatueWallBroken",
+        "giantFlyDefeated",
+        "blocker1Defeated",
+        "blocker2Defeated",
+        "encounteredHornet",
+        "savedByHornet",
+        "mageLordEncountered",
+        "mageLordEncountered_2",
+        "duskKnightDefeated",
+        "flukeMotherEncountered",
+        "defeatedDoubleBlockers",
+        "defeatedNightmareGrimm",
+        "visitedDirtmouth",
+        "visitedCrossroads",
+        "visitedGreenpath",
+        "visitedFungus",
+        "visitedHive",
+        "visitedCrossroadsInfected",
+        "visitedRuins",
+        "visitedMines",
+        "visitedRoyalGardens",
+        "visitedWaterways",
+        "visitedAbyss",
+        "visitedOutskirts",
+        "visitedWhitePalace",
+        "visitedCliffs",
+        "visitedAbyss",
+        "visitedAbyssLower",
+        "visitedGodhome",
+        "visitedMines10",
+        "openedBlackEggDoor",
+        "whitePalaceOrb_1",
+        "whitePalaceOrb_2",
+        "whitePalaceOrb_3",
+        "godseekerUnlocked",
+        "colosseumBronzeOpened",
+        "colosseumBronzeCompleted",
+        "colosseumSilverOpened",
+        "colosseumSilverCompleted",
+        "colosseumGoldOpened",
+        "colosseumGoldCompleted",
+        "mineLiftOpened",
+        "slyRescued",
+        "openedMapperShop",
     };
     private List<string> _affectedBosspd = new()
     {
@@ -143,7 +143,7 @@ internal class CompletionModule : Module
         "mumCaterpillarDefeated", // Boss Flag
         "noEyesDefeated", // Boss Flag
         "galienDefeated", // Boss Flag
-        "markothDefeated" // Boss Flag
+        "markothDefeated", // Boss Flag
     };
     private List<SceneBoolData> _affectedBoolData = new();
 
@@ -153,7 +153,9 @@ internal class CompletionModule : Module
 
     public CompletionModule()
     {
-        _affectedBoolData = ResourceHelper.LoadJsonResource<TheHuntIsOn, List<SceneBoolData>>("SceneData.json");
+        _affectedBoolData = ResourceHelper.LoadJsonResource<TheHuntIsOn, List<SceneBoolData>>(
+            "SceneData.json"
+        );
     }
 
     #endregion
@@ -180,9 +182,19 @@ internal class CompletionModule : Module
             return orig;
     }
 
-    private PersistentBoolData SceneData_FindMyState_PersistentBoolData(On.SceneData.orig_FindMyState_PersistentBoolData orig, SceneData self, PersistentBoolData persistentBoolData)
+    private PersistentBoolData SceneData_FindMyState_PersistentBoolData(
+        On.SceneData.orig_FindMyState_PersistentBoolData orig,
+        SceneData self,
+        PersistentBoolData persistentBoolData
+    )
     {
-        if (!IsModuleUsed || _affectedBoolData.FirstOrDefault(x => x.id == persistentBoolData.id && x.sceneName == persistentBoolData.sceneName) is not SceneBoolData sceneBool)
+        if (
+            !IsModuleUsed
+            || _affectedBoolData.FirstOrDefault(x =>
+                x.id == persistentBoolData.id && x.sceneName == persistentBoolData.sceneName
+            )
+                is not SceneBoolData sceneBool
+        )
             return orig(self, persistentBoolData);
         if (sceneBool.BossFlag)
             return orig(self, persistentBoolData);
@@ -190,7 +202,10 @@ internal class CompletionModule : Module
             return sceneBool;
     }
 
-    private void IntCompare_OnEnter(On.HutongGames.PlayMaker.Actions.IntCompare.orig_OnEnter orig, HutongGames.PlayMaker.Actions.IntCompare self)
+    private void IntCompare_OnEnter(
+        On.HutongGames.PlayMaker.Actions.IntCompare.orig_OnEnter orig,
+        HutongGames.PlayMaker.Actions.IntCompare self
+    )
     {
         if (IsModuleUsed && self.IsCorrectContext("Destroy if Quake", "Battle Gate (1)", "Check"))
             self.lessThan = self.greaterThan;
@@ -284,8 +299,10 @@ internal class CompletionModule : Module
                 self.GetState("Pause").AdjustTransitions("Deactivate");
 
             // Destroys Soul Master & Soul Tyrant Ground
-            if ((self.gameObject.name == "Dream Mage Lord" || self.gameObject.name == "Mage Lord")
-                        && self.FsmName == "Mage Lord")
+            if (
+                (self.gameObject.name == "Dream Mage Lord" || self.gameObject.name == "Mage Lord")
+                && self.FsmName == "Mage Lord"
+            )
             {
                 GameObject.Find("mage_window").SetActive(false);
             }

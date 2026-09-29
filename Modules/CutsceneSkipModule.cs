@@ -24,7 +24,10 @@ internal class CutsceneSkipModule : Module
             }
 
             // Dream Nail Entrance Speed-up
-            if (self.gameObject.name == "Dreamer Plaque Inspect" && self.FsmName == "Conversation Control")
+            if (
+                self.gameObject.name == "Dreamer Plaque Inspect"
+                && self.FsmName == "Conversation Control"
+            )
             {
                 self.GetState("Hero Anim").RemoveActions<ActivateGameObject>();
                 self.GetState("Hero Anim").AdjustTransitions("Map Msg?");

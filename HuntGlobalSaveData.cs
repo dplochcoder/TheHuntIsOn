@@ -6,17 +6,17 @@ namespace TheHuntIsOn;
 
 public class HuntGlobalSaveData
 {
-	#region Properties
+    #region Properties
 
-	public bool IsHunter { get; set; }
+    public bool IsHunter { get; set; }
 
-	public Dictionary<string, ModuleAffection> AffectionTable { get; set; } = new();
+    public Dictionary<string, ModuleAffection> AffectionTable { get; set; } = new();
 
-	public float FocusSpeed { get; set; } = 1.0f;
+    public float FocusSpeed { get; set; } = 1.0f;
 
-	public int FocusCost { get; set; } = 33;
+    public int FocusCost { get; set; } = 33;
 
-	public int SpellCost { get; set; } = 33;
+    public int SpellCost { get; set; } = 33;
 
     public bool DisableEnemies { get; set; }
 

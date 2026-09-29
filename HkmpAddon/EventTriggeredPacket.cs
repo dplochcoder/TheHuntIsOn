@@ -18,7 +18,7 @@ internal class EventTriggeredPacket : IPacketData
 
     public void WriteData(IPacket packet) => packet.Write((byte)NetEvent);
 
-    public void ReadData(IPacket packet) => NetEvent = (NetEvent)packet.ReadByte(); 
+    public void ReadData(IPacket packet) => NetEvent = (NetEvent)packet.ReadByte();
 
     #endregion
 }

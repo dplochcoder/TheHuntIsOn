@@ -15,7 +15,6 @@ public class HuntClientAddon : ClientAddon
 
     public override bool NeedsNetwork => true;
 
-
     #endregion
 
     #region Methods

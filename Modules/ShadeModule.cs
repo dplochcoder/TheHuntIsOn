@@ -16,7 +16,9 @@ internal class ShadeModule : Module
     {
         if (!IsModuleUsed)
             return;
-        HeroController.instance.AddGeoQuietly(PlayerData.instance.GetInt(nameof(PlayerData.geoPool)));
+        HeroController.instance.AddGeoQuietly(
+            PlayerData.instance.GetInt(nameof(PlayerData.geoPool))
+        );
         PlayerData.instance.EndSoulLimiter();
         PlayerData.instance.SetInt(nameof(PlayerData.geoPool), 0);
     }

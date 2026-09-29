@@ -1,10 +1,10 @@
-﻿using GlobalEnums;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using GlobalEnums;
 using Hkmp.Api.Client;
 using Modding;
 using Modding.Utils;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using TheHuntIsOn.Modules.PauseTimerModule;
 using TMPro;
 using UnityEngine;
@@ -21,10 +21,12 @@ internal class CountdownsDisplayer
 
     private bool EnsureParent()
     {
-        if (parent != null) return true;
+        if (parent != null)
+            return true;
 
         var camera = GameObject.Find("_GameCameras/HudCamera");
-        if (camera == null) return false;
+        if (camera == null)
+            return false;
 
         parent = new("CountdownsDisplayer");
         Object.DontDestroyOnLoad(parent);
@@ -58,25 +60,30 @@ internal class CountdownsDisplayer
 
     private static string FormatTime(float timeSeconds)
     {
-        if (timeSeconds <= 0) return "0.00";
+        if (timeSeconds <= 0)
+            return "0.00";
         if (timeSeconds >= 3600)
         {
             int hours = Mathf.FloorToInt(timeSeconds / 3600);
             int minutes = Mathf.FloorToInt((timeSeconds % 3600) / 60);
-            if (minutes >= 60) minutes = 59;
+            if (minutes >= 60)
+                minutes = 59;
 
             string status = $"{hours} {(hours > 1 ? "hours" : "hour")}";
-            if (minutes > 0) status = $"{status} and {minutes} {(minutes > 1 ? "minutes" : "minute")}";
+            if (minutes > 0)
+                status = $"{status} and {minutes} {(minutes > 1 ? "minutes" : "minute")}";
             return status;
         }
         if (timeSeconds >= 60)
         {
             int minutes = Mathf.FloorToInt(timeSeconds / 60);
             int seconds = Mathf.FloorToInt(timeSeconds % 60);
-            if (seconds >= 60) seconds = 59;
+            if (seconds >= 60)
+                seconds = 59;
             return $"{minutes}:{seconds:00}";
         }
-        if (timeSeconds >= 10) return $"{timeSeconds:00.0}";
+        if (timeSeconds >= 10)
+            return $"{timeSeconds:00.0}";
         return $"{timeSeconds:0.00}";
     }
 
@@ -87,21 +94,29 @@ internal class CountdownsDisplayer
         var saveData = TheHuntIsOn.LocalSaveData;
         if (saveData.IsServerPaused(out var unpauseSeconds))
         {
-            if (!unpauseSeconds.HasValue) statuses.Add("Server Paused");
-            else statuses.Add($"Unpausing in: {FormatTime(unpauseSeconds.Value)}");
+            if (!unpauseSeconds.HasValue)
+                statuses.Add("Server Paused");
+            else
+                statuses.Add($"Unpausing in: {FormatTime(unpauseSeconds.Value)}");
         }
-        if (respawnTimer > 0) statuses.Add($"Respawn in: {FormatTime(respawnTimer)}");
+        if (respawnTimer > 0)
+            statuses.Add($"Respawn in: {FormatTime(respawnTimer)}");
 
         foreach (var countdown in saveData.GlobalCountdowns)
         {
-            if (countdown.GetDisplayTime(out float seconds)) statuses.Add($"{countdown.Message}: {FormatTime(seconds)}");
+            if (countdown.GetDisplayTime(out float seconds))
+                statuses.Add($"{countdown.Message}: {FormatTime(seconds)}");
         }
 
         return statuses;
     }
 
     private static TMP_FontAsset font;
-    private static TMP_FontAsset LoadFontAsset() => Resources.FindObjectsOfTypeAll<TMP_FontAsset>().FirstOrDefault(font => font.name == "trajan_bold_tmpro");
+
+    private static TMP_FontAsset LoadFontAsset() =>
+        Resources
+            .FindObjectsOfTypeAll<TMP_FontAsset>()
+            .FirstOrDefault(font => font.name == "trajan_bold_tmpro");
 
     private void CreateTextMesh()
     {
@@ -149,7 +164,13 @@ internal class CountdownsDisplayer
 
             mesh.ForceMeshUpdate();
             var bounds = mesh.textBounds;
-            mesh.transform.localPosition = spacingParameters.GetPosition(i, statuses.Count, saveData.PauseTimerSize.Spacing(), scale, bounds);
+            mesh.transform.localPosition = spacingParameters.GetPosition(
+                i,
+                statuses.Count,
+                saveData.PauseTimerSize.Spacing(),
+                scale,
+                bounds
+            );
         }
     }
 
@@ -162,18 +183,26 @@ internal class CountdownsDisplayer
         if (respawnTimer > 0 && IsConnected() && !TheHuntIsOn.LocalSaveData.IsServerPaused(out _))
         {
             respawnTimer -= Time.unscaledDeltaTime;
-            if (respawnTimer < 0) respawnTimer = 0;
+            if (respawnTimer < 0)
+                respawnTimer = 0;
         }
 
-        if (!EnsureParent()) return;
+        if (!EnsureParent())
+            return;
 
         List<string> statuses = [];
-        if (IsConnected()) statuses = ComputeStatuses();
-        while (textMeshProCache.Count < statuses.Count) CreateTextMesh();
+        if (IsConnected())
+            statuses = ComputeStatuses();
+        while (textMeshProCache.Count < statuses.Count)
+            CreateTextMesh();
         UpdateStatuses(statuses);
     }
 
-    private IEnumerator OnBeginSceneTransitionRoutine(On.GameManager.orig_BeginSceneTransitionRoutine orig, GameManager self, GameManager.SceneLoadInfo sceneLoadInfo)
+    private IEnumerator OnBeginSceneTransitionRoutine(
+        On.GameManager.orig_BeginSceneTransitionRoutine orig,
+        GameManager self,
+        GameManager.SceneLoadInfo sceneLoadInfo
+    )
     {
         var src = orig(self, sceneLoadInfo);
         if (respawnTimer > 0 && IsConnected())
@@ -181,12 +210,15 @@ internal class CountdownsDisplayer
             IEnumerator Modified()
             {
                 yield return new WaitUntil(() => respawnTimer <= 0 || !IsConnected());
-                while (src.MoveNext()) yield return src.Current;
+                while (src.MoveNext())
+                    yield return src.Current;
             }
             return Modified();
         }
-        else return src;
+        else
+            return src;
     }
 
-    private void BeforeHeroDeath() => respawnTimer = Mathf.Max(respawnTimer, TheHuntIsOn.LocalSaveData.RespawnTimerSeconds);
+    private void BeforeHeroDeath() =>
+        respawnTimer = Mathf.Max(respawnTimer, TheHuntIsOn.LocalSaveData.RespawnTimerSeconds);
 }

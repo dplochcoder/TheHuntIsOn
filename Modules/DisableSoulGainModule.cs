@@ -1,6 +1,6 @@
-﻿using Modding;
+﻿using System;
+using Modding;
 using MonoMod.Cil;
-using System;
 
 namespace TheHuntIsOn.Modules;
 

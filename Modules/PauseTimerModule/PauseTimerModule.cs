@@ -1,6 +1,6 @@
-﻿using Hkmp.Api.Client;
+﻿using System;
+using Hkmp.Api.Client;
 using Hkmp.Api.Server;
-using System;
 
 namespace TheHuntIsOn.Modules.PauseModule;
 
@@ -8,7 +8,8 @@ internal class PauseTimerModule : Module
 {
     #region Properties
 
-    public override string MenuDescription => "Enable server-wide pauses, timed unpauses, and respawn timers.";
+    public override string MenuDescription =>
+        "Enable server-wide pauses, timed unpauses, and respawn timers.";
 
     private PauseTimerClientAddon PauseTimerClientAddon;
     private PauseTimerServerAddon PauseTimerServerAddon;
@@ -50,7 +51,8 @@ internal class PauseTimerModule : Module
 
     internal override void Enable()
     {
-        if (!AreAddonsLoaded || !IsModuleUsed) return;
+        if (!AreAddonsLoaded || !IsModuleUsed)
+            return;
 
         pauseController.Enable();
         countdownsDisplayer.Enable();
@@ -62,7 +64,8 @@ internal class PauseTimerModule : Module
 
     internal override void Disable()
     {
-        if (!AreAddonsLoaded || !IsModuleUsed) return;
+        if (!AreAddonsLoaded || !IsModuleUsed)
+            return;
 
         pauseController.Disable();
         countdownsDisplayer.Disable();
@@ -78,11 +81,14 @@ internal class PauseTimerModule : Module
         countdownsDisplayer.SetClientApi(clientApi);
     }
 
-    private void OnSetDeathTimer(SetRespawnTimerPacket packet) => TheHuntIsOn.LocalSaveData.RespawnTimerSeconds = packet.DeathTimer;
+    private void OnSetDeathTimer(SetRespawnTimerPacket packet) =>
+        TheHuntIsOn.LocalSaveData.RespawnTimerSeconds = packet.DeathTimer;
 
-    private void OnUpdateCountdowns(UpdateCountdownsPacket packet) => TheHuntIsOn.LocalSaveData.UpdateCountdowns(DateTime.UtcNow, packet);
+    private void OnUpdateCountdowns(UpdateCountdownsPacket packet) =>
+        TheHuntIsOn.LocalSaveData.UpdateCountdowns(DateTime.UtcNow, packet);
 
-    private void OnUpdatePauseState(UpdatePauseStatePacket packet) => TheHuntIsOn.LocalSaveData.UpdatePauseState(packet);
+    private void OnUpdatePauseState(UpdatePauseStatePacket packet) =>
+        TheHuntIsOn.LocalSaveData.UpdatePauseState(packet);
 
     #endregion
 }

@@ -14,7 +14,9 @@ internal abstract class Module
 
     public ModuleAffection Affection { get; set; }
 
-    public bool IsModuleUsed => Affection == ModuleAffection.All || (TheHuntIsOn.GlobalSaveData.IsHunter && Affection == ModuleAffection.OnlyHunter)
+    public bool IsModuleUsed =>
+        Affection == ModuleAffection.All
+        || (TheHuntIsOn.GlobalSaveData.IsHunter && Affection == ModuleAffection.OnlyHunter)
         || (!TheHuntIsOn.GlobalSaveData.IsHunter && Affection == ModuleAffection.OnlySpeedrunner);
 
     public abstract string MenuDescription { get; }

@@ -17,14 +17,26 @@ internal class InvisibleGatesModule : Module
     {
         if (IsModuleUsed)
         {
-            if (self.gameObject.tag == "Battle Gate" || 
-                self.gameObject.tag.Contains("Dream Gate") ||
-                self.transform.parent?.name == "Hornet Saver" || 
-                self.gameObject.name == "Wall Saver" || 
-                self.gameObject.name == "Enemy Saver" ||
-                self.transform.parent?.name == "infected_door" || 
-                self.transform.name == "Colliders" && (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Deepnest_East_Hornet" && self.transform.parent?.name == "Battle Scene") ||
-                self.transform.name == "Colliders" && (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Fungus2_15" && self.transform.parent?.name == "mantis_cage_down"))
+            if (
+                self.gameObject.tag == "Battle Gate"
+                || self.gameObject.tag.Contains("Dream Gate")
+                || self.transform.parent?.name == "Hornet Saver"
+                || self.gameObject.name == "Wall Saver"
+                || self.gameObject.name == "Enemy Saver"
+                || self.transform.parent?.name == "infected_door"
+                || self.transform.name == "Colliders"
+                    && (
+                        UnityEngine.SceneManagement.SceneManager.GetActiveScene().name
+                            == "Deepnest_East_Hornet"
+                        && self.transform.parent?.name == "Battle Scene"
+                    )
+                || self.transform.name == "Colliders"
+                    && (
+                        UnityEngine.SceneManagement.SceneManager.GetActiveScene().name
+                            == "Fungus2_15"
+                        && self.transform.parent?.name == "mantis_cage_down"
+                    )
+            )
             {
                 tk2dSprite component = self.gameObject.GetComponent<tk2dSprite>();
                 Color color = component.color;
@@ -51,13 +63,15 @@ internal class InvisibleGatesModule : Module
     internal override void Enable()
     {
         On.PlayMakerFSM.OnEnable += PlayMakerFSM_OnEnable;
-        UnityEngine.SceneManagement.SceneManager.activeSceneChanged += SceneManager_activeSceneChanged;
+        UnityEngine.SceneManagement.SceneManager.activeSceneChanged +=
+            SceneManager_activeSceneChanged;
     }
 
     internal override void Disable()
     {
         On.PlayMakerFSM.OnEnable -= PlayMakerFSM_OnEnable;
-        UnityEngine.SceneManagement.SceneManager.activeSceneChanged -= SceneManager_activeSceneChanged;
+        UnityEngine.SceneManagement.SceneManager.activeSceneChanged -=
+            SceneManager_activeSceneChanged;
     }
 
     #endregion

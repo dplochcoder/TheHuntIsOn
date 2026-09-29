@@ -20,5 +20,5 @@ public enum ShadePlatformMode
     /// <summary>
     /// The platforms are always there.
     /// </summary>
-    On
+    On,
 }

@@ -10,5 +10,8 @@ internal class PauseTimerServerAddon : ServerAddon
 
     public override bool NeedsNetwork => true;
 
-    public override void Initialize(IServerApi serverApi) => serverApi.CommandManager.RegisterCommand(new PauseTimerCommand(serverApi, new ServerNetManager(this, serverApi.NetServer)));
+    public override void Initialize(IServerApi serverApi) =>
+        serverApi.CommandManager.RegisterCommand(
+            new PauseTimerCommand(serverApi, new ServerNetManager(this, serverApi.NetServer))
+        );
 }

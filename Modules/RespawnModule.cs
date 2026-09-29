@@ -1,11 +1,11 @@
-﻿using KorzUtils.Data;
+﻿using System;
+using System.Reflection;
+using KorzUtils.Data;
 using KorzUtils.Helper;
 using Modding;
 using MonoMod.Cil;
 using MonoMod.RuntimeDetour;
 using MonoMod.Utils;
-using System;
-using System.Reflection;
 
 namespace TheHuntIsOn.Modules;
 
@@ -45,19 +45,30 @@ internal class RespawnModule : Module
         ILCursor cursor = new(il);
         cursor.Goto(0);
 
-        if (cursor.TryGotoNext(MoveType.After,
-            x => x.MatchLdfld<HeroController>("gm"),
-            x => x.MatchCallvirt<GameManager>("GetCurrentMapZone")))
+        if (
+            cursor.TryGotoNext(
+                MoveType.After,
+                x => x.MatchLdfld<HeroController>("gm"),
+                x => x.MatchCallvirt<GameManager>("GetCurrentMapZone")
+            )
+        )
             cursor.EmitDelegate<Func<string, string>>(x => IsModuleUsed ? "Emptiness" : x);
     }
 
     private void PlayMakerFSM_OnEnable(On.PlayMakerFSM.orig_OnEnable orig, PlayMakerFSM self)
     {
-        if (IsModuleUsed && self.FsmName == "Hero Death Anim" && self.GetState("Should Die?") == null)
+        if (
+            IsModuleUsed
+            && self.FsmName == "Hero Death Anim"
+            && self.GetState("Should Die?") == null
+        )
         {
-            self.AddState("Should Die?", () => self.SendEvent(IsModuleUsed ? "FINISHED" : "DREAM"),
+            self.AddState(
+                "Should Die?",
+                () => self.SendEvent(IsModuleUsed ? "FINISHED" : "DREAM"),
                 FsmTransitionData.FromTargetState("Anim Start").WithEventName("DREAM"),
-                FsmTransitionData.FromTargetState("Break Glass HP").WithEventName("FINISHED"));
+                FsmTransitionData.FromTargetState("Break Glass HP").WithEventName("FINISHED")
+            );
             self.GetState("Map Zone").AdjustTransition("DREAM", "Should Die?");
         }
         orig(self);
@@ -73,8 +84,12 @@ internal class RespawnModule : Module
         ModHooks.SceneChanged += ModHooks_SceneChanged;
         ModHooks.AfterPlayerDeadHook += OnDeath;
         On.PlayMakerFSM.OnEnable += PlayMakerFSM_OnEnable;
-        _hook = new(typeof(HeroController).GetMethod("Die", BindingFlags.NonPublic | BindingFlags.Instance)
-            .GetStateMachineTarget(), HeroController_Die);
+        _hook = new(
+            typeof(HeroController)
+                .GetMethod("Die", BindingFlags.NonPublic | BindingFlags.Instance)
+                .GetStateMachineTarget(),
+            HeroController_Die
+        );
     }
 
     internal override void Disable()

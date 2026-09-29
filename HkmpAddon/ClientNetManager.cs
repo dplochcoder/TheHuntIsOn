@@ -14,7 +14,7 @@ public class ClientNetManager
 
     private readonly INetClient _netClient;
 
-    private readonly IClientAddonNetworkSender<ServerPacketId> _netSender; 
+    private readonly IClientAddonNetworkSender<ServerPacketId> _netSender;
 
     #endregion
 
@@ -29,7 +29,8 @@ public class ClientNetManager
 
         netReceiver.RegisterPacketHandler<GrantItemsPacket>(
             ClientPacketId.GrantItems,
-            packetData => GrantItemsEvent?.Invoke(packetData.NetItems));
+            packetData => GrantItemsEvent?.Invoke(packetData.NetItems)
+        );
     }
 
     #endregion
@@ -41,18 +42,18 @@ public class ClientNetManager
         if (!_netClient.IsConnected)
             return;
 
-        _netSender.SendCollectionData(ServerPacketId.EventTriggered, new EventTriggeredPacket
-        {
-            NetEvent = netEvent
-        });
+        _netSender.SendCollectionData(
+            ServerPacketId.EventTriggered,
+            new EventTriggeredPacket { NetEvent = netEvent }
+        );
     }
 
-    private static IPacketData InstantiatePacket(ClientPacketId packetId)
-        => packetId switch
+    private static IPacketData InstantiatePacket(ClientPacketId packetId) =>
+        packetId switch
         {
             ClientPacketId.GrantItems => new PacketDataCollection<GrantItemsPacket>(),
             _ => null,
-        }; 
+        };
 
     #endregion
 }

@@ -16,13 +16,22 @@ public class ClientNetManager
     {
         var netReceiver = netClient.GetNetworkReceiver<ClientPacketId>(addon, InstantiatePacket);
 
-        netReceiver.RegisterPacketHandler<SetRespawnTimerPacket>(ClientPacketId.SetRespawnTimer, packet => SetRespawnTimerEvent?.Invoke(packet));
-        netReceiver.RegisterPacketHandler<UpdateCountdownsPacket>(ClientPacketId.UpdateCountdowns, packet => UpdateCountdownsEvent?.Invoke(packet));
-        netReceiver.RegisterPacketHandler<UpdatePauseStatePacket>(ClientPacketId.UpdatePauseState, packet => UpdatePauseStateEvent?.Invoke(packet));
+        netReceiver.RegisterPacketHandler<SetRespawnTimerPacket>(
+            ClientPacketId.SetRespawnTimer,
+            packet => SetRespawnTimerEvent?.Invoke(packet)
+        );
+        netReceiver.RegisterPacketHandler<UpdateCountdownsPacket>(
+            ClientPacketId.UpdateCountdowns,
+            packet => UpdateCountdownsEvent?.Invoke(packet)
+        );
+        netReceiver.RegisterPacketHandler<UpdatePauseStatePacket>(
+            ClientPacketId.UpdatePauseState,
+            packet => UpdatePauseStateEvent?.Invoke(packet)
+        );
     }
 
-    private static IPacketData InstantiatePacket(ClientPacketId packetId)
-        => packetId switch
+    private static IPacketData InstantiatePacket(ClientPacketId packetId) =>
+        packetId switch
         {
             ClientPacketId.SetRespawnTimer => new PacketDataCollection<SetRespawnTimerPacket>(),
             ClientPacketId.UpdateCountdowns => new PacketDataCollection<UpdateCountdownsPacket>(),

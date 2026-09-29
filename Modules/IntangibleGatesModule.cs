@@ -15,14 +15,17 @@ internal class IntangibleGatesModule : Module
 
     internal override void Enable()
     {
-        CoroutineHelper.WaitForHero(() =>
+        CoroutineHelper.WaitForHero(
+            () =>
             {
                 if (HeroController.instance.GetComponent<IgnoreGates>() == null)
                     HeroController.instance.gameObject.AddComponent<IgnoreGates>();
-            }, true);
+            },
+            true
+        );
     }
 
-    internal override void Disable(){}
+    internal override void Disable() { }
 
     #endregion
 }

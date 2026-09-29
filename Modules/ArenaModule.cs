@@ -101,16 +101,18 @@ internal class ArenaModule : Module
 
     #region Methods
 
-    internal override void Enable() 
-    { 
-        UnityEngine.SceneManagement.SceneManager.activeSceneChanged += SceneManager_activeSceneChanged;
+    internal override void Enable()
+    {
+        UnityEngine.SceneManagement.SceneManager.activeSceneChanged +=
+            SceneManager_activeSceneChanged;
     }
 
-    internal override void Disable() 
-    { 
-        UnityEngine.SceneManagement.SceneManager.activeSceneChanged -= SceneManager_activeSceneChanged;
+    internal override void Disable()
+    {
+        UnityEngine.SceneManagement.SceneManager.activeSceneChanged -=
+            SceneManager_activeSceneChanged;
     }
-    
+
     private void MakeBlocker(Scene sc, Vector3 p, Vector2 si)
     {
         if (!IsModuleUsed)

@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace TheHuntIsOn.HkmpAddon;
 
@@ -9,6 +9,7 @@ internal class ItemGrant
 
     [JsonProperty("items")]
     public List<NetItem> Items { get; set; }
+
     [JsonProperty("message")]
     public string Message { get; set; }
 

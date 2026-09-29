@@ -6,7 +6,8 @@ internal class HelperPlatformModule : Module
 {
     #region Properties
 
-    public override string MenuDescription => "Places platforms to allow reaching certain spots without skips.";
+    public override string MenuDescription =>
+        "Places platforms to allow reaching certain spots without skips.";
 
     public static bool HasDash => PlayerData.instance.GetBool(nameof(PlayerData.hasDash));
 
@@ -14,13 +15,17 @@ internal class HelperPlatformModule : Module
 
     public static bool HasWings => PlayerData.instance.GetBool(nameof(PlayerData.hasDoubleJump));
 
-    public static bool HasCrystalHeart => PlayerData.instance.GetBool(nameof(PlayerData.hasSuperDash));
+    public static bool HasCrystalHeart =>
+        PlayerData.instance.GetBool(nameof(PlayerData.hasSuperDash));
 
     #endregion
 
     #region Eventhandler
 
-    private void SceneManager_activeSceneChanged(UnityEngine.SceneManagement.Scene oldScene, UnityEngine.SceneManagement.Scene newScene)
+    private void SceneManager_activeSceneChanged(
+        UnityEngine.SceneManagement.Scene oldScene,
+        UnityEngine.SceneManagement.Scene newScene
+    )
     {
         if (!IsModuleUsed)
             return;
@@ -58,10 +63,12 @@ internal class HelperPlatformModule : Module
                 break;
             // Gruz Mother Room
             case "Crossroads_04":
-                if ((HasWings && HasClaw) || (HasClaw && HasCrystalHeart)) break;
+                if ((HasWings && HasClaw) || (HasClaw && HasCrystalHeart))
+                    break;
                 MakePlatform(151.9073f, 15.0591f);
                 MakePlatform(148.2994f, 19.5866f);
-                if (!HasDash && !HasClaw && !HasCrystalHeart && !HasWings) MakePlatform(139.7048f, 6.13f);
+                if (!HasDash && !HasClaw && !HasCrystalHeart && !HasWings)
+                    MakePlatform(139.7048f, 6.13f);
                 break;
             // Mask Shard Crossroads besides hot spring
             case "Crossroads_13" when !HasClaw && !HasWings:
@@ -149,7 +156,7 @@ internal class HelperPlatformModule : Module
             case "Fungus2_15" when !HasWings && HasClaw:
                 MakePlatform(14.30f, 10.61f); // to reach Lifeblood Cocoon
                 break;
-            /* 
+            /*
             // Journal Room Beside Epogo
             case "Fungus2_17" when !HasClaw && !HasWings:
                 MakePlatform(24.00f, 6.75f);
@@ -207,18 +214,24 @@ internal class HelperPlatformModule : Module
     {
         GameObject currentGameObject;
 
-        currentGameObject = GameObject.Instantiate(ShadeSkipModule.PlatformPrefab, new(xpos, ypos, 0), Quaternion.identity);
+        currentGameObject = GameObject.Instantiate(
+            ShadeSkipModule.PlatformPrefab,
+            new(xpos, ypos, 0),
+            Quaternion.identity
+        );
         currentGameObject.SetActive(true);
     }
 
     internal override void Enable()
     {
-        UnityEngine.SceneManagement.SceneManager.activeSceneChanged += SceneManager_activeSceneChanged;
+        UnityEngine.SceneManagement.SceneManager.activeSceneChanged +=
+            SceneManager_activeSceneChanged;
     }
 
     internal override void Disable()
     {
-        UnityEngine.SceneManagement.SceneManager.activeSceneChanged += SceneManager_activeSceneChanged;
+        UnityEngine.SceneManagement.SceneManager.activeSceneChanged +=
+            SceneManager_activeSceneChanged;
     }
 
     #endregion

@@ -30,7 +30,7 @@ internal class GrantItemsPacket : IPacketData
         NetItems = new NetItem[length];
         for (var i = 0; i < length; i++)
             NetItems[i] = (NetItem)packet.ReadByte();
-    } 
+    }
 
     #endregion
 }

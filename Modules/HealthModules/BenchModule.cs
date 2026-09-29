@@ -13,7 +13,10 @@ internal class BenchModule : Module
 
     #region Eventhandler
 
-    private void SetPlayerDataBool_OnEnter(On.HutongGames.PlayMaker.Actions.SetPlayerDataBool.orig_OnEnter orig, HutongGames.PlayMaker.Actions.SetPlayerDataBool self)
+    private void SetPlayerDataBool_OnEnter(
+        On.HutongGames.PlayMaker.Actions.SetPlayerDataBool.orig_OnEnter orig,
+        HutongGames.PlayMaker.Actions.SetPlayerDataBool self
+    )
     {
         if (IsModuleUsed && self.IsCorrectContext("Bench Control", null, "Start Rest"))
             HealthControl.BlockHeal = true;
@@ -40,9 +43,11 @@ internal class BenchModule : Module
 
     #region Methods
 
-    internal override void Enable() => On.HutongGames.PlayMaker.Actions.SetPlayerDataBool.OnEnter += SetPlayerDataBool_OnEnter;
+    internal override void Enable() =>
+        On.HutongGames.PlayMaker.Actions.SetPlayerDataBool.OnEnter += SetPlayerDataBool_OnEnter;
 
-    internal override void Disable() => On.HutongGames.PlayMaker.Actions.SetPlayerDataBool.OnEnter -= SetPlayerDataBool_OnEnter;
+    internal override void Disable() =>
+        On.HutongGames.PlayMaker.Actions.SetPlayerDataBool.OnEnter -= SetPlayerDataBool_OnEnter;
 
     #endregion
 }

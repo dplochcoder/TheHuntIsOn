@@ -11,5 +11,5 @@ public enum ModuleAffection
 
     OnlyHunter,
 
-    OnlySpeedrunner
+    OnlySpeedrunner,
 }

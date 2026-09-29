@@ -15,14 +15,20 @@ internal class DreamEntranceModule : Module
 
     #region Eventhandler
 
-    private void DeactivateIfPlayerdataTrue_OnEnable(On.DeactivateIfPlayerdataTrue.orig_OnEnable orig, DeactivateIfPlayerdataTrue self)
+    private void DeactivateIfPlayerdataTrue_OnEnable(
+        On.DeactivateIfPlayerdataTrue.orig_OnEnable orig,
+        DeactivateIfPlayerdataTrue self
+    )
     {
         if (IsModuleUsed && self.gameObject.name == "Dung Defender_Sleep")
             return;
         orig(self);
     }
 
-    private void DeactivateIfPlayerdataFalse_OnEnable(On.DeactivateIfPlayerdataFalse.orig_OnEnable orig, DeactivateIfPlayerdataFalse self)
+    private void DeactivateIfPlayerdataFalse_OnEnable(
+        On.DeactivateIfPlayerdataFalse.orig_OnEnable orig,
+        DeactivateIfPlayerdataFalse self
+    )
     {
         if (IsModuleUsed && self.gameObject.name == "Dung Defender_Sleep")
             return;
@@ -37,8 +43,11 @@ internal class DreamEntranceModule : Module
             {
                 // Create clone for both sides of the arena.
                 self.transform.position = new Vector3(4.25f, 18.4f, self.transform.position.z);
-                GameObject.Instantiate(self.gameObject).transform.position = new Vector3(41.17f, 29.41f, self.transform.position.z);
-
+                GameObject.Instantiate(self.gameObject).transform.position = new Vector3(
+                    41.17f,
+                    29.41f,
+                    self.transform.position.z
+                );
             }
             else if (self.gameObject.name == "IK Remains")
             {
@@ -53,7 +62,10 @@ internal class DreamEntranceModule : Module
                 Component.Destroy(self);
                 return;
             }
-            else if (self.FsmName == "Conversation Control" && self.gameObject.name == "Dreamer Plaque Inspect")
+            else if (
+                self.FsmName == "Conversation Control"
+                && self.gameObject.name == "Dreamer Plaque Inspect"
+            )
             {
                 self.GetState("Hero Anim").RemoveActions<ActivateGameObject>();
                 self.GetState("Hero Anim").AdjustTransitions("Map Msg?");
@@ -68,15 +80,31 @@ internal class DreamEntranceModule : Module
         orig(self);
     }
 
-    private void PlayerDataBoolTest_OnEnter(On.HutongGames.PlayMaker.Actions.PlayerDataBoolTest.orig_OnEnter orig, HutongGames.PlayMaker.Actions.PlayerDataBoolTest self)
+    private void PlayerDataBoolTest_OnEnter(
+        On.HutongGames.PlayMaker.Actions.PlayerDataBoolTest.orig_OnEnter orig,
+        HutongGames.PlayMaker.Actions.PlayerDataBoolTest self
+    )
     {
-        if (IsModuleUsed && ((self.IsCorrectContext("Control", "IK Remains", "Check")
-            && self.boolName.Value == "infectedKnightDreamDefeated") || (self.IsCorrectContext("Control", "Mage Lord Remains", "Check")
-            && self.boolName.Value == "mageLordDreamDefeated") || (self.IsCorrectContext("Control", "FK Corpse", "Check")
-            && self.boolName.Value == "falseKnightDreamDefeated")
-            || self.IsCorrectContext("Conversation Control", "Dreamer Plaque Inspect", "End")
-            || self.IsCorrectContext("Control", "Dreamer Scene 2", "Init")
-            || self.IsCorrectContext("FSM", "PostDreamnail", "Check")))
+        if (
+            IsModuleUsed
+            && (
+                (
+                    self.IsCorrectContext("Control", "IK Remains", "Check")
+                    && self.boolName.Value == "infectedKnightDreamDefeated"
+                )
+                || (
+                    self.IsCorrectContext("Control", "Mage Lord Remains", "Check")
+                    && self.boolName.Value == "mageLordDreamDefeated"
+                )
+                || (
+                    self.IsCorrectContext("Control", "FK Corpse", "Check")
+                    && self.boolName.Value == "falseKnightDreamDefeated"
+                )
+                || self.IsCorrectContext("Conversation Control", "Dreamer Plaque Inspect", "End")
+                || self.IsCorrectContext("Control", "Dreamer Scene 2", "Init")
+                || self.IsCorrectContext("FSM", "PostDreamnail", "Check")
+            )
+        )
             self.isTrue = self.isFalse;
         orig(self);
     }
@@ -91,7 +119,10 @@ internal class DreamEntranceModule : Module
                 GameObject.Find("door_dreamReturn").transform.position = new(4.25f, 18.4f);
         }
         // To prevent a softlock we spawn the portal anyway, even if the module is not used, if the player is in the room with dream nail already.
-        if (newScene.name == "Dream_Nailcollection" && PlayerData.instance.GetBool(nameof(PlayerData.hasDreamNail)))
+        if (
+            newScene.name == "Dream_Nailcollection"
+            && PlayerData.instance.GetBool(nameof(PlayerData.hasDreamNail))
+        )
         {
             GameObject teleporterSprite = GameObject.Instantiate(EnemyModule.DreamGate);
             teleporterSprite.transform.position = new(272.88f, 51.3f);
@@ -104,7 +135,8 @@ internal class DreamEntranceModule : Module
             PlayMakerFSM teleportFsm = teleporter.GetComponent<PlayMakerFSM>();
             teleportFsm.FsmVariables.FindFsmString("Entry Gate").Value = "right1";
             teleportFsm.FsmVariables.FindFsmString("New Scene").Value = "RestingGrounds_07";
-            teleportFsm.GetState("Enter").GetLastAction<SendEventByName>().sendEvent.Value = "FADE OUT";
+            teleportFsm.GetState("Enter").GetLastAction<SendEventByName>().sendEvent.Value =
+                "FADE OUT";
             teleportFsm.FsmVariables.FindFsmString("Prompt Name").Value = "Exit";
             teleportFsm.FsmVariables.FindFsmBool("Crossroads Ascent").Value = false;
         }
@@ -120,7 +152,8 @@ internal class DreamEntranceModule : Module
         On.DeactivateIfPlayerdataFalse.OnEnable += DeactivateIfPlayerdataFalse_OnEnable;
         On.PlayMakerFSM.OnEnable += PlayMakerFSM_OnEnable;
         On.HutongGames.PlayMaker.Actions.PlayerDataBoolTest.OnEnter += PlayerDataBoolTest_OnEnter;
-        UnityEngine.SceneManagement.SceneManager.activeSceneChanged += SceneManager_activeSceneChanged;
+        UnityEngine.SceneManagement.SceneManager.activeSceneChanged +=
+            SceneManager_activeSceneChanged;
     }
 
     internal override void Disable()
@@ -129,7 +162,8 @@ internal class DreamEntranceModule : Module
         On.DeactivateIfPlayerdataFalse.OnEnable -= DeactivateIfPlayerdataFalse_OnEnable;
         On.PlayMakerFSM.OnEnable -= PlayMakerFSM_OnEnable;
         On.HutongGames.PlayMaker.Actions.PlayerDataBoolTest.OnEnter -= PlayerDataBoolTest_OnEnter;
-        UnityEngine.SceneManagement.SceneManager.activeSceneChanged -= SceneManager_activeSceneChanged;
+        UnityEngine.SceneManagement.SceneManager.activeSceneChanged -=
+            SceneManager_activeSceneChanged;
     }
 
     #endregion
